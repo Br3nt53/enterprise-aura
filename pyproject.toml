@@ -1,0 +1,22 @@
+# pyproject.toml additions
+[project]
+name = "aura-tracking"
+version = "2.0.0"
+
+[project.optional-dependencies]
+core = [
+    "pydantic>=2.0",
+    "dependency-injector>=4.40",
+    "asyncio>=3.4",
+]
+architecture = [
+    "pyeventbus>=1.0",
+    "circuitbreaker>=1.4",
+    "tenacity>=8.0",
+]
+observability = [
+    "opentelemetry-api>=1.20",
+    "opentelemetry-sdk>=1.20",
+    "prometheus-client>=0.18",
+    "structlog>=23.0",
+]
