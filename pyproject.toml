@@ -1,16 +1,12 @@
-[build-system]
-requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "aura-v2"
 version = "2.0.0"
-requires-python = ">=3.11"
 description = "AURA Enterprise v2 – real-time multi-object tracking"
 readme = "README.md"
+requires-python = ">=3.11"
 
+# Core runtime deps (include what main.py uses)
 dependencies = [
-  # Core
   "pydantic>=2.5",
   "numpy>=1.26",
   "attrs>=23.1",
@@ -20,10 +16,13 @@ dependencies = [
 
   # API & IO
   "fastapi>=0.116",
+  "uvicorn>=0.29",         # <— needed by main.py
+  "typer>=0.12",           # <— needed by main.py
+  "pyyaml>=6.0",           # <— main.py optional config load
   "grpcio>=1.59",
   "websockets>=12.0",
 
-  # Observability (lightweight core)
+  # Observability (lightweight)
   "opentelemetry-api>=1.20",
   "opentelemetry-sdk>=1.20",
   "prometheus-client>=0.22",
@@ -43,24 +42,24 @@ tracking = [
   "deep-sort-realtime>=1.3",
   "lap>=0.5.1"
 ]
-observability = [
-  "opentelemetry-api>=1.20",
-  "opentelemetry-sdk>=1.20",
-  "prometheus-client>=0.22",
-  "structlog>=25"
-]
-messaging = ["aiokafka>=0.12", "aioredis>=2.0", "motor>=3.7"]
-# pin NumPy for numba on macOS
-perf = ["numba>=0.61", "numpy<2.3"]
+observability = ["opentelemetry-api>=1.20","opentelemetry-sdk>=1.20","prometheus-client>=0.22","structlog>=25"]
+messaging = ["aiokafka>=0.12","aioredis>=2.0","motor>=3.7"]
+perf = ["numba>=0.61","numpy<2.3"]   # pin for numba on macOS
+test = ["pytest>=8.2","requests>=2.32","httpx>=0.25"]
+
 # Linux-only GPU extras (won’t resolve on macOS)
 gpu = [
-  "cupy-cuda12x>=13 ; platform_system == 'Linux'",
-  "tensorrt>=8.6     ; platform_system == 'Linux'"
+  "cupy-cuda12x>=13 ; platform_system=='Linux'",
+  "tensorrt>=8.6 ; platform_system=='Linux'"
 ]
 
-[project.scripts]
-aura = "enterprise_aura.aura_v2.main:app_cli"
+[project.urls]
+Homepage = "https://github.com/Br3nt53/enterprise-aura"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["enterprise_aura*", "aura_v2*"]
+include = ["aura_v2*"]
