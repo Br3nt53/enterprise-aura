@@ -1,49 +1,66 @@
-# pyproject.toml
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "aura-v2"
 version = "2.0.0"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
+description = "AURA Enterprise v2 – real-time multi-object tracking"
+readme = "README.md"
 
-[project.dependencies]
-# Core Domain
-pydantic = "^2.5"
-numpy = "^1.24"
-attrs = "^23.1"
+dependencies = [
+  # Core
+  "pydantic>=2.5",
+  "numpy>=1.26",
+  "attrs>=23.1",
+  "filterpy>=1.4.5",
+  "scipy>=1.11",
+  "scikit-learn>=1.3",
 
-# SOTA Tracking Algorithms
-boxmot = "^10.0.0"
-ultralytics = "^8.0.0"
-supervision = "^0.16.0"
-deep-sort-realtime = "^1.3"
+  # API & IO
+  "fastapi>=0.116",
+  "grpcio>=1.59",
+  "websockets>=12.0",
 
-# Sensor Fusion & Filtering
-filterpy = "^1.4.5"
-scipy = "^1.11"
-scikit-learn = "^1.3"
+  # Observability (lightweight core)
+  "opentelemetry-api>=1.20",
+  "opentelemetry-sdk>=1.20",
+  "prometheus-client>=0.22",
+  "structlog>=25",
 
-# Infrastructure
-dependency-injector = "^4.41"
-asyncio = "^3.4.3"
-aioredis = "^2.0"
-motor = "^3.3"  # Async MongoDB
-aiokafka = "^0.10"  # Event streaming
+  # Messaging / storage clients
+  "aioredis>=2.0",
+  "aiokafka>=0.12",
+  "motor>=3.7"
+]
 
-# Evaluation
-trackeval = "^1.0.0"
-lap = "^0.4.0"  # Linear assignment
+[project.optional-dependencies]
+tracking = [
+  "boxmot>=15",
+  "ultralytics>=8.3",
+  "supervision>=0.26",
+  "deep-sort-realtime>=1.3",
+  "lap>=0.5.1"
+]
+observability = [
+  "opentelemetry-api>=1.20",
+  "opentelemetry-sdk>=1.20",
+  "prometheus-client>=0.22",
+  "structlog>=25"
+]
+messaging = ["aiokafka>=0.12", "aioredis>=2.0", "motor>=3.7"]
+# pin NumPy for numba on macOS
+perf = ["numba>=0.61", "numpy<2.3"]
+# Linux-only GPU extras (won’t resolve on macOS)
+gpu = [
+  "cupy-cuda12x>=13 ; platform_system == 'Linux'",
+  "tensorrt>=8.6     ; platform_system == 'Linux'"
+]
 
-# Observability
-opentelemetry-api = "^1.20"
-opentelemetry-sdk = "^1.20"
-prometheus-client = "^0.18"
-structlog = "^23.2"
+[project.scripts]
+aura = "enterprise_aura.aura_v2.main:app_cli"
 
-# Performance
-numba = "^0.58"  # JIT compilation
-cupy = "^13.0"  # GPU arrays
-tensorrt = "^8.6"
-
-# API
-fastapi = "^0.104"
-grpcio = "^1.59"
-websockets = "^12.0"
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["enterprise_aura*", "aura_v2*"]
