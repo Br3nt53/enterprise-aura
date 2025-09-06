@@ -1,2 +1,0 @@
-[console_scripts]
-aura = enterprise_aura.aura_v2.main:app_cli

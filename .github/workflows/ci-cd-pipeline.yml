@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install uv
+        run: |
+          curl -fsSL https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Create venv (uv)
+        run: |
+          uv venv .venv
+          echo ".venv" >> $GITHUB_ENV
+          echo "VIRTUAL_ENV=.venv" >> $GITHUB_ENV
+          echo "$(pwd)/.venv/bin" >> $GITHUB_PATH
+
+      - name: Install project (editable) + extras
+        run: |
+          uv pip install -e .
+          uv pip install -e ".[tracking,observability,messaging,perf,test]"
+
+      - name: Run tests
+        run: uv run pytest aura_v2/tests -v
