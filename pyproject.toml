@@ -24,6 +24,7 @@ dependencies = [
   "aioredis>=2.0",
   "aiokafka>=0.12",
   "motor>=3.7",
+  "dependency-injector>=4.41.0",
 ]
 
 [project.optional-dependencies]
@@ -44,9 +45,6 @@ test = [
   "httpx<0.24",
   "anyio>=3.7,<5",
 ]
-
-
-
 
 # Linux/Windows-only GPU extras; excluded on macOS to avoid TensorRT errors
 gpu = [
@@ -70,5 +68,3 @@ include = ["aura_v2*"]
 [tool.pytest.ini_options]
 testpaths = ["aura_v2/tests"]
 addopts = "-q"
-
-

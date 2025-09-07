@@ -1,6 +1,32 @@
-from .value_objects.position import Position3D
-from .value_objects.velocity import Velocity3D
-from .value_objects.confidence import Confidence
-from .entities.detection import Detection
-from .entities.track import Track, TrackState, TrackStatus, ThreatLevel
-__all__ = ["Position3D","Velocity3D","Confidence","Detection","Track","TrackState","TrackStatus","ThreatLevel"]
+# aura_v2/domain/__init__.py
+from .entities import (
+    Detection,
+    Track,
+    TrackID,
+    TrackState,
+    TrackStatus,
+    ThreatLevel,
+)
+from .value_objects import (
+    Confidence,
+    CovarianceMatrix,
+    Position3D,
+    SensorID,
+    SourceID,
+    Velocity3D,
+)
+
+__all__ = [
+    "Detection",
+    "Track",
+    "TrackID",
+    "TrackState",
+    "TrackStatus",
+    "ThreatLevel",
+    "Confidence",
+    "CovarianceMatrix",
+    "Position3D",
+    "SensorID",
+    "SourceID",
+    "Velocity3D",
+]

@@ -1,7 +1,12 @@
-from .track import Track, TrackState, TrackStatus, ThreatLevel
+# aura_v2/domain/entities/__init__.py
 from .detection import Detection
-from ..value_objects import Position3D, Velocity3D, Confidence
+from .track import Track, TrackID, TrackState, TrackStatus, ThreatLevel
+
 __all__ = [
-    "Track", "TrackState", "TrackStatus", "ThreatLevel", "Detection",
-    "Position3D", "Velocity3D", "Confidence",
+    "Detection",
+    "Track",
+    "TrackID",
+    "TrackState",
+    "TrackStatus",
+    "ThreatLevel",
 ]

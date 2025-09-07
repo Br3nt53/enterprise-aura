@@ -2,6 +2,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Tuple, Optional
 import numpy as np
+from ...domain.entities import Detection, Track # Add this line
 
 class AssociationStrategy(ABC):
     """Domain service interface for data association"""

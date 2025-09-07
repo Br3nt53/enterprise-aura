@@ -1,38 +1,31 @@
-# aura_v2/tests/integration/test_pipeline_e2e.py
 import pytest
-import asyncio
-from aura_v2.infrastructure.config.container import Container
+from aura_v2.infrastructure.container import Container
 
 @pytest.fixture
 async def test_container():
-    """Create test container with mocked external dependencies"""
-    container = Container()
-    container.config.from_dict({
-        'tracking': {
-            'association_method': 'hungarian',
-            'gate_threshold': 2.0,
-        },
-        'database': {
-            'connection_string': 'sqlite:///:memory:'
-        }
-    })
-    container.wire(modules=['aura_v2.application', 'aura_v2.infrastructure'])
-    yield container
-    await container.shutdown_resources()
+    c = Container()
+    await c.init_resources()
+    yield c
+    await c.shutdown_resources()
 
 @pytest.mark.asyncio
 async def test_full_tracking_pipeline(test_container):
     """Test complete tracking pipeline end-to-end"""
     # Arrange
-    pipeline = test_container.tracking_pipeline()
-    test_detections = create_test_detection_sequence()
-    
+    pipeline = await test_container.tracking_pipeline()
+    sensor_data = [
+        {"sensor_id": "radar_1", "x": 10, "y": 20, "timestamp": 1.0},
+        {"sensor_id": "camera_1", "x": 10.1, "y": 20.2, "timestamp": 1.1},
+        {"sensor_id": "lidar_1", "x": 9.9, "y": 19.8, "timestamp": 1.2},
+    ]
+
     # Act
-    results = []
-    async for result in pipeline.process(test_detections):
-        results.append(result)
-    
+    tracks = await pipeline.process(sensor_data)
+
     # Assert
-    assert len(results) > 0
-    assert all(r.active_tracks for r in results)
-    assert results[-1].metrics.mota > 0.9
+    assert len(tracks) == 1
+    track = tracks[0]
+    assert track.id is not None
+    # Check that the fused position is a reasonable average
+    assert 9.9 < track.predicted_position.x < 10.1
+    assert 19.8 < track.predicted_position.y < 20.2

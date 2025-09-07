@@ -1,7 +1,7 @@
 from typing import List
 from pydantic import BaseModel, field_validator
 
-class Covariance(BaseModel):
+class CovarianceMatrix(BaseModel):
     """3x3 covariance matrix for position uncertainty."""
     matrix: List[List[float]]
 
