@@ -1,172 +1,99 @@
-# aura_v2/application/pipelines/real_time_tracking_pipeline.py
-import asyncio
-from typing import AsyncIterator
-from dataclasses import dataclass
-import time
+﻿"""Real-time tracking pipeline for processing sensor data."""
+from datetime import datetime
+from logging import Logger
+from typing import Dict
 
-from ..use_cases import DetectAndTrackUseCase
-from ...infrastructure.monitoring import MetricsCollector
-from ...domain.events import EventBus
+from ...domain.entities import ThreatLevel
+from ...domain.ports import SensorStream
+from ...domain.services import FusionService
+from ...infrastructure.tracking import ModernTracker
+from ..events import EventPublisher
 
-@dataclass
-class PipelineConfig:
-    """Configuration for tracking pipeline"""
-    max_latency_ms: int = 50
-    batch_size: int = 10
-    enable_gpu: bool = True
-    enable_threat_assessment: bool = True
-    enable_collision_prediction: bool = True
 
 class RealTimeTrackingPipeline:
-    """
-    High-performance real-time tracking pipeline
-    Handles 100+ targets at 30+ FPS with <50ms latency
-    """
-    
-    def __init__(self,
-                 detect_and_track: DetectAndTrackUseCase,
-                 sensor_streams: Dict[str, SensorStream],
-                 event_bus: EventBus,
-                 metrics: MetricsCollector,
-                 config: PipelineConfig):
-        self.detect_and_track = detect_and_track
-        self.sensor_streams = sensor_streams
-        self.event_bus = event_bus
-        self.metrics = metrics
-        self.config = config
-        
-        # Performance optimization
-        self.detection_queue = asyncio.Queue(maxsize=100)
-        self.result_queue = asyncio.Queue(maxsize=100)
-        
-    async def run(self) -> None:
-        """Main pipeline execution"""
-        
-        # Start sensor data collection
-        sensor_tasks = [
-            asyncio.create_task(self._collect_sensor_data(name, stream))
-            for name, stream in self.sensor_streams.items()
-        ]
-        
-        # Start processing pipeline
-        processing_task = asyncio.create_task(self._process_detections())
-        
-        # Start result handling
-        result_task = asyncio.create_task(self._handle_results())
-        
-        # Monitor performance
-        monitor_task = asyncio.create_task(self._monitor_performance())
-        
-        # Run until cancelled
-        try:
-            await asyncio.gather(
-                *sensor_tasks,
-                processing_task,
-                result_task,
-                monitor_task
-            )
-        except asyncio.CancelledError:
-            # Graceful shutdown
-            await self._shutdown()
-    
-    async def _collect_sensor_data(self, 
-                                  sensor_name: str,
-                                  stream: SensorStream) -> None:
-        """Collect data from individual sensor"""
-        
-        async for data in stream:
-            # Add to processing queue
-            await self.detection_queue.put({
-                'sensor': sensor_name,
-                'data': data,
-                'timestamp': time.time()
-            })
-            
-            # Track input rate
-            self.metrics.increment(f'sensor.{sensor_name}.detections')
-    
-    async def _process_detections(self) -> None:
-        """Main processing loop"""
-        
-        batch = []
-        last_process_time = time.time()
-        
-        while True:
-            try:
-                # Collect batch
-                while len(batch) < self.config.batch_size:
-                    timeout = self.config.max_latency_ms / 1000.0
-                    try:
-                        detection = await asyncio.wait_for(
-                            self.detection_queue.get(),
-                            timeout=timeout
-                        )
-                        batch.append(detection)
-                    except asyncio.TimeoutError:
-                        break
-                
-                if batch:
-                    # Process batch
-                    start = time.time()
-                    
-                    # Group by sensor type
-                    radar = [d['data'] for d in batch if d['sensor'] == 'radar']
-                    lidar = [d['data'] for d in batch if d['sensor'] == 'lidar']
-                    camera = [d['data'] for d in batch if d['sensor'] == 'camera']
-                    
-                    # Execute tracking
-                    result = await self.detect_and_track.execute(
-                        DetectAndTrackCommand(
-                            radar_data=radar,
-                            lidar_data=lidar,
-                            camera_data=camera,
-                            timestamp=datetime.now()
-                        )
-                    )
-                    
-                    # Queue result
-                    await self.result_queue.put(result)
-                    
-                    # Metrics
-                    latency = (time.time() - start) * 1000
-                    self.metrics.histogram('pipeline.latency_ms', latency)
-                    self.metrics.gauge('pipeline.active_tracks', len(result.active_tracks))
-                    
-                    batch.clear()
-                    
-            except Exception as e:
-                self.metrics.increment('pipeline.errors')
-                # Log error but continue processing
-                await self._handle_error(e)
-    
-    async def _handle_results(self) -> None:
-        """Handle tracking results and generate outputs"""
-        
-        while True:
-            result = await self.result_queue.get()
-            
-            # Publish events
-            for event in result.events:
-                await self.event_bus.publish(event)
-            
-            # Handle threats
-            for threat in result.threats:
-                await self._handle_threat(threat)
-            
-            # Update displays/dashboards
-            await self._update_displays(result)
-    
-    async def _handle_threat(self, threat: ThreatAssessment) -> None:
-        """Handle detected threats with appropriate actions"""
-        
-        if threat.threat_level == ThreatLevel.CRITICAL:
-            # Immediate action required
-            await self._trigger_critical_alert(threat)
-            await self._activate_countermeasures(threat)
-            
-        elif threat.threat_level == ThreatLevel.HIGH:
-            # Alert operators
-            await self._send_operator_alert(threat)
-            
-        # Log all threats
-        await self._log_threat(threat)
+    """Orchestrates the real-time object tracking process."""
+ 
+    def __init__(
+        self,
+        tracker: ModernTracker,
+        fusion_service: FusionService,
+        event_publisher: EventPublisher,
+        logger: Logger,
+    ):
+        self.tracker = tracker
+        self.fusion_service = fusion_service
+        self.event_publisher = event_publisher
+        self.logger = logger
+        self.sequence_id = 0
+        self.subscriptions: Dict[str, bool] = {}
+
+    def subscribe(self, stream: SensorStream) -> None:
+        """Subscribe to a sensor stream."""
+        stream_id = stream.get_id()
+        if stream_id not in self.subscriptions:
+            self.subscriptions[stream_id] = True
+            # In a real system, you would set up a callback or async task here
+            self.logger.info(f"Subscribed to stream: {stream_id}")
+
+    def unsubscribe(self, stream: SensorStream) -> None:
+        """Unsubscribe from a sensor stream."""
+        stream_id = stream.get_id()
+        if stream_id in self.subscriptions:
+            del self.subscriptions[stream_id]
+            self.logger.info(f"Unsubscribed from stream: {stream_id}")
+
+    def subscribe_to_streams(
+        self,
+        streams: list[SensorStream],
+    ) -> None:
+        """Subscribe to a list of sensor streams."""
+        for stream in streams:
+            self.subscribe(stream)
+
+    def process_frame(self, detections: list) -> None:
+        """Process a single frame of detections."""
+        self.sequence_id += 1
+        self.logger.debug(f"Processing frame {self.sequence_id} with {len(detections)} detections.")
+
+        if not detections:
+            return
+
+        # NOTE: This is a simplified placeholder. In a real scenario, you might use
+        # a more sophisticated timestamp synchronization mechanism.
+        latest_timestamp = max(d.timestamp for d in detections)
+
+        # Fuse detections if necessary (conceptual)
+        # fused_detections = self.fusion_service.fuse(detections)
+
+        # Update tracker
+        command = self._create_command(detections, latest_timestamp)
+        updated_tracks = self.tracker.update(command.detections)
+
+        # Publish events (e.g., TrackUpdated)
+        # for track in updated_tracks:
+        #     self.event_publisher.publish(TrackUpdated(track_id=track.id, ...))
+
+        self._assess_threats(updated_tracks)
+
+    def _create_command(self, detections, latest_timestamp: datetime):
+        """Create a command object for the detect and track use case."""
+        from ..use_cases import DetectAndTrackCommand
+        return DetectAndTrackCommand( # type: ignore
+            detections=detections,
+            timestamp=latest_timestamp,
+            sequence_id=self.sequence_id,
+        )
+
+    def _assess_threats(self, tracks):
+        """Assess threats based on the current tracks."""
+        from ..use_cases import ThreatAssessment
+        for track in tracks:
+            # Example threat assessment logic
+            if track.confidence > 0.8 and track.velocity.magnitude > 20:
+                threat_level = ThreatLevel.HIGH # type: ignore
+                self.logger.warning(f"High threat track detected: {track.id}")
+            elif track.confidence > 0.6 and track.velocity.magnitude > 10:
+                threat_level = ThreatLevel.MEDIUM # type: ignore
+                self.logger.info(f"Medium threat track detected: {track.id}")
+            else:
+                continue
