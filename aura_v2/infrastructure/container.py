@@ -3,15 +3,14 @@ from dependency_injector import containers, providers
 
 from aura_v2.application.pipelines.tracking_pipeline import TrackingPipeline
 from aura_v2.application.use_cases.process_detections import ProcessDetectionsUseCase
-from aura_v2.domain.services.association import GNN_AssociationStrategy
 from aura_v2.infrastructure.tracking.modern_tracker import ModernTracker
 from aura_v2.infrastructure.persistence.in_memory import (
     InMemoryTrackRepository,
-    InMemoryEventPublisher,
     InMemoryDetectionSource,
     InMemoryEvaluationUseCase,
     InMemoryOutputSink,
 )
+
 
 class Container(containers.DeclarativeContainer):
     config = providers.Configuration()
@@ -42,4 +41,6 @@ class Container(containers.DeclarativeContainer):
 
     def init_resources(self):
         """Initializes container resources."""
-        self.wire(modules=["aura_v2.main", "aura_v2.application.pipelines.tracking_pipeline"])
+        self.wire(
+            modules=["aura_v2.main", "aura_v2.application.pipelines.tracking_pipeline"]
+        )

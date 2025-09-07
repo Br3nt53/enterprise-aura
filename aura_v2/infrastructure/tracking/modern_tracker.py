@@ -1,5 +1,7 @@
+# aura_v2/infrastructure/tracking/modern_tracker.py
 from __future__ import annotations
 
+import time
 from dataclasses import dataclass, replace
 from datetime import datetime
 from typing import Any, Dict, List, Tuple
@@ -7,13 +9,12 @@ from typing import Any, Dict, List, Tuple
 import numpy as np
 from filterpy.kalman import KalmanFilter
 
-# Domain imports (no Position3D here)
+# Domain imports
 from ...domain.entities import Detection, Track, TrackState, TrackStatus
 
-# Velocity3D location varies by project layout; try value_objects first, then entities
 try:
     from ...domain.value_objects.velocity import Velocity3D
-except Exception:  # fallback if re-exported from entities
+except Exception:
     from ...domain.entities import Velocity3D
 
 
@@ -22,17 +23,11 @@ class TrackingResult:
     active_tracks: List[Track]
     new_tracks: List[Track]
     deleted_tracks: List[Track]
+    processing_time_ms: float = 0.0
 
 
 class ModernTracker:
-    """
-    Minimal, test-oriented multi-sensor tracker.
-
-    Guarantees:
-    - No mutation of frozen dataclasses; uses dataclasses.replace.
-    - Every Track always holds a Velocity3D instance.
-    - Unmatched tracks are predicted and kept alive for at least one miss.
-    """
+    """Minimal, test-oriented multi-sensor tracker with timing metrics."""
 
     def __init__(self, max_distance: float = 50.0, max_missed: int = 2) -> None:
         self.tracks: Dict[str, Track] = {}
@@ -42,9 +37,9 @@ class ModernTracker:
         self.max_distance = float(max_distance)
         self.max_missed = int(max_missed)
 
-    # ---------- Public API ----------
-
     async def update(self, detections: List[Detection], timestamp: datetime) -> TrackingResult:
+        start_time = time.time()
+        
         # 1) Predict all current tracks to this timestamp
         for t in list(self.tracks.values()):
             self.predict_track(t, timestamp)
@@ -70,10 +65,15 @@ class ModernTracker:
         # 6) Prune old tracks
         deleted_tracks = self._prune()
 
+        processing_time = (time.time() - start_time) * 1000  # Convert to milliseconds
         active_tracks = [t for t in self.tracks.values() if t.status != TrackStatus.DELETED]
-        return TrackingResult(active_tracks=active_tracks, new_tracks=new_tracks, deleted_tracks=deleted_tracks)
-
-    # ---------- Core ops ----------
+        
+        return TrackingResult(
+            active_tracks=active_tracks, 
+            new_tracks=new_tracks, 
+            deleted_tracks=deleted_tracks,
+            processing_time_ms=processing_time
+        )
 
     def predict_track(self, track: Track, timestamp: datetime) -> None:
         """Advance a single track's KF to 'timestamp' and rebuild frozen state."""
@@ -139,8 +139,6 @@ class ModernTracker:
         track.missed = 0
         track.hits = getattr(track, "hits", 0) + 1
 
-    # ---------- Helpers ----------
-
     def _associate(
         self, detections: List[Detection]
     ) -> Tuple[List[Tuple[Track, Detection, float]], List[Detection], List[Track]]:
@@ -154,7 +152,6 @@ class ModernTracker:
         used_dets: set[int] = set()
 
         for j, det in enumerate(detections):
-            # choose closest unused track
             best_i = -1
             best_dist = float("inf")
             for i, tr in enumerate(live_tracks):

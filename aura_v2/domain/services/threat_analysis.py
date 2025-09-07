@@ -2,8 +2,10 @@
 from abc import ABC, abstractmethod
 from ...domain.entities.track import Track, ThreatLevel
 
+
 class ThreatAnalyzer(ABC):
     """Abstract base class for threat analysis strategies."""
+
     @abstractmethod
     def analyze(self, track: Track) -> ThreatLevel:
         """Analyzes a track and returns a threat level."""

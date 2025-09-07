@@ -1,4 +1,4 @@
-# aura_v2/domain/value_objects/position.py
+# aura_v2/domain/value_objects/position_2d.py
 from dataclasses import dataclass
 import numpy as np
 
@@ -14,15 +14,13 @@ class Position2D:
     def distance_to(self, other: 'Position2D') -> float:
         return float(np.linalg.norm(self.to_array() - other.to_array()))
 
+# aura_v2/domain/value_objects/velocity_2d.py
 @dataclass(slots=True)
-class Position3D:
-    """Represents a mutable position in 3D space."""
-    x: float
-    y: float
-    z: float
+class Velocity2D:
+    """Represents a mutable velocity in 2D space."""
+    vx: float = 0.0
+    vy: float = 0.0
 
-    def to_array(self) -> np.ndarray:
-        return np.array([self.x, self.y, self.z], dtype=float)
-
-    def distance_to(self, other: 'Position3D') -> float:
-        return float(np.linalg.norm(self.to_array() - other.to_array()))
+    @property
+    def magnitude(self) -> float:
+        return float(np.linalg.norm([self.vx, self.vy]))

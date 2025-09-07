@@ -1,7 +1,6 @@
-from .threat_analyzer import BasicThreatAnalyzer
-from .collision_predictor import BasicCollisionPredictor
+"""Application services."""
 
-__all__ = [
-    "BasicThreatAnalyzer",
-    "BasicCollisionPredictor",
-]
+from .collision_predictor import BasicCollisionPredictor
+from .threat_analyzer import BasicThreatAnalyzer
+
+__all__ = ["BasicThreatAnalyzer", "BasicCollisionPredictor"]

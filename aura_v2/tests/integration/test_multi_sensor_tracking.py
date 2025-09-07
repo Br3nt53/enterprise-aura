@@ -1,11 +1,13 @@
 import pytest
 from aura_v2.infrastructure.container import Container
 
+
 @pytest.fixture
 def container():
     c = Container()
     c.init_resources()
     yield c
+
 
 @pytest.mark.asyncio
 async def test_multi_target_crossing_scenario(container):

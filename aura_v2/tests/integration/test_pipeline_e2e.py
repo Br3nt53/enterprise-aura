@@ -2,11 +2,13 @@
 import pytest
 from aura_v2.infrastructure.container import Container
 
+
 @pytest.fixture
 def test_container():
     c = Container()
     c.init_resources()
     yield c
+
 
 @pytest.mark.asyncio
 async def test_full_tracking_pipeline(test_container):

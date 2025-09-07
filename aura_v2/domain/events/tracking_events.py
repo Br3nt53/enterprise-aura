@@ -1,9 +1,8 @@
 # aura_v2/domain/events/tracking_events.py
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional
 
-from ..entities import Detection, Track
+from ..entities import Detection
 from ..value_objects import TrackID
 
 

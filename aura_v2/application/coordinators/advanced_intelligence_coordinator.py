@@ -2,11 +2,11 @@
 import asyncio
 import logging
 from dataclasses import dataclass
-from typing import List, Coroutine
+from typing import List, Coroutine, Optional
 
 from ...domain.entities import Track, ThreatLevel
 from ...domain.services import ThreatAnalyzer, CollisionPredictor
-from ...domain.value_objects import Threat, TacticalAlert
+from ...domain.value_objects import Threat, TacticalAlert, Collision
 from ...infrastructure.persistence.in_memory import TrackHistoryRepository
 
 @dataclass
@@ -25,13 +25,13 @@ class AdvancedIntelligenceCoordinator:
         collision_predictor: CollisionPredictor,
         track_history: TrackHistoryRepository,
         logger: logging.Logger,
-        config: CoordinatorConfig = CoordinatorConfig()
+        config: CoordinatorConfig = None
     ):
         self.threat_analyzer = threat_analyzer
         self.collision_predictor = collision_predictor
         self.track_history = track_history
         self.logger = logger
-        self.config = config
+        self.config = config or CoordinatorConfig()
 
     async def process_tracks(self, tracks: List[Track]) -> List[TacticalAlert]:
         """
@@ -51,7 +51,7 @@ class AdvancedIntelligenceCoordinator:
         threat_assessment_tasks: List[Coroutine] = [
             self._assess_individual_threat(track) for track in tracks
         ]
-        assessed_threats: List[Threat] = await asyncio.gather(*threat_assessment_tasks)
+        assessed_threats: List[Optional[Threat]] = await asyncio.gather(*threat_assessment_tasks)
 
         # Step 3: Filter for threats that meet the required level for further analysis
         priority_threats = [
@@ -77,11 +77,9 @@ class AdvancedIntelligenceCoordinator:
 
     async def _assess_individual_threat(self, track: Track) -> Optional[Threat]:
         """Analyzes a single track, considering its history."""
-        # This is where historical analysis would be added.
-        # For now, it delegates to the analyzer.
         threat_level = self.threat_analyzer.analyze(track)
         if threat_level != ThreatLevel.LOW:
-            return Threat(track, threat_level, track.confidence.value)
+            return Threat(track, threat_level, float(track.confidence))
         return None
 
     def _fuse_intelligence(self, threats: List[Threat], collisions: List[Collision]) -> List[TacticalAlert]:
@@ -97,15 +95,15 @@ class AdvancedIntelligenceCoordinator:
                     related_collision = collision
                     break
             
-            # Urgency can be a complex calculation. Here's a simple example.
-            urgency = threat.threat_level.value / len(ThreatLevel) + threat.confidence.value
+            # Urgency calculation
+            urgency = threat.threat_level.value / len(ThreatLevel) + threat.confidence
             if related_collision:
-                urgency += (1.0 - (related_collision.time_to_collision / 60.0)) # Higher urgency for closer collisions
+                urgency += (1.0 - (related_collision.time_to_collision / 60.0))
             
             alerts.append(TacticalAlert(
                 threat=threat,
                 collision=related_collision,
-                urgency=min(1.0, urgency / 2.0) # Normalize
+                urgency=min(1.0, urgency / 2.0)  # Normalize
             ))
             
         # Sort alerts by the highest urgency
