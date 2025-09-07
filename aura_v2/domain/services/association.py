@@ -1,57 +1,48 @@
 # aura_v2/domain/services/association.py
 from abc import ABC, abstractmethod
-from typing import List, Tuple, Optional
+from typing import List, Tuple
 import numpy as np
-from ...domain.entities import Detection, Track # Add this line
+from scipy.optimize import linear_sum_assignment
+from ..entities import Detection, Track
 
 class AssociationStrategy(ABC):
-    """Domain service interface for data association"""
-    
+    """Abstract base class for association strategies."""
     @abstractmethod
-    def associate(
-        self, 
-        tracks: List[Track], 
-        detections: List[Detection]
-    ) -> List[Tuple[Optional[Track], Optional[Detection], float]]:
-        """
-        Returns list of (track, detection, score) associations.
-        None track means new track, None detection means missed detection.
-        """
+    def associate(self, tracks: List[Track], detections: List[Detection]) -> List[Tuple[Track, Detection, float]]:
+        """Associates detections to tracks."""
         pass
 
-class HungarianAssociation(AssociationStrategy):
-    """Optimal assignment using Hungarian algorithm"""
-    
-    def __init__(self, gate_threshold: float = 2.0):
-        self.gate_threshold = gate_threshold
-    
-    def associate(
-        self, 
-        tracks: List[Track], 
-        detections: List[Detection]
-    ) -> List[Tuple[Optional[Track], Optional[Detection], float]]:
+class GNN_AssociationStrategy(AssociationStrategy):
+    """Global Nearest Neighbor association strategy."""
+    def __init__(self, max_distance: float = 50.0):
+        self.max_distance = max_distance
+
+    def associate(self, tracks: List[Track], detections: List[Detection]) -> List[Tuple[Track, Detection, float]]:
+        """
+        Associates detections to tracks using Global Nearest Neighbor (GNN) algorithm.
+        This is a concrete implementation.
+        """
         if not tracks or not detections:
-            return self._handle_empty_case(tracks, detections)
-        
-        # Build cost matrix
-        cost_matrix = self._build_cost_matrix(tracks, detections)
-        
-        # Apply gating
-        cost_matrix[cost_matrix > self.gate_threshold] = np.inf
-        
-        # Solve assignment problem
-        from scipy.optimize import linear_sum_assignment
-        track_indices, det_indices = linear_sum_assignment(cost_matrix)
-        
-        # Build associations
+            return []
+
+        # Create a cost matrix
+        cost_matrix = np.full((len(tracks), len(detections)), self.max_distance + 1.0)
+        for i, track in enumerate(tracks):
+            for j, detection in enumerate(detections):
+                distance = np.linalg.norm(track.state.position.to_array() - detection.position.to_array())
+                if distance < self.max_distance:
+                    cost_matrix[i, j] = distance
+
+        # Use the Hungarian algorithm to find the optimal assignment
+        track_indices, detection_indices = linear_sum_assignment(cost_matrix)
+
         associations = []
-        for t_idx, d_idx in zip(track_indices, det_indices):
-            if cost_matrix[t_idx, d_idx] < np.inf:
-                associations.append(
-                    (tracks[t_idx], detections[d_idx], cost_matrix[t_idx, d_idx])
-                )
-        
-        # Add unassociated tracks and detections
-        # ... implementation
-        
+        for track_idx, det_idx in zip(track_indices, detection_indices):
+            if cost_matrix[track_idx, det_idx] <= self.max_distance:
+                track = tracks[track_idx]
+                detection = detections[det_idx]
+                # Score can be inverse of distance, or simply 1.0
+                score = 1.0 / (1.0 + cost_matrix[track_idx, det_idx])
+                associations.append((track, detection, score))
+
         return associations

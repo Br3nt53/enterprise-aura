@@ -1,131 +1,236 @@
 from __future__ import annotations
-import time
-from dataclasses import dataclass
+
+from dataclasses import dataclass, replace
 from datetime import datetime
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
+
 import numpy as np
-from scipy.optimize import linear_sum_assignment
 from filterpy.kalman import KalmanFilter
-from aura_v2.domain import (
-    Detection, Track, TrackState, TrackStatus, ThreatLevel,
-    Position3D, Velocity3D
-)
+
+# Domain imports (no Position3D here)
+from ...domain.entities import Detection, Track, TrackState, TrackStatus
+
+# Velocity3D location varies by project layout; try value_objects first, then entities
+try:
+    from ...domain.value_objects.velocity import Velocity3D
+except Exception:  # fallback if re-exported from entities
+    from ...domain.entities import Velocity3D
+
 
 @dataclass
 class TrackingResult:
     active_tracks: List[Track]
     new_tracks: List[Track]
     deleted_tracks: List[Track]
-    processing_time_ms: float
+
 
 class ModernTracker:
-    def __init__(self, max_age: int = 30, min_hits: int = 3, iou_threshold: float = 0.3, max_distance: float = 50.0) -> None:
-        self.max_age = max_age
-        self.min_hits = min_hits
-        self.iou_threshold = iou_threshold
-        self.max_distance = max_distance
+    """
+    Minimal, test-oriented multi-sensor tracker.
+
+    Guarantees:
+    - No mutation of frozen dataclasses; uses dataclasses.replace.
+    - Every Track always holds a Velocity3D instance.
+    - Unmatched tracks are predicted and kept alive for at least one miss.
+    """
+
+    def __init__(self, max_distance: float = 50.0, max_missed: int = 2) -> None:
         self.tracks: Dict[str, Track] = {}
         self.kalman_filters: Dict[str, KalmanFilter] = {}
-        self.next_track_id = 0
+        self._id_counter: int = 0
 
-    def create_state_from_detection(self, detection: Detection) -> TrackState:
-        return TrackState(position=detection.position, velocity=Velocity3D())
+        self.max_distance = float(max_distance)
+        self.max_missed = int(max_missed)
+
+    # ---------- Public API ----------
 
     async def update(self, detections: List[Detection], timestamp: datetime) -> TrackingResult:
-        start = time.perf_counter()
-        self._predict_tracks(timestamp)
+        # 1) Predict all current tracks to this timestamp
+        for t in list(self.tracks.values()):
+            self.predict_track(t, timestamp)
+
+        # 2) Associate detections to tracks (greedy nearest-neighbor)
         matched, unmatched_dets, unmatched_tracks = self._associate(detections)
-        for track_id, det, score in matched:
-            self._update_track(track_id, det, score, timestamp)
+
+        # 3) Update matched tracks
+        for track, det, score in matched:
+            self._update_track(track, det, score, timestamp)
+
+        # 4) Spawn new tracks for unmatched detections
         new_tracks: List[Track] = []
         for det in unmatched_dets:
-            new_tracks.append(self._create_track(det, timestamp))
-        for track_id in unmatched_tracks:
-            self.tracks[track_id].mark_missed()
-        deleted_tracks = self._delete_old_tracks()
-        active = [t for t in self.tracks.values() if t.status != TrackStatus.DELETED]
-        ms = (time.perf_counter() - start) * 1000.0
-        return TrackingResult(active_tracks=active, new_tracks=new_tracks, deleted_tracks=deleted_tracks, processing_time_ms=ms)
+            nt = self._new_track_from_detection(det, timestamp)
+            self.tracks[nt.id] = nt
+            new_tracks.append(nt)
 
-    def _predict_tracks(self, timestamp: datetime) -> None:
-        for tid, track in list(self.tracks.items()):
-            if track.status == TrackStatus.DELETED:
-                continue
-            kf = self.kalman_filters[tid]
-            dt = (timestamp - track.updated_at).total_seconds()
-            if dt <= 0:
-                continue
-            kf.F[0, 3] = dt; kf.F[1, 4] = dt; kf.F[2, 5] = dt
-            kf.predict()
-            track.state = TrackState(
-                position=Position3D(float(kf.x[0,0]), float(kf.x[1,0]), float(kf.x[2,0])),
-                velocity=Velocity3D(float(kf.x[3,0]), float(kf.x[4,0]), float(kf.x[5,0]))
-            )
+        # 5) Keep unmatched tracks alive; increment missed
+        for t in unmatched_tracks:
+            t.missed = getattr(t, "missed", 0) + 1
 
-    def _associate(self, detections: List[Detection]) -> Tuple[List[Tuple[str, Detection, float]], List[Detection], List[str]]:
-        ids = [tid for tid, t in self.tracks.items() if t.status != TrackStatus.DELETED]
-        if not ids or not detections:
-            return [], detections, ids
-        cost = np.zeros((len(ids), len(detections)), dtype=float)
-        for i, tid in enumerate(ids):
-            tr = self.tracks[tid]
-            for j, det in enumerate(detections):
-                cost[i, j] = tr.state.position.distance_to(det.position)
-        cost[cost > self.max_distance] = 1e6
-        ti, dj = linear_sum_assignment(cost)
-        matched: List[Tuple[str, Detection, float]] = []
-        mt, md = set(), set()
-        for a, b in zip(ti, dj):
-            if cost[a, b] < self.max_distance:
-                matched.append((ids[a], detections[b], 1.0 / (1.0 + cost[a, b])))
-                mt.add(a); md.add(b)
-        unmatched_tracks = [ids[i] for i in range(len(ids)) if i not in mt]
-        unmatched_dets = [detections[j] for j in range(len(detections)) if j not in md]
+        # 6) Prune old tracks
+        deleted_tracks = self._prune()
+
+        active_tracks = [t for t in self.tracks.values() if t.status != TrackStatus.DELETED]
+        return TrackingResult(active_tracks=active_tracks, new_tracks=new_tracks, deleted_tracks=deleted_tracks)
+
+    # ---------- Core ops ----------
+
+    def predict_track(self, track: Track, timestamp: datetime) -> None:
+        """Advance a single track's KF to 'timestamp' and rebuild frozen state."""
+        if track.id not in self.kalman_filters:
+            self._init_kf(track)
+
+        kf = self.kalman_filters[track.id]
+        dt = (timestamp - track.updated_at).total_seconds()
+        if dt <= 0:
+            return
+
+        # Constant-velocity model: insert dt into F
+        kf.F[0, 3] = dt
+        kf.F[1, 4] = dt
+        kf.F[2, 5] = dt
+
+        kf.predict()
+
+        pos = replace(
+            track.state.position,
+            x=float(kf.x[0, 0]),
+            y=float(kf.x[1, 0]),
+            z=float(kf.x[2, 0]),
+        )
+        vel0 = track.state.velocity or Velocity3D(0.0, 0.0, 0.0)
+        vel = replace(
+            vel0,
+            vx=float(kf.x[3, 0]),
+            vy=float(kf.x[4, 0]),
+            vz=float(kf.x[5, 0]),
+        )
+        track.state = replace(track.state, position=pos, velocity=vel)
+        track.updated_at = timestamp
+
+    def _update_track(self, track: Track, detection: Detection, score: float, timestamp: datetime) -> None:
+        """KF measurement update and immutable state rebuild."""
+        kf = self.kalman_filters[track.id]
+        z = np.array(
+            [detection.position.x, detection.position.y, detection.position.z],
+            dtype=float,
+        ).reshape(3, 1)
+        kf.update(z)
+
+        pos = replace(
+            track.state.position,
+            x=float(kf.x[0, 0]),
+            y=float(kf.x[1, 0]),
+            z=float(kf.x[2, 0]),
+        )
+        vel0 = track.state.velocity or Velocity3D(0.0, 0.0, 0.0)
+        vel = replace(
+            vel0,
+            vx=float(kf.x[3, 0]),
+            vy=float(kf.x[4, 0]),
+            vz=float(kf.x[5, 0]),
+        )
+        track.state = replace(track.state, position=pos, velocity=vel)
+
+        # Domain update (if present); keep counters sane
+        if hasattr(track, "update"):
+            track.update(detection, score)
+        track.updated_at = timestamp
+        track.missed = 0
+        track.hits = getattr(track, "hits", 0) + 1
+
+    # ---------- Helpers ----------
+
+    def _associate(
+        self, detections: List[Detection]
+    ) -> Tuple[List[Tuple[Track, Detection, float]], List[Detection], List[Track]]:
+        """Greedy nearest-neighbor association within max_distance."""
+        live_tracks = [t for t in self.tracks.values() if t.status != TrackStatus.DELETED]
+        if not live_tracks:
+            return [], detections, []
+
+        matched: List[Tuple[Track, Detection, float]] = []
+        used_tracks: set[int] = set()
+        used_dets: set[int] = set()
+
+        for j, det in enumerate(detections):
+            # choose closest unused track
+            best_i = -1
+            best_dist = float("inf")
+            for i, tr in enumerate(live_tracks):
+                if i in used_tracks:
+                    continue
+                dist = self._euclidean(tr.state.position, det.position)
+                if dist < best_dist:
+                    best_dist = dist
+                    best_i = i
+            if best_i >= 0 and best_dist <= self.max_distance:
+                matched.append((live_tracks[best_i], det, 1.0 / (1.0 + best_dist)))
+                used_tracks.add(best_i)
+                used_dets.add(j)
+
+        unmatched_dets = [d for j, d in enumerate(detections) if j not in used_dets]
+        unmatched_tracks = [t for i, t in enumerate(live_tracks) if i not in used_tracks]
         return matched, unmatched_dets, unmatched_tracks
 
-    def _update_track(self, track_id: str, detection: Detection, score: float, timestamp: datetime) -> None:
-        tr = self.tracks[track_id]
-        kf = self.kalman_filters[track_id]
-        z = detection.position.to_array().reshape(3,1)
-        kf.update(z)
-        tr.state = TrackState(
-            position=Position3D(float(kf.x[0,0]), float(kf.x[1,0]), float(kf.x[2,0])),
-            velocity=Velocity3D(float(kf.x[3,0]), float(kf.x[4,0]), float(kf.x[5,0]))
+    def _new_track_from_detection(self, detection: Detection, now: datetime) -> Track:
+        track_id = self._next_track_id()
+        state = TrackState(
+            position=detection.position,
+            velocity=Velocity3D(0.0, 0.0, 0.0),
         )
-        tr.update(detection, score)
-        tr.updated_at = timestamp
-
-    def _create_track(self, detection: Detection, timestamp: datetime) -> Track:
-        tid = f"track_{self.next_track_id:05d}"; self.next_track_id += 1
-        kf = KalmanFilter(dim_x=6, dim_z=3)
-        kf.x = np.array([[detection.position.x],[detection.position.y],[detection.position.z],[0.0],[0.0],[0.0]], dtype=float)
-        kf.F = np.array([[1,0,0,1,0,0],[0,1,0,0,1,0],[0,0,1,0,0,1],[0,0,0,1,0,0],[0,0,0,0,1,0],[0,0,0,0,0,1]], dtype=float)
-        kf.H = np.array([[1,0,0,0,0,0],[0,1,0,0,0,0],[0,0,1,0,0,0]], dtype=float)
-        kf.R = np.eye(3)*1.0; kf.Q = np.eye(6)*0.1; kf.P = np.eye(6)*10.0
-        self.kalman_filters[tid] = kf
-        tr = Track(
-            id=tid,
-            state=TrackState(position=detection.position, velocity=Velocity3D()),
-            status=TrackStatus.TENTATIVE,
-            confidence=detection.confidence,
-            threat_level=ThreatLevel.LOW,
-            created_at=timestamp,
-            updated_at=timestamp,
+        track = Track(
+            id=track_id,
+            state=state,
+            status=TrackStatus.ACTIVE,
+            created_at=now,
+            updated_at=now,
             hits=1,
             missed=0,
         )
-        self.tracks[tid] = tr
-        return tr
+        self._init_kf(track)
+        return track
 
-    def _delete_old_tracks(self) -> List[Track]:
+    def _init_kf(self, track: Track) -> None:
+        kf = KalmanFilter(dim_x=6, dim_z=3)
+        kf.F = np.eye(6, dtype=float)
+        kf.H = np.hstack([np.eye(3), np.zeros((3, 3))]).astype(float)
+        kf.P = np.eye(6, dtype=float) * 10.0
+        kf.R = np.eye(3, dtype=float) * 0.5
+        kf.Q = np.eye(6, dtype=float) * 0.01
+        vx = track.state.velocity.vx if track.state.velocity else 0.0
+        vy = track.state.velocity.vy if track.state.velocity else 0.0
+        vz = track.state.velocity.vz if track.state.velocity else 0.0
+        kf.x = np.array(
+            [
+                [float(track.state.position.x)],
+                [float(track.state.position.y)],
+                [float(track.state.position.z)],
+                [float(vx)],
+                [float(vy)],
+                [float(vz)],
+            ],
+            dtype=float,
+        )
+        self.kalman_filters[track.id] = kf
+
+    def _prune(self) -> List[Track]:
         deleted: List[Track] = []
-        to_del: List[str] = []
-        for tid, tr in self.tracks.items():
-            if tr.missed > self.max_age:
-                tr.status = TrackStatus.DELETED
-                deleted.append(tr)
-                to_del.append(tid)
-        for tid in to_del:
-            self.tracks.pop(tid, None)
-            self.kalman_filters.pop(tid, None)
+        for t in list(self.tracks.values()):
+            if t.missed > self.max_missed:
+                t.status = TrackStatus.DELETED
+                deleted.append(t)
+                self.kalman_filters.pop(t.id, None)
         return deleted
+
+    def _next_track_id(self) -> str:
+        tid = f"track_{self._id_counter:05d}"
+        self._id_counter += 1
+        return tid
+
+    @staticmethod
+    def _euclidean(a: Any, b: Any) -> float:
+        dx = float(a.x) - float(b.x)
+        dy = float(a.y) - float(b.y)
+        dz = float(a.z) - float(b.z)
+        return float(np.sqrt(dx * dx + dy * dy + dz * dz))
