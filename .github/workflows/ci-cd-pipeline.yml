@@ -24,12 +24,11 @@ jobs:
           echo "$HOME/.cargo/bin" >> $GITHUB_PATH
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      - name: Create venv (uv)
+      - name: Create venv with uv
         run: |
-          uv venv .venv
-          echo ".venv" >> $GITHUB_ENV
-          echo "VIRTUAL_ENV=.venv" >> $GITHUB_ENV
-          echo "$(pwd)/.venv/bin" >> $GITHUB_PATH
+         uv venv .venv
+         echo "VIRTUAL_ENV=.venv" >> $GITHUB_ENV
+         echo "$PWD/.venv/bin" >> $GITHUB_PATH
 
       - name: Install project (editable) + extras
         run: |
