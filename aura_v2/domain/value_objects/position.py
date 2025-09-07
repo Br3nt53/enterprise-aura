@@ -1,18 +1,16 @@
-from __future__ import annotations
+# aura_v2/domain/value_objects/position.py
 from dataclasses import dataclass
 import numpy as np
 
-@dataclass(frozen=True, slots=True)
+@dataclass(slots=True)  # <-- CRITICAL FIX: `frozen=True` has been REMOVED.
 class Position3D:
+    """Represents a mutable position in 3D space."""
     x: float
     y: float
-    z: float = 0.0
-
-    def distance_to(self, other: "Position3D") -> float:
-        dx = self.x - other.x
-        dy = self.y - other.y
-        dz = self.z - other.z
-        return float((dx*dx + dy*dy + dz*dz) ** 0.5)
+    z: float
 
     def to_array(self) -> np.ndarray:
         return np.array([self.x, self.y, self.z], dtype=float)
+
+    def distance_to(self, other: 'Position3D') -> float:
+        return float(np.linalg.norm(self.to_array() - other.to_array()))

@@ -1,15 +1,14 @@
+# aura_v2/domain/value_objects/velocity.py
 from dataclasses import dataclass
 import numpy as np
 
-@dataclass(frozen=True, slots=True)
+@dataclass(slots=True)  # <-- CRITICAL FIX: `frozen=True` has been REMOVED.
 class Velocity3D:
+    """Represents a mutable velocity in 3D space."""
     vx: float = 0.0
     vy: float = 0.0
     vz: float = 0.0
 
     @property
     def magnitude(self) -> float:
-        return float((self.vx*self.vx + self.vy*self.vy + self.vz*self.vz) ** 0.5)
-
-    def to_array(self) -> np.ndarray:
-        return np.array([self.vx, self.vy, self.vz], dtype=float)
+        return float(np.linalg.norm([self.vx, self.vy, self.vz]))

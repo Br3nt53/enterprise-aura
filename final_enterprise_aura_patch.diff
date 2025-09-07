@@ -1,0 +1,134 @@
+*** Begin Patch
+*** Update File: aura_v2/infrastructure/tracking/modern_tracker.py
+@@
+-from dataclasses import dataclass
++from dataclasses import dataclass, replace
+@@
+     def _update_track(self, track: Track, detection: Detection, score: float, timestamp: datetime):
+-        kf = self.kalman_filters[track.id]
+-        kf.update(np.array([detection.position.x, detection.position.y, detection.position.z]))
+-        track.state.position.x = kf.x[0, 0]
+-        track.state.position.y = kf.x[1, 0]
+-        track.state.position.z = kf.x[2, 0]
+-        track.state.velocity.vx = kf.x[3, 0]
+-        track.state.velocity.vy = kf.x[4, 0]
+-        track.state.velocity.vz = kf.x[5, 0]
+-        track.updated_at = timestamp
++        kf = self.kalman_filters[track.id]
++        # incorporate new measurement
++        kf.update(np.array([detection.position.x, detection.position.y, detection.position.z]))
++        # Build new immutable state to respect frozen dataclasses
++        new_pos = Position3D(
++            x=float(kf.x[0, 0]),
++            y=float(kf.x[1, 0]),
++            z=float(kf.x[2, 0]),
++        )
++        new_vel = Velocity3D(
++            vx=float(kf.x[3, 0]),
++            vy=float(kf.x[4, 0]),
++            vz=float(kf.x[5, 0]),
++        )
++        track.state = TrackState(position=new_pos, velocity=new_vel)
++        track.updated_at = timestamp
++        # Reset missed count and increment hit count on successful update
++        track.missed = 0
++        track.hits = getattr(track, "hits", 0) + 1
+@@
+     def predict_track(self, track: Track, timestamp: datetime) -> None:
+-        kf = self.kalman_filters[track.id]
+-        dt = (timestamp - track.updated_at).total_seconds()
+-        if dt <= 0:
+-            return
+-        kf.F[0, 3] = dt
+-        kf.F[1, 4] = dt
+-        kf.F[2, 5] = dt
+-        kf.predict()
+-        track.state.position.x = kf.x[0, 0]
+-        track.state.position.y = kf.x[1, 0]
+-        track.state.position.z = kf.x[2, 0]
+-        track.state.velocity.vx = kf.x[3, 0]
+-        track.state.velocity.vy = kf.x[4, 0]
+-        track.state.velocity.vz = kf.x[5, 0]
+-        track.updated_at = timestamp
++        kf = self.kalman_filters[track.id]
++        dt = (timestamp - track.updated_at).total_seconds()
++        if dt <= 0:
++            return
++        # update state transition matrix for elapsed time
++        kf.F[0, 3] = dt
++        kf.F[1, 4] = dt
++        kf.F[2, 5] = dt
++        kf.predict()
++        # Build new immutable state
++        new_pos = Position3D(
++            x=float(kf.x[0, 0]),
++            y=float(kf.x[1, 0]),
++            z=float(kf.x[2, 0]),
++        )
++        new_vel = Velocity3D(
++            vx=float(kf.x[3, 0]),
++            vy=float(kf.x[4, 0]),
++            vz=float(kf.x[5, 0]),
++        )
++        track.state = TrackState(position=new_pos, velocity=new_vel)
++        track.updated_at = timestamp
+*** End Patch
+
+*** Begin Patch
+*** Update File: aura_v2/infrastructure/tracking/modern_tracker.py
+@@
+-    def _new_track_from_detection(self, detection: Detection, now: datetime) -> Track:
+-        track_id = self._next_track_id()
+-        state = TrackState(position=detection.position, velocity=None)
+-        track = Track(
+-            id=track_id,
+-            state=state,
+-            status=TrackStatus.ACTIVE,
+-            created_at=now,
+-            updated_at=now,
+-            hits=1,
+-            missed=0,
+-        )
+-        self._init_kf(track)
+-        return track
++    def _new_track_from_detection(self, detection: Detection, now: datetime) -> Track:
++        """
++        Create a new Track from an initial detection. Always set a default velocity of zero
++        so later velocity updates do not fail with NoneType errors.
++        """
++        track_id = self._next_track_id()
++        # Provide zero-initialised velocity so we never have None
++        state = TrackState(position=detection.position, velocity=Velocity3D(0.0, 0.0, 0.0))
++        track = Track(
++            id=track_id,
++            state=state,
++            status=TrackStatus.ACTIVE,
++            created_at=now,
++            updated_at=now,
++            hits=1,
++            missed=0,
++        )
++        # initialise Kalman filter for this new track
++        self._init_kf(track)
++        return track
+*** End Patch
+
+*** Begin Patch
+*** Update File: aura_v2/application/use_cases/process_detections.py
+@@ class ProcessDetectionsUseCase:
+-        active_tracks = await self.track_repository.get_active_tracks()
+-        # 2. CRITICAL FIX: Synchronize the tracker's in-memory state with the loaded state.
+-        self.track_manager.tracks = {t.id: t for t in active_tracks}
+-        # Also sync the Kalman filters to prevent errors on subsequent updates.
+-        self.track_manager.kalman_filters = {
+-            t.id: self.track_manager.kalman_filters[t.id]
+-            for t in active_tracks if t.id in self.track_manager.kalman_filters
+-        }
++        active_tracks = await self.track_repository.get_active_tracks()
++        # Synchronize tracker state with persisted tracks
++        self.track_manager.tracks = {t.id: t for t in active_tracks}
++        # Ensure every loaded track has a Kalman filter; create one if absent
++        for t in active_tracks:
++            if t.id not in self.track_manager.kalman_filters:
++                self.track_manager._init_kf(t)
+*** End Patch
