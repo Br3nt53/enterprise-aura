@@ -1,5 +1,11 @@
-# aura_v2/domain/services/__init__.py
-from .multi_sensor_fusion import SensorCharacteristics, MultiSensorFusion
 from .association import AssociationStrategy
+from .multi_sensor_fusion import FusionService
+from .threat_analysis import ThreatAnalyzer
+from .collision_prediction import CollisionPredictor
 
-__all__ = ["SensorCharacteristics", "MultiSensorFusion", "AssociationStrategy"]
+__all__ = [
+    "AssociationStrategy",
+    "FusionService",
+    "ThreatAnalyzer",
+    "CollisionPredictor",
+]
