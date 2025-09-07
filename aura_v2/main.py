@@ -66,11 +66,19 @@ class AURAApplication:
             return
         self._build_app()
         self.tracker = ModernTracker()
-        self.fusion_service = MultiSensorFusion({
-            "radar":  SensorCharacteristics("radar", 2.0, 20.0, 0.95, 0.01, np.eye(3)*4.0),
-            "camera": SensorCharacteristics("camera", 5.0, 30.0, 0.90, 0.05, np.diag([25.0, 1.0, 25.0])),
-            "lidar":  SensorCharacteristics("lidar", 0.2, 10.0, 0.85, 0.001, np.eye(3)*0.04),
-        })
+        self.fusion_service = MultiSensorFusion(
+            {
+                "radar": SensorCharacteristics(
+                    "radar", 2.0, 20.0, 0.95, 0.01, np.eye(3) * 4.0
+                ),
+                "camera": SensorCharacteristics(
+                    "camera", 5.0, 30.0, 0.90, 0.05, np.diag([25.0, 1.0, 25.0])
+                ),
+                "lidar": SensorCharacteristics(
+                    "lidar", 0.2, 10.0, 0.85, 0.001, np.eye(3) * 0.04
+                ),
+            }
+        )
         self._initialized = True
 
     # CHANGED: async shim so tests can await it
@@ -106,31 +114,45 @@ class AURAApplication:
                 pos = d.position
                 return Detection(
                     timestamp=d.timestamp,
-                    position=Position3D(pos.get("x", 0.0), pos.get("y", 0.0), pos.get("z", 0.0)),
+                    position=Position3D(
+                        pos.get("x", 0.0), pos.get("y", 0.0), pos.get("z", 0.0)
+                    ),
                     confidence=Confidence(d.confidence),
                     sensor_id=d.sensor_id,
                     attributes=d.attributes or {},
                 )
 
             detections: List[Detection] = []
-            for d in req.radar_detections + req.camera_detections + req.lidar_detections:
+            for d in (
+                req.radar_detections + req.camera_detections + req.lidar_detections
+            ):
                 detections.append(to_det(d))
 
             result: TrackingResult = await self.tracker.update(detections, ts)
 
             threats: List[Dict[str, Any]] = []
             for tr in result.active_tracks:
-                threats.append({
-                    "track_id": tr.id,
-                    "threat_level": int(tr.threat_level),
-                    "confidence": float(tr.confidence),
-                })
+                threats.append(
+                    {
+                        "track_id": tr.id,
+                        "threat_level": int(tr.threat_level),
+                        "confidence": float(tr.confidence),
+                    }
+                )
 
             def out(tr: Track) -> TrackOutput:
                 return TrackOutput(
                     id=tr.id,
-                    position={"x": tr.state.position.x, "y": tr.state.position.y, "z": tr.state.position.z},
-                    velocity={"vx": tr.state.velocity.vx, "vy": tr.state.velocity.vy, "vz": tr.state.velocity.vz},
+                    position={
+                        "x": tr.state.position.x,
+                        "y": tr.state.position.y,
+                        "z": tr.state.position.z,
+                    },
+                    velocity={
+                        "vx": tr.state.velocity.vx,
+                        "vy": tr.state.velocity.vy,
+                        "vz": tr.state.velocity.vz,
+                    },
                     confidence=float(tr.confidence),
                     status=tr.status.value,
                     threat_level=str(int(tr.threat_level)),
@@ -171,4 +193,11 @@ def dev_server(
     reload: bool = False,
     log_level: str = "info",
 ):
-    uvicorn.run("aura_v2.main:get_app", host=host, port=port, reload=reload, factory=True, log_level=log_level)
+    uvicorn.run(
+        "aura_v2.main:get_app",
+        host=host,
+        port=port,
+        reload=reload,
+        factory=True,
+        log_level=log_level,
+    )

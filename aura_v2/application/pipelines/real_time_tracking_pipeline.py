@@ -1,4 +1,5 @@
-﻿"""Real-time tracking pipeline for processing sensor data."""
+"""Real-time tracking pipeline for processing sensor data."""
+
 from datetime import datetime
 from logging import Logger
 from typing import Dict
@@ -12,7 +13,7 @@ from ..events import EventPublisher
 
 class RealTimeTrackingPipeline:
     """Orchestrates the real-time object tracking process."""
- 
+
     def __init__(
         self,
         tracker: ModernTracker,
@@ -53,7 +54,9 @@ class RealTimeTrackingPipeline:
     def process_frame(self, detections: list) -> None:
         """Process a single frame of detections."""
         self.sequence_id += 1
-        self.logger.debug(f"Processing frame {self.sequence_id} with {len(detections)} detections.")
+        self.logger.debug(
+            f"Processing frame {self.sequence_id} with {len(detections)} detections."
+        )
 
         if not detections:
             return
@@ -78,7 +81,8 @@ class RealTimeTrackingPipeline:
     def _create_command(self, detections, latest_timestamp: datetime):
         """Create a command object for the detect and track use case."""
         from ..use_cases import DetectAndTrackCommand
-        return DetectAndTrackCommand( # type: ignore
+
+        return DetectAndTrackCommand(  # type: ignore
             detections=detections,
             timestamp=latest_timestamp,
             sequence_id=self.sequence_id,
@@ -86,14 +90,14 @@ class RealTimeTrackingPipeline:
 
     def _assess_threats(self, tracks):
         """Assess threats based on the current tracks."""
-        from ..use_cases import ThreatAssessment
+
         for track in tracks:
             # Example threat assessment logic
             if track.confidence > 0.8 and track.velocity.magnitude > 20:
-                threat_level = ThreatLevel.HIGH # type: ignore
+                threat_level = ThreatLevel.HIGH  # type: ignore
                 self.logger.warning(f"High threat track detected: {track.id}")
             elif track.confidence > 0.6 and track.velocity.magnitude > 10:
-                threat_level = ThreatLevel.MEDIUM # type: ignore
+                threat_level = ThreatLevel.MEDIUM  # type: ignore
                 self.logger.info(f"Medium threat track detected: {track.id}")
             else:
                 continue

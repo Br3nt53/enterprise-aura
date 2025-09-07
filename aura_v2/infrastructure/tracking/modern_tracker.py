@@ -44,7 +44,9 @@ class ModernTracker:
 
     # ---------- Public API ----------
 
-    async def update(self, detections: List[Detection], timestamp: datetime) -> TrackingResult:
+    async def update(
+        self, detections: List[Detection], timestamp: datetime
+    ) -> TrackingResult:
         # 1) Predict all current tracks to this timestamp
         for t in list(self.tracks.values()):
             self.predict_track(t, timestamp)
@@ -70,8 +72,14 @@ class ModernTracker:
         # 6) Prune old tracks
         deleted_tracks = self._prune()
 
-        active_tracks = [t for t in self.tracks.values() if t.status != TrackStatus.DELETED]
-        return TrackingResult(active_tracks=active_tracks, new_tracks=new_tracks, deleted_tracks=deleted_tracks)
+        active_tracks = [
+            t for t in self.tracks.values() if t.status != TrackStatus.DELETED
+        ]
+        return TrackingResult(
+            active_tracks=active_tracks,
+            new_tracks=new_tracks,
+            deleted_tracks=deleted_tracks,
+        )
 
     # ---------- Core ops ----------
 
@@ -108,7 +116,9 @@ class ModernTracker:
         track.state = replace(track.state, position=pos, velocity=vel)
         track.updated_at = timestamp
 
-    def _update_track(self, track: Track, detection: Detection, score: float, timestamp: datetime) -> None:
+    def _update_track(
+        self, track: Track, detection: Detection, score: float, timestamp: datetime
+    ) -> None:
         """KF measurement update and immutable state rebuild."""
         kf = self.kalman_filters[track.id]
         z = np.array(
@@ -145,7 +155,9 @@ class ModernTracker:
         self, detections: List[Detection]
     ) -> Tuple[List[Tuple[Track, Detection, float]], List[Detection], List[Track]]:
         """Greedy nearest-neighbor association within max_distance."""
-        live_tracks = [t for t in self.tracks.values() if t.status != TrackStatus.DELETED]
+        live_tracks = [
+            t for t in self.tracks.values() if t.status != TrackStatus.DELETED
+        ]
         if not live_tracks:
             return [], detections, []
 
@@ -170,7 +182,9 @@ class ModernTracker:
                 used_dets.add(j)
 
         unmatched_dets = [d for j, d in enumerate(detections) if j not in used_dets]
-        unmatched_tracks = [t for i, t in enumerate(live_tracks) if i not in used_tracks]
+        unmatched_tracks = [
+            t for i, t in enumerate(live_tracks) if i not in used_tracks
+        ]
         return matched, unmatched_dets, unmatched_tracks
 
     def _new_track_from_detection(self, detection: Detection, now: datetime) -> Track:

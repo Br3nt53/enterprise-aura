@@ -4,9 +4,11 @@ from datetime import datetime, timezone
 from typing import Dict, Any, Optional
 from ..value_objects import Position3D, Velocity3D, Confidence, CovarianceMatrix
 
+
 @dataclass(frozen=True)
 class Detection:
     """Represents a single sensor detection at a point in time."""
+
     sensor_id: str
     timestamp: datetime
     position: Position3D
@@ -23,7 +25,7 @@ class Detection:
             y=data.get("y", data.get("position", {}).get("y", 0.0)),
             z=data.get("z", data.get("position", {}).get("z", 0.0)),
         )
-        
+
         # Handle different timestamp formats (float or string)
         ts_data = data.get("timestamp")
         if isinstance(ts_data, (int, float)):

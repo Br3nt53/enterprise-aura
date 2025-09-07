@@ -5,19 +5,27 @@ import numpy as np
 from scipy.optimize import linear_sum_assignment
 from ..entities import Detection, Track
 
+
 class AssociationStrategy(ABC):
     """Abstract base class for association strategies."""
+
     @abstractmethod
-    def associate(self, tracks: List[Track], detections: List[Detection]) -> List[Tuple[Track, Detection, float]]:
+    def associate(
+        self, tracks: List[Track], detections: List[Detection]
+    ) -> List[Tuple[Track, Detection, float]]:
         """Associates detections to tracks."""
         pass
 
+
 class GNN_AssociationStrategy(AssociationStrategy):
     """Global Nearest Neighbor association strategy."""
+
     def __init__(self, max_distance: float = 50.0):
         self.max_distance = max_distance
 
-    def associate(self, tracks: List[Track], detections: List[Detection]) -> List[Tuple[Track, Detection, float]]:
+    def associate(
+        self, tracks: List[Track], detections: List[Detection]
+    ) -> List[Tuple[Track, Detection, float]]:
         """
         Associates detections to tracks using Global Nearest Neighbor (GNN) algorithm.
         This is a concrete implementation.
@@ -29,7 +37,9 @@ class GNN_AssociationStrategy(AssociationStrategy):
         cost_matrix = np.full((len(tracks), len(detections)), self.max_distance + 1.0)
         for i, track in enumerate(tracks):
             for j, detection in enumerate(detections):
-                distance = np.linalg.norm(track.state.position.to_array() - detection.position.to_array())
+                distance = np.linalg.norm(
+                    track.state.position.to_array() - detection.position.to_array()
+                )
                 if distance < self.max_distance:
                     cost_matrix[i, j] = distance
 

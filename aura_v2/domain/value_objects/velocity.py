@@ -1,14 +1,12 @@
-# aura_v2/domain/value_objects/velocity.py
 from dataclasses import dataclass
-import numpy as np
 
-@dataclass(slots=True)  # <-- CRITICAL FIX: `frozen=True` has been REMOVED.
-class Velocity3D:
-    """Represents a mutable velocity in 3D space."""
-    vx: float = 0.0
-    vy: float = 0.0
-    vz: float = 0.0
 
-    @property
-    def magnitude(self) -> float:
-        return float(np.linalg.norm([self.vx, self.vy, self.vz]))
+@dataclass(frozen=True)
+class Velocity2D:
+    vx: float
+    vy: float
+
+
+@dataclass(frozen=True)
+class Velocity3D(Velocity2D):
+    vz: float

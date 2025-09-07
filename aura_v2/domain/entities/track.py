@@ -5,11 +5,13 @@ from datetime import datetime, timezone
 from enum import Enum
 from ..value_objects import Position3D, Velocity3D, Confidence
 
+
 class TrackStatus(str, Enum):
     TENTATIVE = "tentative"
     ACTIVE = "active"
     LOST = "lost"
     DELETED = "deleted"
+
 
 class ThreatLevel(int, Enum):
     LOW = 0
@@ -17,15 +19,19 @@ class ThreatLevel(int, Enum):
     HIGH = 2
     CRITICAL = 3
 
+
 @dataclass(slots=True)  # CRITICAL FIX: `frozen=True` has been removed.
 class TrackState:
     """Represents the dynamic, mutable state of a track."""
+
     position: Position3D
     velocity: Velocity3D
+
 
 @dataclass
 class Track:
     """Represents a tracked object over time."""
+
     id: str
     state: TrackState
     status: TrackStatus = TrackStatus.TENTATIVE
@@ -49,5 +55,5 @@ class Track:
     def mark_missed(self) -> None:
         """Increments the missed counter for the track."""
         self.missed += 1
-        if self.missed > 5: # More forgiving threshold
+        if self.missed > 5:  # More forgiving threshold
             self.status = TrackStatus.LOST

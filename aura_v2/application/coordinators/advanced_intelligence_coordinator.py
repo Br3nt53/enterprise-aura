@@ -1,31 +1,39 @@
+from __future__ import annotations
+from typing import Optional, List, Coroutine
+from ...domain.value_objects import Collision
+from ..domain.value_objects import Collision
+
 # aura_v2/application/coordinators/advanced_intelligence_coordinator.py
 import asyncio
 import logging
 from dataclasses import dataclass
-from typing import List, Coroutine
 
 from ...domain.entities import Track, ThreatLevel
 from ...domain.services import ThreatAnalyzer, CollisionPredictor
 from ...domain.value_objects import Threat, TacticalAlert
 from ...infrastructure.persistence.in_memory import TrackHistoryRepository
 
+
 @dataclass
 class CoordinatorConfig:
     """Configuration for the AdvancedIntelligenceCoordinator."""
+
     threat_assessment_threshold: ThreatLevel = ThreatLevel.MEDIUM
     prune_history: bool = True
+
 
 class AdvancedIntelligenceCoordinator:
     """
     A sophisticated, stateful coordinator that processes intelligence concurrently.
     """
+
     def __init__(
         self,
         threat_analyzer: ThreatAnalyzer,
         collision_predictor: CollisionPredictor,
         track_history: TrackHistoryRepository,
         logger: logging.Logger,
-        config: CoordinatorConfig = CoordinatorConfig()
+        config: CoordinatorConfig = CoordinatorConfig(),
     ):
         self.threat_analyzer = threat_analyzer
         self.collision_predictor = collision_predictor
@@ -55,15 +63,20 @@ class AdvancedIntelligenceCoordinator:
 
         # Step 3: Filter for threats that meet the required level for further analysis
         priority_threats = [
-            threat for threat in assessed_threats
-            if threat and threat.threat_level.value >= self.config.threat_assessment_threshold.value
+            threat
+            for threat in assessed_threats
+            if threat
+            and threat.threat_level.value
+            >= self.config.threat_assessment_threshold.value
         ]
-        
+
         if not priority_threats:
             self.logger.info("No high-priority threats identified.")
             return []
 
-        self.logger.info(f"Identified {len(priority_threats)} priority threats for collision analysis.")
+        self.logger.info(
+            f"Identified {len(priority_threats)} priority threats for collision analysis."
+        )
 
         # Step 4: Run collision prediction only on the priority subset
         priority_tracks = [threat.track for threat in priority_threats]
@@ -84,10 +97,12 @@ class AdvancedIntelligenceCoordinator:
             return Threat(track, threat_level, track.confidence.value)
         return None
 
-    def _fuse_intelligence(self, threats: List[Threat], collisions: List[Collision]) -> List[TacticalAlert]:
+    def _fuse_intelligence(
+        self, threats: List[Threat], collisions: List[Collision]
+    ) -> List[TacticalAlert]:
         """Combines threat and collision data into actionable alerts."""
         alerts = []
-        collision_map = { (c.track1.id, c.track2.id): c for c in collisions }
+        collision_map = {(c.track1.id, c.track2.id): c for c in collisions}
 
         for threat in threats:
             # Check if this threat is involved in any predicted collision
@@ -96,17 +111,23 @@ class AdvancedIntelligenceCoordinator:
                 if threat.track.id in [id1, id2]:
                     related_collision = collision
                     break
-            
+
             # Urgency can be a complex calculation. Here's a simple example.
-            urgency = threat.threat_level.value / len(ThreatLevel) + threat.confidence.value
+            urgency = (
+                threat.threat_level.value / len(ThreatLevel) + threat.confidence.value
+            )
             if related_collision:
-                urgency += (1.0 - (related_collision.time_to_collision / 60.0)) # Higher urgency for closer collisions
-            
-            alerts.append(TacticalAlert(
-                threat=threat,
-                collision=related_collision,
-                urgency=min(1.0, urgency / 2.0) # Normalize
-            ))
-            
+                urgency += 1.0 - (
+                    related_collision.time_to_collision / 60.0
+                )  # Higher urgency for closer collisions
+
+            alerts.append(
+                TacticalAlert(
+                    threat=threat,
+                    collision=related_collision,
+                    urgency=min(1.0, urgency / 2.0),  # Normalize
+                )
+            )
+
         # Sort alerts by the highest urgency
         return sorted(alerts, key=lambda a: a.urgency, reverse=True)
