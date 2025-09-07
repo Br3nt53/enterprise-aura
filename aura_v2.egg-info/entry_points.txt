@@ -1,2 +1,0 @@
-[console_scripts]
-aura-cli = aura_v2.main:app_cli

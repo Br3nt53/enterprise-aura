@@ -1,1 +1,1 @@
-3.12
+Set-Content -Path ".python-version" -Value "3.11"

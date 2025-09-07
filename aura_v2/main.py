@@ -1,5 +1,4 @@
 from __future__ import annotations
-import asyncio
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -59,16 +58,24 @@ class AURAApplication:
         self.tracker: Optional[ModernTracker] = None
         self.fusion_service: Optional[MultiSensorFusion] = None
         self._frame_id: int = 0
+        self._initialized: bool = False  # NEW
 
-    # SYNCHRONOUS init (no event loop usage)
-    def initialize(self) -> None:
+    # NEW: pure sync initializer used by server and tests
+    def _initialize_sync(self) -> None:
+        if self._initialized:
+            return
         self._build_app()
         self.tracker = ModernTracker()
         self.fusion_service = MultiSensorFusion({
             "radar":  SensorCharacteristics("radar", 2.0, 20.0, 0.95, 0.01, np.eye(3)*4.0),
-            "camera": SensorCharacteristics("camera", 5.0, 30.0, 0.90, 0.05, np.diag([25.0,1.0,25.0])),
+            "camera": SensorCharacteristics("camera", 5.0, 30.0, 0.90, 0.05, np.diag([25.0, 1.0, 25.0])),
             "lidar":  SensorCharacteristics("lidar", 0.2, 10.0, 0.85, 0.001, np.eye(3)*0.04),
         })
+        self._initialized = True
+
+    # CHANGED: async shim so tests can await it
+    async def initialize(self) -> None:
+        self._initialize_sync()
 
     def _build_app(self) -> None:
         app = FastAPI(title="AURA Enterprise", version="2.0.0")
@@ -144,14 +151,13 @@ class AURAApplication:
         self.app = app
 
     def get_app(self) -> FastAPI:
-        if self.app is None or self.tracker is None or self.fusion_service is None:
-            # Synchronous init. No event loop interaction.
-            self.initialize()
-        return self.app
+        if not self._initialized:
+            self._initialize_sync()
+        # self.app is set in _initialize_sync
+        return self.app  # type: ignore[return-value]
 
 
 def get_app() -> FastAPI:
-    # uvicorn --factory will call this synchronously
     return AURAApplication().get_app()
 
 
