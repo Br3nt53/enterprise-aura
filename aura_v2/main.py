@@ -1,47 +1,30 @@
-"""
-Main entry point and API definitions for AURA v2.
-
-This module wires together the domain services, infrastructure trackers and
-FastAPI application.  It provides a command‑line interface via Typer to
-run the service and includes health checks and a primary tracking endpoint.
-"""
-
 from __future__ import annotations
-
 import asyncio
-import json
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-import numpy as np  # type: ignore
+import numpy as np
 import typer
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from aura_v2.domain import (
-    Detection,
-    Position3D,
-    Confidence,
-    Track,
-    TrackStatus,
-    ThreatLevel,
-)
+from aura_v2.domain import Detection, Position3D, Confidence, Track
 from aura_v2.domain.services import MultiSensorFusion, SensorCharacteristics
 from aura_v2.infrastructure.tracking.modern_tracker import ModernTracker, TrackingResult
 
+
 class DetectionInput(BaseModel):
-    """Incoming detection payload for the API."""
     timestamp: datetime
     position: Dict[str, float]
     confidence: float = Field(ge=0.0, le=1.0)
     sensor_id: str
     attributes: Optional[Dict[str, Any]] = None
 
+
 class TrackOutput(BaseModel):
-    """Track output as returned by the API."""
     id: str
     position: Dict[str, float]
     velocity: Dict[str, float]
@@ -51,15 +34,15 @@ class TrackOutput(BaseModel):
     created_at: datetime
     updated_at: datetime
 
+
 class TrackRequest(BaseModel):
-    """Request model for tracking endpoint."""
     radar_detections: List[DetectionInput] = Field(default_factory=list)
     camera_detections: List[DetectionInput] = Field(default_factory=list)
     lidar_detections: List[DetectionInput] = Field(default_factory=list)
     timestamp: Optional[datetime] = None
 
+
 class TrackResponse(BaseModel):
-    """Response model for tracking endpoint."""
     active_tracks: List[TrackOutput]
     new_tracks: List[TrackOutput] = Field(default_factory=list)
     deleted_tracks: List[str] = Field(default_factory=list)
@@ -67,9 +50,8 @@ class TrackResponse(BaseModel):
     processing_time_ms: float = 0.0
     frame_id: int = 0
 
-class AURAApplication:
-    """AURA v2 application encapsulating domain services and API."""
 
+class AURAApplication:
     def __init__(self, config_path: Optional[Path] = None) -> None:
         self.config_path = Path(config_path) if config_path else None
         self.config: Dict[str, Any] = {}
@@ -78,56 +60,109 @@ class AURAApplication:
         self.fusion_service: Optional[MultiSensorFusion] = None
         self._frame_id: int = 0
 
-    async def initialize(self) -> None:
-        """Initialize configuration, tracker and services."""
-        if self.config_path and self.config_path.exists():
-            self._load_config()
+    # SYNCHRONOUS init (no event loop usage)
+    def initialize(self) -> None:
+        self._build_app()
+        self.tracker = ModernTracker()
+        self.fusion_service = MultiSensorFusion({
+            "radar":  SensorCharacteristics("radar", 2.0, 20.0, 0.95, 0.01, np.eye(3)*4.0),
+            "camera": SensorCharacteristics("camera", 5.0, 30.0, 0.90, 0.05, np.diag([25.0,1.0,25.0])),
+            "lidar":  SensorCharacteristics("lidar", 0.2, 10.0, 0.85, 0.001, np.eye(3)*0.04),
+        })
 
-        # Tracker configuration
-        tracking_cfg = self.config.get("tracking", {})
-        self.tracker = ModernTracker(
-            max_age=int(tracking_cfg.get("max_age", 30)),
-            min_hits=int(tracking_cfg.get("min_hits", 3)),
-            iou_threshold=float(tracking_cfg.get("iou_threshold", 0.3)),
-            max_distance=float(tracking_cfg.get("max_distance", 50.0)),
+    def _build_app(self) -> None:
+        app = FastAPI(title="AURA Enterprise", version="2.0.0")
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=["*"],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
         )
 
-        # Sensor fusion configuration
-        sensor_configs: Dict[str, SensorCharacteristics] = {
-            "radar": SensorCharacteristics(
-                sensor_id="radar",
-                accuracy=2.0,
-                update_rate=20.0,
-                detection_probability=0.95,
-                false_alarm_rate=0.01,
-                covariance=np.eye(3) * 4.0,
-            ),
-            "camera": SensorCharacteristics(
-                sensor_id="camera",
-                accuracy=5.0,
-                update_rate=30.0,
-                detection_probability=0.90,
-                false_alarm_rate=0.05,
-                covariance=np.diag([25.0, 1.0, 25.0]),
-            ),
-            "lidar": SensorCharacteristics(
-                sensor_id="lidar",
-                accuracy=0.2,
-                update_rate=10.0,
-                detection_probability=0.85,
-                false_alarm_rate=0.001,
-                covariance=np.eye(3) * 0.04,
-            ),
-        }
-        self.fusion_service = MultiSensorFusion(sensor_configs)
+        @app.get("/health", tags=["system"])
+        async def health():
+            return {"status": "ok", "service": "aura", "version": "2.0.0"}
 
-        self._build_app()
+        @app.get("/ready", tags=["system"])
+        async def ready():
+            has_services = self.tracker is not None and self.fusion_service is not None
+            return {"ready": has_services}
 
-    def _load_config(self) -> None:
-        """Load configuration from JSON or YAML file."""
-        try:
-            text = self.config_path.read_text()
-            if self.config_path.suffix in {".yaml", ".yml"}:
-           
+        @app.post("/track", response_model=TrackResponse, tags=["tracking"])
+        async def track(req: TrackRequest) -> TrackResponse:
+            if self.tracker is None or self.fusion_service is None:
+                raise HTTPException(status_code=503, detail="Service not initialized")
+            ts = req.timestamp or datetime.utcnow()
 
-This message was truncated. You can access the complete answer  :agentCitation{citationIndex='0' label='here'}
+            def to_det(d: DetectionInput) -> Detection:
+                pos = d.position
+                return Detection(
+                    timestamp=d.timestamp,
+                    position=Position3D(pos.get("x", 0.0), pos.get("y", 0.0), pos.get("z", 0.0)),
+                    confidence=Confidence(d.confidence),
+                    sensor_id=d.sensor_id,
+                    attributes=d.attributes or {},
+                )
+
+            detections: List[Detection] = []
+            for d in req.radar_detections + req.camera_detections + req.lidar_detections:
+                detections.append(to_det(d))
+
+            result: TrackingResult = await self.tracker.update(detections, ts)
+
+            threats: List[Dict[str, Any]] = []
+            for tr in result.active_tracks:
+                threats.append({
+                    "track_id": tr.id,
+                    "threat_level": int(tr.threat_level),
+                    "confidence": float(tr.confidence),
+                })
+
+            def out(tr: Track) -> TrackOutput:
+                return TrackOutput(
+                    id=tr.id,
+                    position={"x": tr.state.position.x, "y": tr.state.position.y, "z": tr.state.position.z},
+                    velocity={"vx": tr.state.velocity.vx, "vy": tr.state.velocity.vy, "vz": tr.state.velocity.vz},
+                    confidence=float(tr.confidence),
+                    status=tr.status.value,
+                    threat_level=str(int(tr.threat_level)),
+                    created_at=tr.created_at,
+                    updated_at=tr.updated_at,
+                )
+
+            self._frame_id += 1
+            return TrackResponse(
+                active_tracks=[out(t) for t in result.active_tracks],
+                new_tracks=[out(t) for t in result.new_tracks],
+                deleted_tracks=[t.id for t in result.deleted_tracks],
+                threats=threats,
+                processing_time_ms=result.processing_time_ms,
+                frame_id=self._frame_id,
+            )
+
+        self.app = app
+
+    def get_app(self) -> FastAPI:
+        if self.app is None or self.tracker is None or self.fusion_service is None:
+            # Synchronous init. No event loop interaction.
+            self.initialize()
+        return self.app
+
+
+def get_app() -> FastAPI:
+    # uvicorn --factory will call this synchronously
+    return AURAApplication().get_app()
+
+
+app_cli = typer.Typer(help="AURA Enterprise CLI")
+
+
+@app_cli.command("dev-server")
+def dev_server(
+    host: str = "127.0.0.1",
+    port: int = 8000,
+    reload: bool = False,
+    log_level: str = "info",
+):
+    uvicorn.run("aura_v2.main:get_app", host=host, port=port, reload=reload, factory=True, log_level=log_level)

@@ -20,6 +20,9 @@ aura_v2/application/use_cases/detect_and_track.py
 aura_v2/application/use_cases/process_detections.py
 aura_v2/deployment/rollback.py
 aura_v2/domain/__init__.py
+aura_v2/domain/confidence.py
+aura_v2/domain/position.py
+aura_v2/domain/velocity.py
 aura_v2/domain/entities/__init__.py
 aura_v2/domain/entities/detection.py
 aura_v2/domain/entities/track.py
@@ -63,6 +66,8 @@ aura_v2/infrastructure/sensors/radar_adapter.py
 aura_v2/infrastructure/tracking/modern_tracker.py
 aura_v2/migration/run_parallel.py
 aura_v2/tests/__init__.py
+aura_v2/tests/test_health.py
+aura_v2/tests/test_imports.py
 aura_v2/tests/api/test_main_endpoints.py
 aura_v2/tests/architecture/__init__.py
 aura_v2/tests/architecture/test_dependencies.py

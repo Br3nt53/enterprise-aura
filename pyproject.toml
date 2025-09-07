@@ -27,22 +27,25 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+# Safe on Windows
 tracking = [
-  "boxmot>=15",
-  "ultralytics>=8.3",
-  "supervision>=0.26",
-  "deep-sort-realtime>=1.3",
-  "lap>=0.5.1",
+  "ultralytics>=8.0",
+  "boxmot>=11,<13; python_version < '3.13'",
+  "PyQt5; sys_platform == 'win32'",
+  "pyqt5-qt5; sys_platform != 'win32'"
 ]
-observability = [
-  "opentelemetry-api>=1.20",
-  "opentelemetry-sdk>=1.20",
-  "prometheus-client>=0.22",
-  "structlog>=25",
-]
+
+observability = ["opentelemetry-api>=1.20","opentelemetry-sdk>=1.20","prometheus-client>=0.22","structlog>=25"]
 messaging = ["aiokafka>=0.12","aioredis>=2.0","motor>=3.7"]
-perf = ["numba>=0.61","numpy<2.3"]   # macOS/numba pin
-test = ["pytest>=8.2","requests>=2.32","httpx>=0.28"]
+perf = []
+test = ["pytest>=8.2","pytest-asyncio>=0.23","httpx>=0.28"]
+
+[tool.uv]
+required-environments = ["win_amd64"]
+
+
+
+
 
 # Linux/Windows-only GPU extras; excluded on macOS to avoid TensorRT errors
 gpu = [
@@ -66,3 +69,5 @@ include = ["aura_v2*"]
 [tool.pytest.ini_options]
 testpaths = ["aura_v2/tests"]
 addopts = "-q"
+
+
