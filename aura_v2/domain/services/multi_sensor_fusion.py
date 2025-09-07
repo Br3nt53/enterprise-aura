@@ -1,116 +1,81 @@
-# aura_v2/domain/services/multi_sensor_fusion.py
-from typing import List, Dict, Tuple
-import numpy as np
+"""
+Multi‑sensor fusion service.
+
+Provides a basic fusion algorithm that combines detections from different
+sensors based on their accuracy and detection confidence.  This
+implementation uses a weighted average of positions, where the weight of
+each detection is proportional to the inverse of the sensor's accuracy and
+the detection's own confidence.
+"""
+
+from __future__ import annotations
+
 from dataclasses import dataclass
-from filterpy.kalman import UnscentedKalmanFilter
+from typing import Dict, List, Tuple
 
-from ..entities import Track, Detection
-from ..ports import FusionStrategy
+import numpy as np  # type: ignore
 
-@dataclass
+from ..entities.detection import Detection
+from ..entities.track import Track, TrackState
+from ..value_objects import Position3D, Velocity3D, Confidence
+
+@dataclass(frozen=True, slots=True)
 class SensorCharacteristics:
-    """Defines sensor capabilities and uncertainties"""
+    """Defines the intrinsic properties of a sensor."""
     sensor_id: str
-    accuracy: float  # meters
+    accuracy: float  # metres (smaller is better)
     update_rate: float  # Hz
     detection_probability: float
     false_alarm_rate: float
     covariance: np.ndarray
 
-class MultiSensorFusion(FusionStrategy):
-    """
-    Advanced multi-sensor fusion using Unscented Kalman Filter
-    Handles radar, lidar, camera with different characteristics
-    """
-    
+class MultiSensorFusion:
+    """Simple multi‑sensor fusion using weighted averaging."""
+
     def __init__(self, sensor_configs: Dict[str, SensorCharacteristics]):
         self.sensor_configs = sensor_configs
-        self.ukf = self._initialize_ukf()
-    
-    def _initialize_ukf(self) -> UnscentedKalmanFilter:
-        """Initialize UKF for 6-DOF tracking"""
-        def fx(x, dt):
-            """State transition function"""
-            F = np.eye(6)
-            F[0:3, 3:6] = np.eye(3) * dt
-            return F @ x
-        
-        def hx(x):
-            """Measurement function"""
-            return x[0:3]  # Position only
-        
-        points = filterpy.kalman.MerweScaledSigmaPoints(
-            n=6, alpha=0.001, beta=2, kappa=-3
-        )
-        
-        ukf = UnscentedKalmanFilter(
-            dim_x=6, dim_z=3, 
-            dt=0.1, 
-            fx=fx, hx=hx,
-            points=points
-        )
-        
-        # Process noise
-        ukf.Q = np.eye(6) * 0.1
-        
-        return ukf
-    
-    def fuse(self, 
-             track: Track,
-             detections: List[Detection]) -> Tuple[Track, float]:
-        """
-        Fuse multi-sensor detections into unified track state
-        
-        Returns updated track and fusion confidence
+
+    def fuse(self, track: Track, detections: List[Detection]) -> Tuple[Track, float]:
+        """Fuse multiple detections into a unified track state.
+
+        :param track: The track to update.
+        :param detections: List of detections associated with the track in the current frame.
+        :returns: (updated track, fusion confidence)
         """
         if not detections:
-            # Predict only
-            track.state = track.state.predict(0.1)
-            return track, track.confidence.value * 0.95
-        
-        # Group detections by sensor
-        sensor_groups = {}
+            # no detections: degrade confidence slightly
+            degraded = float(track.confidence) * 0.95
+            track.confidence = Confidence(degraded)
+            return track, degraded
+
+        weights: List[float] = []
+        positions: List[np.ndarray] = []
+
         for det in detections:
-            sensor_groups.setdefault(det.sensor_id, []).append(det)
-        
-        # Initialize state
-        x = np.hstack([
-            track.state.position.to_array(),
-            track.state.velocity.to_array()
-        ])
-        
-        # Fuse each sensor's measurements
-        fusion_confidence = 1.0
-        
-        for sensor_id, sensor_dets in sensor_groups.items():
-            sensor_config = self.sensor_configs[sensor_id]
-            
-            # Weight by sensor accuracy
-            weight = 1.0 / sensor_config.accuracy
-            
-            for det in sensor_dets:
-                # Measurement
-                z = det.position.to_array()
-                
-                # Measurement noise (sensor-specific)
-                self.ukf.R = sensor_config.covariance
-                
-                # Update
-                self.ukf.update(z)
-                
-                # Track confidence from this sensor
-                fusion_confidence *= (
-                    sensor_config.detection_probability * 
-                    (1 - sensor_config.false_alarm_rate) *
-                    det.confidence.value
-                )
-        
-        # Extract updated state
-        track.state.position = Position3D.from_array(self.ukf.x[0:3])
-        track.state.velocity = Velocity3D.from_array(self.ukf.x[3:6])
-        track.state.covariance = Covariance(self.ukf.P)
-        
-        # Update track confidence
-        track.confidence = Confidence(min(0.99, fusion_confidence))
-        
-        return track, fusion_confidence
+            base_id = (det.sensor_id or "").split("_")[0]
+            cfg = self.sensor_configs.get(base_id)
+            acc = cfg.accuracy if cfg else 1.0
+            weight = (1.0 / acc) * det.confidence.value
+            weights.append(weight)
+            positions.append(det.position.to_array())
+
+        weights_array = np.array(weights, dtype=float)
+        weights_array /= weights_array.sum()
+        positions_array = np.array(positions, dtype=float)
+        fused = weights_array @ positions_array  # shape (3,)
+
+        # Update track position; velocity remains unchanged for now
+        track.state = TrackState(position=Position3D(*fused.tolist()), velocity=track.state.velocity)
+
+        # Fusion confidence: combine sensor detection probabilities and false alarm rates
+        conf_val = 1.0
+        for det in detections:
+            base_id = (det.sensor_id or "").split("_")[0]
+            cfg = self.sensor_configs.get(base_id)
+            if cfg:
+                conf_val *= cfg.detection_probability * (1.0 - cfg.false_alarm_rate) * det.confidence.value
+            else:
+                conf_val *= det.confidence.value
+        conf_val = min(0.99, conf_val)
+        track.confidence = Confidence(conf_val)
+        return track, conf_val

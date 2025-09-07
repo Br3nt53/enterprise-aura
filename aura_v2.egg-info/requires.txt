@@ -1,13 +1,12 @@
+typer>=0.9
+fastapi>=0.116
+uvicorn>=0.23
 pydantic>=2.5
+pyyaml>=6.0
 numpy>=1.26
-attrs>=23.1
 filterpy>=1.4.5
 scipy>=1.11
 scikit-learn>=1.3
-fastapi>=0.116
-uvicorn>=0.29
-typer>=0.12
-pyyaml>=6.0
 grpcio>=1.59
 websockets>=12.0
 opentelemetry-api>=1.20
@@ -19,10 +18,14 @@ aiokafka>=0.12
 motor>=3.7
 
 [gpu]
+torch>=2.2
+
+[gpu:platform_system != "Darwin"]
+tensorrt>=8.6
+tensorrt-cu13==10.13.3.9
 
 [gpu:platform_system == "Linux"]
 cupy-cuda12x>=13
-tensorrt>=8.6
 
 [messaging]
 aiokafka>=0.12
@@ -42,7 +45,7 @@ numpy<2.3
 [test]
 pytest>=8.2
 requests>=2.32
-httpx>=0.25
+httpx>=0.28
 
 [tracking]
 boxmot>=15

@@ -1,46 +1,28 @@
-# aura_v2/domain/entities/detection.py
-from dataclasses import dataclass
-from typing import Optional, NewType
+"""
+Domain detection entity.
+
+Represents a single observation from a sensor at a specific time.  Each
+detection carries a position in 3D space, an associated confidence and
+sensor identifier, along with arbitrary attribute metadata.  Detections
+are immutable to guarantee referential transparency during tracking.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
 from datetime import datetime
+from typing import Any, Dict, Optional
 
-TrackID = NewType('TrackID', str)
-SensorID = NewType('SensorID', str)
-Confidence = NewType('Confidence', float)
+from ..value_objects import Position3D, Confidence
 
-@dataclass(frozen=True)
-class Position:
-    """Value object for 3D position"""
-    x: float
-    y: float
-    z: float = 0.0
-    
-    def distance_to(self, other: 'Position') -> float:
-        return ((self.x - other.x)**2 + 
-                (self.y - other.y)**2 + 
-                (self.z - other.z)**2) ** 0.5
-
-@dataclass(frozen=True)
-class Velocity:
-    """Value object for velocity"""
-    vx: float
-    vy: float
-    vz: float = 0.0
-    
-    @property
-    def magnitude(self) -> float:
-        return (self.vx**2 + self.vy**2 + self.vz**2) ** 0.5
-
-@dataclass
+@dataclass(frozen=True, slots=True)
 class Detection:
-    """Domain entity for a single detection"""
     timestamp: datetime
-    position: Position
+    position: Position3D
     confidence: Confidence
-    sensor_id: Optional[SensorID] = None
-    attributes: dict = None
-    
-    def __post_init__(self):
-        if self.attributes is None:
-            self.attributes = {}
-        if not 0 <= self.confidence <= 1:
-            raise ValueError(f"Confidence must be in [0,1], got {self.confidence}")
+    sensor_id: Optional[str] = None
+    attributes: Dict[str, Any] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        # Validate confidence via Confidence.__post_init__
+        _ = float(self.confidence)
