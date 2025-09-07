@@ -1,5 +1,5 @@
 # aura_v2/infrastructure/persistence/in_memory.py
-from typing import Dict, List
+from typing import Dict, List, Optional
 from ...domain.entities import Track
 from ...domain.events import DomainEvent
 
@@ -87,3 +87,31 @@ class InMemoryOutputSink:
 
     async def send(self, data):
         self.output.append(data)
+
+# aura_v2/infrastructure/persistence/in_memory.py
+from typing import Dict, List, Optional
+from ...domain.entities import Track
+
+# ... (existing code)
+
+class TrackHistoryRepository:
+    """A simple in-memory repository to store the history of tracks."""
+
+    def __init__(self):
+        self._histories: Dict[str, List[Track]] = {}
+
+    def update(self, track: Track):
+        """Adds the latest version of a track to its history."""
+        if track.id not in self._histories:
+            self._histories[track.id] = []
+        self._histories[track.id].append(track)
+
+    def get_history(self, track_id: str) -> Optional[List[Track]]:
+        """Retrieves the full history of a track."""
+        return self._histories.get(track_id)
+
+    def prune(self, active_track_ids: List[str]):
+        """Removes histories for tracks that are no longer active."""
+        inactive_ids = set(self._histories.keys()) - set(active_track_ids)
+        for track_id in inactive_ids:
+            del self._histories[track_id]
