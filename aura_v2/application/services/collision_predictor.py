@@ -2,7 +2,7 @@
 import numpy as np
 from typing import List
 from ...domain.entities.track import Track
-from ...domain.services.collission_prediction import CollisionPredictor
+from ...domain.services.collision_prediction import CollisionPredictor
 from ...domain.value_objects.collision import Collision
 
 

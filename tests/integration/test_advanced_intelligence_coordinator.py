@@ -2,10 +2,10 @@
 import pytest
 import logging
 
-from ...application.coordinators.advanced_intelligence_coordinator import (
+from aura_v2.application.coordinators.advanced_intelligence_coordinator import (
     AdvancedIntelligenceCoordinator,
 )
-from ...domain.entities import (
+from aura_v2.domain.entities import (
     Track,
     TrackState,
     Position3D,
@@ -13,8 +13,8 @@ from ...domain.entities import (
     Confidence,
     ThreatLevel,
 )
-from ...domain.value_objects import Collision
-from ...infrastructure.persistence.in_memory import TrackHistoryRepository
+from aura_v2.domain.value_objects import Collision
+from aura_v2.infrastructure.persistence.in_memory import TrackHistoryRepository
 
 
 # Mocks for dependencies

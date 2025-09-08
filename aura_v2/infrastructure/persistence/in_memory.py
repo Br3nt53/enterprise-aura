@@ -1,8 +1,11 @@
+from __future__ import annotations
 # aura_v2/infrastructure/persistence/in_memory.py
+from dataclasses import dataclass, field
 import asyncio
-from typing import AsyncIterator, List, Optional, TYPE_CHECKING, Dict
+from typing import AsyncIterator, List, Optional, TYPE_CHECKING, Dict, Iterable
 
 from ...domain.entities import Detection  # runtime import only
+from ...domain.entities import Track
 
 if TYPE_CHECKING:
     from ...domain.entities.track import Track
@@ -67,12 +70,21 @@ class InMemoryTrackRepository:
         self._store.clear()
 
 
-# ---- In-memory Track history repository -------------------------------------
+# ---- In-memory Track history -----------------------------------------------
+from typing import TYPE_CHECKING, Dict, List, Set
+if TYPE_CHECKING:
+    from ...domain.entities.track import Track  # noqa: F401
+
+
 class TrackHistoryRepository:
     """Keeps a simple append-only history of tracks by id."""
 
     def __init__(self) -> None:
         self._hist: Dict[str, List["Track"]] = {}
+
+    # Backwards-compat: some callers used `add` / `append` / `update`
+    def add(self, track: "Track") -> None:
+        self.append(track)
 
     def append(self, track: "Track") -> None:
         tid = getattr(track, "id", None) or getattr(track, "track_id", None)
@@ -80,14 +92,25 @@ class TrackHistoryRepository:
             return
         self._hist.setdefault(str(tid), []).append(track)
 
-    def get(self, track_id: "TrackID") -> List["Track"]:
+    def update(self, track: "Track") -> None:
+        self.append(track)
+
+    def get(self, track_id: object) -> List["Track"]:
         return list(self._hist.get(str(track_id), []))
+
+    def prune(self, active_ids: Set[str]) -> None:
+        for tid in list(self._hist.keys()):
+            if tid not in active_ids:
+                self._hist.pop(tid, None)
 
     def clear(self) -> None:
         self._hist.clear()
 
 
 # ---- In-memory Evaluation use case ------------------------------------------
+    def update(self, track: 'Track') -> None:
+        # Keep API simple: update == append latest snapshot
+        self.add(track)
 class InMemoryEvaluationUseCase:
     """No-op evaluator that records the last batch size."""
 
