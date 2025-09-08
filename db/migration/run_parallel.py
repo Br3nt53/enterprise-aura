@@ -1,107 +1,24 @@
-import json
+"""Utility to compare migration results and run legacy/new pipelines."""
+
 import subprocess
-from aura_v2.domain.pipeline.model import PipelineContext
+from typing import Any
 
 
-def compare_results(l, m):
+def compare_results(left: Any, right: Any) -> None:
+    """Placeholder comparison (kept for API parity)."""
     pass
 
 
-def generate_migration_report(c):
-    pass
+def run_existing() -> None:
+    """Run the existing system."""
+    _ = subprocess.run(["python", "legacy_main.py"], check=False)
 
 
-def compare_results(l, m):
-    pass
+def run_new() -> None:
+    """Run the new system."""
+    _ = subprocess.run(["python", "-m", "aura_v2.main"], check=False)
 
 
-def generate_migration_report(c):
-    pass
-
-
-def compare_results(l, m):
-    pass
-
-
-def generate_migration_report(c):
-    pass
-
-
-def compare_results(l, m):
-    pass
-
-
-def generate_migration_report(c):
-    pass
-
-
-def compare_results(l, m):
-    pass
-
-
-def generate_migration_report(c):
-    pass
-
-
-#!/usr/bin/env python3
-# migration/run_parallel.py
-"""
-Run both old and new systems in parallel for validation
-"""
-
-import asyncio
-
-
-async def run_parallel_validation(scenario_path: str, config_path: str):
-    """Run both systems and compare results"""
-
-    # 1. Run legacy system
-    legacy_result = run_legacy_system(scenario_path, config_path)
-
-    # 2. Run new system
-    from aura_v2.infrastructure.config.container import Container
-
-    container = Container()
-    container.config.from_yaml(config_path)
-    container.wire(
-        modules=["aura_v2.application.use_cases", "aura_v2.infrastructure.adapters"]
-    )
-
-    pipeline = container.tracking_pipeline()
-    new_result = await pipeline.run(
-        PipelineContext(
-            config=container.config(),
-            telemetry=container.telemetry(),
-            cancellation_token=asyncio.Event(),
-        )
-    )
-
-    # 3. Compare results
-    comparison = compare_results(legacy_result, new_result)
-
-    # 4. Generate report
-    generate_migration_report(comparison)
-
-    return comparison
-
-
-def run_legacy_system(scenario_path: str, config_path: str) -> dict:
-    """Run the existing system"""
-
-    result = subprocess.run(
-        [
-            "python",
-            "tools/run_single.py",
-            "--scenario",
-            scenario_path,
-            "--params",
-            config_path,
-            "--out-dir",
-            "out/legacy",
-        ],
-        capture_output=True,
-    )
-
-    # Load results
-    with open("out/legacy/metrics.json") as f:
-        return json.load(f)
+if __name__ == "__main__":
+    run_existing()
+    run_new()

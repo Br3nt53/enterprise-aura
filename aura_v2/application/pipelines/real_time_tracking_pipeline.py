@@ -54,9 +54,7 @@ class RealTimeTrackingPipeline:
     def process_frame(self, detections: list) -> None:
         """Process a single frame of detections."""
         self.sequence_id += 1
-        self.logger.debug(
-            f"Processing frame {self.sequence_id} with {len(detections)} detections."
-        )
+        self.logger.debug(f"Processing frame {self.sequence_id} with {len(detections)} detections.")
 
         if not detections:
             return
@@ -94,7 +92,6 @@ class RealTimeTrackingPipeline:
         for track in tracks:
             # Example threat assessment logic
             if track.confidence > 0.8 and track.velocity.magnitude > 20:
-                threat_level = ThreatLevel.HIGH  # type: ignore
                 self.logger.warning(f"High threat track detected: {track.id}")
             elif track.confidence > 0.6 and track.velocity.magnitude > 10:
                 # medium threat branch; keep logs only
