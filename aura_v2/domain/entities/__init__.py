@@ -1,13 +1,16 @@
-# aura_v2/domain/entities/__init__.py
+# Re-export a stable surface for tests
 from .detection import Detection
-from .track import Track, TrackState, TrackStatus, ThreatLevel
-from ..value_objects import TrackID
+from .track import Track, TrackStatus, ThreatLevel, TrackState
+from ..value_objects import Position3D, Velocity3D, Confidence, CovarianceMatrix
 
 __all__ = [
     "Detection",
     "Track",
-    "TrackID",
-    "TrackState",
     "TrackStatus",
     "ThreatLevel",
+    "TrackState",
+    "Position3D",
+    "Velocity3D",
+    "Confidence",
+    "CovarianceMatrix",
 ]
