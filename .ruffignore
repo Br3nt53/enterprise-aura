@@ -1,0 +1,4 @@
+.bak_aura/
+.bak_aura/
+db/migration/run_parallel.py
+.bak_aura/**
