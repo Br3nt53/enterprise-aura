@@ -1,5 +1,4 @@
-from __future__ import annotations
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -11,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from aura_v2.domain import Detection, Position3D, Confidence, Track
-from aura_v2.domain.services import MultiSensorFusion, SensorCharacteristics
+from aura_v2.domain.services import BasicFusionService, FusionService, SensorCharacteristics
 from aura_v2.infrastructure.tracking.modern_tracker import ModernTracker, TrackingResult
 
 
@@ -56,7 +55,7 @@ class AURAApplication:
         self.config: Dict[str, Any] = {}
         self.app: Optional[FastAPI] = None
         self.tracker: Optional[ModernTracker] = None
-        self.fusion_service: Optional[MultiSensorFusion] = None
+        self.fusion_service: Optional[FusionService] = None
         self._frame_id: int = 0
         self._initialized: bool = False  # NEW
 
@@ -66,7 +65,7 @@ class AURAApplication:
             return
         self._build_app()
         self.tracker = ModernTracker()
-        self.fusion_service = MultiSensorFusion(
+        self.fusion_service = BasicFusionService(
             {
                 "radar": SensorCharacteristics(
                     "radar", 2.0, 20.0, 0.95, 0.01, np.eye(3) * 4.0
@@ -108,7 +107,7 @@ class AURAApplication:
         async def track(req: TrackRequest) -> TrackResponse:
             if self.tracker is None or self.fusion_service is None:
                 raise HTTPException(status_code=503, detail="Service not initialized")
-            ts = req.timestamp or datetime.utcnow()
+            ts = req.timestamp or datetime.now(timezone.utc)
 
             def to_det(d: DetectionInput) -> Detection:
                 pos = d.position
