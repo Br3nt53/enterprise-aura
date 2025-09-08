@@ -6,9 +6,11 @@ from scipy.spatial.distance import mahalanobis
 # Simple alias for covariance matrices; keep numpy dependency minimal
 Covariance = np.ndarray  # shape validation can be done at use-sites
 
+
 def make_covariance(diag: list[float] | tuple[float, ...]) -> Covariance:
     d = np.asarray(diag, dtype=float)
     return np.diag(d)
+
 
 def is_symmetric_positive_semidefinite(m: np.ndarray, atol: float = 1e-8) -> bool:
     if m.ndim != 2 or m.shape[0] != m.shape[1]:
@@ -18,13 +20,14 @@ def is_symmetric_positive_semidefinite(m: np.ndarray, atol: float = 1e-8) -> boo
     eigvals = np.linalg.eigvalsh(m)
     return np.all(eigvals >= -atol)
 
+
 class MahalanobisDistance:
     """Utility for computing Mahalanobis distance between points."""
-    
+
     def __init__(self, covariance_matrix: np.ndarray):
         self.cov_matrix = covariance_matrix
         self.inv_cov_matrix = np.linalg.pinv(covariance_matrix)
-    
+
     def distance(self, point1: np.ndarray, point2: np.ndarray) -> float:
         """Compute Mahalanobis distance between two points."""
         try:
@@ -32,7 +35,7 @@ class MahalanobisDistance:
         except Exception:
             # Fallback to Euclidean distance if covariance is singular
             return float(np.linalg.norm(point1 - point2))
-    
+
     def distance_to_mean(self, point: np.ndarray, mean: np.ndarray) -> float:
         """Compute Mahalanobis distance from point to mean."""
         return self.distance(point, mean)

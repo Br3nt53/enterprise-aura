@@ -36,4 +36,6 @@ jobs:
           uv pip install -e ".[tracking,observability,messaging,perf,test]"
 
       - name: Run tests
-        run: uv run pytest tests -v
+        run: |
+          uv pip install -q pytest pytest-asyncio httpx anyio
+          uv run pytest

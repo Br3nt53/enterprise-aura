@@ -3,10 +3,11 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional
 from ..entities import Detection
 
+
 class FusionService(ABC):
     @abstractmethod
-    def fuse(self, detections: List[Detection]) -> List[Detection]:
-        ...
+    def fuse(self, detections: List[Detection]) -> List[Detection]: ...
+
 
 class BasicFusionService(FusionService):
     def __init__(self, sensors: Optional[Dict[str, Any]] = None, **kwargs: Any):

@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ...domain.entities.track import Track, ThreatLevel
 
+
 @dataclass(frozen=True)
 class Threat:
     track: "Track"

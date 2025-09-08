@@ -8,7 +8,6 @@ from ....domain.entities import Detection
 from ....domain.value_objects import Position3D
 
 
-
 class ROS2DetectionAdapter:
     """Adapter to receive detections from ROS2."""
 

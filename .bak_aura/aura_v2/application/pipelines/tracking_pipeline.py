@@ -1,5 +1,3 @@
-
-
 # Placeholders
 class Config:
     pass

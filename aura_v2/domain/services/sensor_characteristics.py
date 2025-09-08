@@ -1,6 +1,7 @@
 # aura_v2/domain/services/sensor_characteristics.py
 from dataclasses import dataclass, field
 
+
 @dataclass(frozen=True)
 class SensorCharacteristics:
     name: str = "generic"

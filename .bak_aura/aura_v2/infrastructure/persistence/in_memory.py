@@ -21,7 +21,7 @@ class TrackHistoryRepository:
         if track.id not in self._histories:
             self._histories[track.id] = []
         self._histories[track.id].append(track)
-    
+
     def prune(self, active_track_ids: List[str]):
         """Remove histories for inactive tracks - MISSING METHOD THAT BREAKS COORDINATOR"""
         inactive_ids = set(self._histories.keys()) - set(active_track_ids)

@@ -13,13 +13,13 @@ from .tactical_alert import TacticalAlert
 
 __all__ = [
     "Confidence",
-    "CovarianceMatrix", 
+    "CovarianceMatrix",
     "SensorID",
     "TrackID",
     "MahalanobisDistance",
     "Position2D",
     "Position3D",
-    "Velocity2D", 
+    "Velocity2D",
     "Velocity3D",
     "Threat",
     "Collision",

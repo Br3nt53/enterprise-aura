@@ -5,6 +5,7 @@ if TYPE_CHECKING:
     from .threat import Threat
     from .collision import Collision
 
+
 @dataclass(frozen=True)
 class TacticalAlert:
     threat: "Threat"

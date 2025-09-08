@@ -10,7 +10,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from aura_v2.domain import Detection, Position3D, Confidence, Track
-from aura_v2.domain.services import BasicFusionService, FusionService, SensorCharacteristics
+from aura_v2.domain.services import (
+    BasicFusionService,
+    FusionService,
+    SensorCharacteristics,
+)
 from aura_v2.infrastructure.tracking.modern_tracker import ModernTracker, TrackingResult
 
 

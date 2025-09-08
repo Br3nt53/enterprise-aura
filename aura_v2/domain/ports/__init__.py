@@ -3,6 +3,6 @@ from .sensor_port import SensorPort, SensorStream, SensorAdapter
 
 __all__ = [
     "SensorPort",
-    "SensorStream", 
+    "SensorStream",
     "SensorAdapter",
 ]

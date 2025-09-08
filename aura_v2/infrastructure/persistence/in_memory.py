@@ -12,6 +12,7 @@ if TYPE_CHECKING:
 # ---- In-memory detection source ---------------------------------------------
 class InMemoryDetectionSource:
     """Simple in-memory source. Push detections, consume as async stream."""
+
     def __init__(self, maxsize: int = 100, batch_timeout: float = 0.1) -> None:
         self._q: asyncio.Queue[Detection] = asyncio.Queue(maxsize=maxsize)
         self._batch_timeout = batch_timeout
@@ -43,6 +44,7 @@ class InMemoryDetectionSource:
 # ---- In-memory Track repository ---------------------------------------------
 class InMemoryTrackRepository:
     """Simple in-memory repo keyed by TrackID."""
+
     def __init__(self) -> None:
         self._store: Dict[str, "Track"] = {}
 
@@ -68,6 +70,7 @@ class InMemoryTrackRepository:
 # ---- In-memory Track history repository -------------------------------------
 class TrackHistoryRepository:
     """Keeps a simple append-only history of tracks by id."""
+
     def __init__(self) -> None:
         self._hist: Dict[str, List["Track"]] = {}
 
@@ -87,6 +90,7 @@ class TrackHistoryRepository:
 # ---- In-memory Evaluation use case ------------------------------------------
 class InMemoryEvaluationUseCase:
     """No-op evaluator that records the last batch size."""
+
     def __init__(self) -> None:
         self.last_count: int = 0
 
@@ -97,6 +101,7 @@ class InMemoryEvaluationUseCase:
 # ---- In-memory Output sink ---------------------------------------------------
 class InMemoryOutputSink:
     """No-op sink that records the last write size."""
+
     def __init__(self) -> None:
         self.last_count: int = 0
 

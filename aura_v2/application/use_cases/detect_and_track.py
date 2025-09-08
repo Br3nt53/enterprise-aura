@@ -1,5 +1,3 @@
-
-
 # Placeholder classes for unresolved dependencies
 class ThreatAssessment:
     pass

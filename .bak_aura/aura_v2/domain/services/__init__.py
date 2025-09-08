@@ -9,5 +9,6 @@ __all__ = [
     "AssociationStrategy",
     "FusionService",
     "ThreatAnalyzer",
-    "CollisionPredictor", "SensorCharacteristics",
+    "CollisionPredictor",
+    "SensorCharacteristics",
 ]
