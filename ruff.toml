@@ -1,8 +1,8 @@
 line-length = 100
 target-version = "py311"
-extend-ignore = ["F401","F403","F811","E402"]
+lint.extend-ignore = ["F401","F403","F811","E402"]
 
-[per-file-ignores]
+[lint.per-file-ignores]
 "aura_v2/domain/__init__.py" = ["F401","F403"]
 "aura_v2/infrastructure/adapters/legacy/bridge.py" = ["E402","F401","F841"]
 "aura_v2/infrastructure/adapters/ros2/detection_adapter.py" = ["F401"]

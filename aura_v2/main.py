@@ -32,7 +32,7 @@ class TrackOutput(BaseModel):
     velocity: Dict[str, float]
     confidence: float
     status: str
-    threat_level: str
+    threat_level: int
     created_at: datetime
     updated_at: datetime
 
@@ -71,15 +71,11 @@ class AURAApplication:
         self.tracker = ModernTracker()
         self.fusion_service = BasicFusionService(
             {
-                "radar": SensorCharacteristics(
-                    "radar", 2.0, 20.0, 0.95, 0.01, np.eye(3) * 4.0
-                ),
+                "radar": SensorCharacteristics("radar", 2.0, 20.0, 0.95, 0.01, np.eye(3) * 4.0),
                 "camera": SensorCharacteristics(
                     "camera", 5.0, 30.0, 0.90, 0.05, np.diag([25.0, 1.0, 25.0])
                 ),
-                "lidar": SensorCharacteristics(
-                    "lidar", 0.2, 10.0, 0.85, 0.001, np.eye(3) * 0.04
-                ),
+                "lidar": SensorCharacteristics("lidar", 0.2, 10.0, 0.85, 0.001, np.eye(3) * 0.04),
             }
         )
         self._initialized = True
@@ -117,18 +113,14 @@ class AURAApplication:
                 pos = d.position
                 return Detection(
                     timestamp=d.timestamp,
-                    position=Position3D(
-                        pos.get("x", 0.0), pos.get("y", 0.0), pos.get("z", 0.0)
-                    ),
+                    position=Position3D(pos.get("x", 0.0), pos.get("y", 0.0), pos.get("z", 0.0)),
                     confidence=Confidence(d.confidence),
                     sensor_id=d.sensor_id,
                     attributes=d.attributes or {},
                 )
 
             detections: List[Detection] = []
-            for d in (
-                req.radar_detections + req.camera_detections + req.lidar_detections
-            ):
+            for d in req.radar_detections + req.camera_detections + req.lidar_detections:
                 detections.append(to_det(d))
 
             result: TrackingResult = await self.tracker.update(detections, ts)
@@ -158,7 +150,7 @@ class AURAApplication:
                     },
                     confidence=float(tr.confidence),
                     status=tr.status.value,
-                    threat_level=str(int(tr.threat_level)),
+                    threat_level=int(tr.threat_level),
                     created_at=tr.created_at,
                     updated_at=tr.updated_at,
                 )
@@ -173,6 +165,7 @@ class AURAApplication:
                 frame_id=self._frame_id,
             )
 
+        app.add_api_route("/", dashboard, tags=["ui"])
         self.app = app
 
     def get_app(self) -> FastAPI:
@@ -204,3 +197,121 @@ def dev_server(
         factory=True,
         log_level=log_level,
     )
+
+
+# ===== BEGIN-CLI-CMDS =====
+import json
+import uuid
+import asyncio
+from datetime import timezone
+import yaml  # type: ignore
+
+
+@app_cli.command("scenario-run")
+def scenario_run(file: str, out_dir: str = "out"):
+    run_id = str(uuid.uuid4())[:8]
+    outp = Path(out_dir) / run_id
+    outp.mkdir(parents=True, exist_ok=True)
+    with open(file, "r", encoding="utf-8") as f:
+        scenario = yaml.safe_load(f) or {}
+    from aura_v2.infrastructure.container import Container
+
+    c = Container()
+    pipeline = c.tracking_pipeline()
+
+    async def _run():
+        ts0 = datetime.now(timezone.utc)
+        frames = scenario.get("frames") or []
+        total = 0
+        for frame in frames:
+            detections = frame.get("detections", [])
+            await pipeline.process(detections, ts=ts0)
+            total += 1
+        metrics = {
+            "run_id": run_id,
+            "scenario": scenario.get("name", "unknown"),
+            "summary": {"frames": total},
+            "meta": {"versions": {"app": "2.0.0"}},
+        }
+        (outp / "metrics.json").write_text(json.dumps(metrics, indent=2))
+
+    asyncio.run(_run())
+    print(str(outp))
+
+
+@app_cli.command("detections-send")
+def detections_send(jsonl_path: str, host: str = "127.0.0.1", port: int = 8000):
+    import httpx  # type: ignore
+
+    rows = []
+    with open(jsonl_path, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                rows.append(json.loads(line))
+    req = {
+        "radar_detections": [],
+        "camera_detections": rows,
+        "lidar_detections": [],
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
+    url = f"http://{host}:{port}/track"
+    r = httpx.post(url, json=req, timeout=30.0)
+    r.raise_for_status()
+    print(r.json())
+
+
+@app_cli.command("tracks-tail")
+def tracks_tail(host: str = "127.0.0.1", port: int = 8000, interval: float = 1.0):
+    import httpx
+    import time  # type: ignore
+
+    url = f"http://{host}:{port}/track"
+    while True:
+        req = {
+            "radar_detections": [],
+            "camera_detections": [],
+            "lidar_detections": [],
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
+        try:
+            r = httpx.post(url, json=req, timeout=10.0)
+            if r.status_code == 200:
+                data = r.json()
+                print(
+                    {"frame_id": data.get("frame_id"), "active": len(data.get("active_tracks", []))}
+                )
+        except Exception:
+            pass
+        time.sleep(interval)
+
+
+# Minimal operator dashboard at "/"
+from fastapi.responses import HTMLResponse
+
+
+async def dashboard():
+    html = """<html><body style="font-family:ui-sans-serif">
+    <h2>AURA Operator Panel</h2>
+    <button onclick="send()">Tick /track</button>
+    <pre id='out' style="border:1px solid #ccc;padding:8px"></pre>
+    <script>
+    async function send(){
+      const r = await fetch('/track',{method:'POST',headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({radar_detections:[],camera_detections:[],lidar_detections:[],
+          timestamp:new Date().toISOString()})});
+      document.getElementById('out').textContent = JSON.stringify(await r.json(),null,2);
+    }
+    </script></body></html>"""
+    return HTMLResponse(html)
+
+
+# ===== END-CLI-CMDS =====
+
+
+def main():
+    app_cli()
+
+
+if __name__ == "__main__":
+    main()

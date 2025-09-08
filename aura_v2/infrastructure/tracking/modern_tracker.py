@@ -1,8 +1,9 @@
 # aura_v2/infrastructure/tracking/modern_tracker.py
 
+import os
 import time
 from dataclasses import dataclass, replace
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Tuple
 
 import numpy as np
@@ -26,6 +27,16 @@ class TrackingResult:
 
 
 class ModernTracker:
+    def _to_dt(self, ts) -> datetime:
+        if isinstance(ts, datetime):
+            return ts if ts.tzinfo else ts.replace(tzinfo=timezone.utc)
+        if isinstance(ts, str):
+            t = ts.rstrip()
+            if t.endswith("Z"):
+                t = t[:-1] + "+00:00"
+            return datetime.fromisoformat(t)
+        raise TypeError("Unsupported timestamp type")
+
     """Minimal, test-oriented multi-sensor tracker with timing metrics."""
 
     def __init__(self, max_distance: float = 50.0, max_missed: int = 2) -> None:
@@ -36,10 +47,16 @@ class ModernTracker:
         self.max_distance = float(max_distance)
         self.max_missed = int(max_missed)
 
-    async def update(
-        self, detections: List[Detection], timestamp: datetime
-    ) -> TrackingResult:
+        # prune TTL in seconds (env override)
+        self.stale_after_sec = float(os.getenv("AURA_TRACK_STALE_SEC", "5.0"))
+        self._frame_timestamp = None
+        self._last_obs: Dict[str, datetime] = {}
+
+    async def update(self, detections: List[Detection], timestamp: datetime) -> TrackingResult:
         start_time = time.time()
+
+        # record current frame timestamp for pruning
+        self._frame_timestamp = self._to_dt(timestamp)
 
         # 1) Predict all current tracks to this timestamp
         for t in list(self.tracks.values()):
@@ -55,8 +72,10 @@ class ModernTracker:
         # 4) Spawn new tracks for unmatched detections
         new_tracks: List[Track] = []
         for det in unmatched_dets:
-            nt = self._new_track_from_detection(det, timestamp)
+            nt = self._new_track_from_detection(det, self._frame_timestamp)
             self.tracks[nt.id] = nt
+            self._last_obs[nt.id] = self._frame_timestamp
+
             new_tracks.append(nt)
 
         # 5) Keep unmatched tracks alive; increment missed
@@ -67,9 +86,7 @@ class ModernTracker:
         deleted_tracks = self._prune()
 
         processing_time = (time.time() - start_time) * 1000  # Convert to milliseconds
-        active_tracks = [
-            t for t in self.tracks.values() if t.status != TrackStatus.DELETED
-        ]
+        active_tracks = [t for t in self.tracks.values() if t.status != TrackStatus.DELETED]
 
         return TrackingResult(
             active_tracks=active_tracks,
@@ -109,7 +126,6 @@ class ModernTracker:
             vz=float(kf.x[5, 0]),
         )
         track.state = replace(track.state, position=pos, velocity=vel)
-        track.updated_at = timestamp
 
     def _update_track(
         self, track: Track, detection: Detection, score: float, timestamp: datetime
@@ -140,7 +156,9 @@ class ModernTracker:
         # Domain update (if present); keep counters sane
         if hasattr(track, "update"):
             track.update(detection, score)
-        track.updated_at = timestamp
+        track.updated_at = self._frame_timestamp
+        self._last_obs[track.id] = self._frame_timestamp
+
         track.missed = 0
         track.hits = getattr(track, "hits", 0) + 1
 
@@ -148,9 +166,7 @@ class ModernTracker:
         self, detections: List[Detection]
     ) -> Tuple[List[Tuple[Track, Detection, float]], List[Detection], List[Track]]:
         """Greedy nearest-neighbor association within max_distance."""
-        live_tracks = [
-            t for t in self.tracks.values() if t.status != TrackStatus.DELETED
-        ]
+        live_tracks = [t for t in self.tracks.values() if t.status != TrackStatus.DELETED]
         if not live_tracks:
             return [], detections, []
 
@@ -174,9 +190,7 @@ class ModernTracker:
                 used_dets.add(j)
 
         unmatched_dets = [d for j, d in enumerate(detections) if j not in used_dets]
-        unmatched_tracks = [
-            t for i, t in enumerate(live_tracks) if i not in used_tracks
-        ]
+        unmatched_tracks = [t for i, t in enumerate(live_tracks) if i not in used_tracks]
         return matched, unmatched_dets, unmatched_tracks
 
     def _new_track_from_detection(self, detection: Detection, now: datetime) -> Track:
@@ -222,8 +236,17 @@ class ModernTracker:
 
     def _prune(self) -> List[Track]:
         deleted: List[Track] = []
+        ttl = getattr(self, "stale_after_sec", 5.0)
+        ts = getattr(self, "_frame_timestamp", None)
         for t in list(self.tracks.values()):
-            if t.missed > self.max_missed:
+            too_old = False
+            if ts is not None and getattr(t, "updated_at", None) is not None and ttl > 0:
+                try:
+                    age = (ts - t.updated_at).total_seconds()
+                    too_old = age > ttl
+                except Exception:
+                    too_old = False
+            if t.missed > self.max_missed or too_old:
                 t.status = TrackStatus.DELETED
                 deleted.append(t)
                 self.kalman_filters.pop(t.id, None)
