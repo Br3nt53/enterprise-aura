@@ -7,6 +7,8 @@ import typer
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from aura_v2.domain import Detection, Position3D, Confidence, Track
@@ -84,27 +86,65 @@ class AURAApplication:
     async def initialize(self) -> None:
         self._initialize_sync()
 
-    def _build_app(self) -> None:
-        app = FastAPI(title="AURA Enterprise", version="2.0.0")
-        app.add_middleware(
-            CORSMiddleware,
-            allow_origins=["*"],
-            allow_credentials=True,
-            allow_methods=["*"],
-            allow_headers=["*"],
-        )
+   def _build_app(self) -> None:
+    app = FastAPI(title="AURA Enterprise", version="2.0.0")
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+    
+    # 🔥 NEW: Add dashboard API routes
+    from .web_dashboard.api import router as dashboard_router
+    app.include_router(dashboard_router)
 
-        @app.get("/health", tags=["system"])
-        async def health():
-            return {"status": "ok", "service": "aura", "version": "2.0.0"}
+    @app.get("/health", tags=["system"])
+    async def health():
+        return {"status": "ok", "service": "aura", "version": "2.0.0"}
 
-        @app.get("/ready", tags=["system"])
-        async def ready():
-            has_services = self.tracker is not None and self.fusion_service is not None
-            return {"ready": has_services}
+    @app.get("/ready", tags=["system"])
+    async def ready():
+        has_services = self.tracker is not None and self.fusion_service is not None
+        return {"ready": has_services}
 
-        @app.post("/track", response_model=TrackResponse, tags=["tracking"])
-        async def track(req: TrackRequest) -> TrackResponse:
+    # 🔥 NEW: Serve the development dashboard at root
+    @app.get("/", response_class=HTMLResponse, tags=["ui"])
+    async def development_dashboard():
+        """Serve the React development dashboard"""
+        dashboard_path = Path(__file__).parent / "web_dashboard" / "dashboard.html"
+        if dashboard_path.exists():
+            return HTMLResponse(dashboard_path.read_text())
+        else:
+            # Fallback to simple dashboard if file doesn't exist
+            return HTMLResponse("""
+            <html><body style="font-family:ui-sans-serif;padding:20px">
+                <h1>AURA v2 Enterprise</h1>
+                <p>Development dashboard not found. Please run:</p>
+                <pre>python -m aura_v2.setup_dashboard</pre>
+                <p><a href="/track">Go to API endpoint</a></p>
+            </body></html>
+            """)
+
+    # 🔥 NEW: Alternative simple dashboard route
+    @app.get("/simple", response_class=HTMLResponse, tags=["ui"])
+    async def simple_dashboard():
+        return HTMLResponse("""<html><body style="font-family:ui-sans-serif">
+        <h2>AURA Simple Panel</h2>
+        <button onclick="send()">Test /track</button>
+        <pre id='out' style="border:1px solid #ccc;padding:8px"></pre>
+        <script>
+        async function send(){
+          const r = await fetch('/track',{method:'POST',headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({radar_detections:[],camera_detections:[],lidar_detections:[],
+              timestamp:new Date().toISOString()})});
+          document.getElementById('out').textContent = JSON.stringify(await r.json(),null,2);
+        }
+        </script></body></html>""")
+
+    @app.post("/track", response_model=TrackResponse, tags=["tracking"])
+    async def track(req: TrackRequest) -> TrackResponse:
             if self.tracker is None or self.fusion_service is None:
                 raise HTTPException(status_code=503, detail="Service not initialized")
             ts = req.timestamp or datetime.now(timezone.utc)
