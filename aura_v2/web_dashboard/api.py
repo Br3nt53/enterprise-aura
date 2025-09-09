@@ -154,7 +154,7 @@ def create_router():
             pytest=await check_command("pytest --version"), 
             dependencies=await check_command("pip show fastapi"),
             server=await check_command("curl -f http://localhost:8000/health --connect-timeout 2 --max-time 5"),
-            aura_imports=await check_command("python -c \"import aura_v2; print('v' + aura_v2.__version__)\"")
+            aura_imports=await check_command('python -c "import aura_v2; print(\'v\' + aura_v2.__version__)"')
         )
         
         return status
