@@ -19,7 +19,6 @@ class RadarAdapter:
         range_resolution: float = 0.5,  # meters
         velocity_resolution: float = 0.1,
     ):  # m/s
-
         self.device_path = device_path
         self.sample_rate = sample_rate
         self.range_res = range_resolution
@@ -49,9 +48,7 @@ class RadarAdapter:
 
                     detection = Detection(
                         timestamp=datetime.now(timezone.utc),
-                        position=Position3D(
-                            x=position[0], y=position[1], z=position[2]
-                        ),
+                        position=Position3D(x=position[0], y=position[1], z=position[2]),
                         velocity=Velocity3D(vx=det["doppler_velocity"], vy=0, vz=0),
                         confidence=Confidence(min(1.0, det["snr"] / 30.0)),
                         sensor_id="radar_main",
@@ -102,24 +99,15 @@ class RadarAdapter:
         rows, cols = range_doppler.shape
 
         # Scan through range-doppler map
-        for r in range(
-            guard_cells + training_cells, rows - guard_cells - training_cells
-        ):
-            for d in range(
-                guard_cells + training_cells, cols - guard_cells - training_cells
-            ):
-
+        for r in range(guard_cells + training_cells, rows - guard_cells - training_cells):
+            for d in range(guard_cells + training_cells, cols - guard_cells - training_cells):
                 # Cell under test
                 cut = range_doppler[r, d]
 
                 # Training cells (excluding guard cells)
                 training = []
-                for i in range(
-                    -training_cells - guard_cells, training_cells + guard_cells + 1
-                ):
-                    for j in range(
-                        -training_cells - guard_cells, training_cells + guard_cells + 1
-                    ):
+                for i in range(-training_cells - guard_cells, training_cells + guard_cells + 1):
+                    for j in range(-training_cells - guard_cells, training_cells + guard_cells + 1):
                         if abs(i) > guard_cells or abs(j) > guard_cells:
                             training.append(range_doppler[r + i, d + j])
 

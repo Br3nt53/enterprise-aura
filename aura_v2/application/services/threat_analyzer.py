@@ -2,6 +2,7 @@
 from ...domain.entities.track import Track, ThreatLevel
 from ...domain.services.threat_analysis import ThreatAnalyzer
 
+
 class BasicThreatAnalyzer(ThreatAnalyzer):
     """Simple, confidence-driven thresholds to satisfy unit tests."""
 

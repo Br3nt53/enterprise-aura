@@ -11,6 +11,7 @@ from .collision import Collision
 @dataclass(frozen=True)
 class TacticalAlert:
     """Single fused alert from threat/collision analysis."""
+
     threat: Threat
     collision: Optional[Collision] = None
     urgency: float = 0.0

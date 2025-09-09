@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # aura_v2/infrastructure/persistence/in_memory.py
 from dataclasses import dataclass, field
 import asyncio
@@ -72,6 +73,7 @@ class InMemoryTrackRepository:
 
 # ---- In-memory Track history -----------------------------------------------
 from typing import TYPE_CHECKING, Dict, List, Set
+
 if TYPE_CHECKING:
     from ...domain.entities.track import Track  # noqa: F401
 
@@ -106,11 +108,12 @@ class TrackHistoryRepository:
     def clear(self) -> None:
         self._hist.clear()
 
-
-# ---- In-memory Evaluation use case ------------------------------------------
-    def update(self, track: 'Track') -> None:
+    # ---- In-memory Evaluation use case ------------------------------------------
+    def update(self, track: "Track") -> None:
         # Keep API simple: update == append latest snapshot
         self.add(track)
+
+
 class InMemoryEvaluationUseCase:
     """No-op evaluator that records the last batch size."""
 
