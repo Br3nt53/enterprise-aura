@@ -1,0 +1,20 @@
+{
+  "name": "aura-enterprise (uv)",
+  "image": "ghcr.io/astral-sh/uv:python3.11-bookworm",
+  "features": { "ghcr.io/devcontainers/features/github-cli:1": {} },
+  "postCreateCommand": "uv sync && uv run pytest -q",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "charliermarsh.ruff",
+        "ms-azuretools.vscode-docker"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": ".venv/bin/python"
+      }
+    }
+  },
+  "updateContentCommand": "uv sync"
+}
