@@ -30,6 +30,12 @@ jobs:
          echo "VIRTUAL_ENV=.venv" >> $GITHUB_ENV
          echo "$PWD/.venv/bin" >> $GITHUB_PATH
 
+      - name: Setup Development Dashboard  
+        run: python -m aura_v2.setup_dashboard
+
+      - name: Test Dashboard
+        run: python -c "from aura_v2.web_dashboard.api import router; print('Dashboard ready')"
+
       - name: Install project (editable) + extras
         run: |
           uv pip install -e .
