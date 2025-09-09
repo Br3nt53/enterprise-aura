@@ -11,6 +11,10 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional
 
 # Defensive imports - handle missing dependencies gracefully
+FASTAPI_AVAILABLE = False
+APIRouter = None
+HTTPException = None
+
 try:
     from fastapi import APIRouter, HTTPException
     from pydantic import BaseModel
@@ -64,7 +68,6 @@ class SystemStatusResponse(BaseModel):
 def create_router():
     """Create dashboard router only if dependencies are available"""
     if not FASTAPI_AVAILABLE:
-        print("⚠️  FastAPI not available - dashboard API disabled")
         return None
     
     router = APIRouter(prefix="/dashboard", tags=["dashboard"])
@@ -223,7 +226,4 @@ router = create_router()
 # Compatibility function for main.py import
 def get_router():
     """Get the dashboard router, with fallback handling"""
-    if router is None:
-        print("⚠️  Dashboard router not available - check dependencies")
-        return None
     return router
