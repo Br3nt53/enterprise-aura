@@ -1,4 +1,121 @@
-<!DOCTYPE html>
+# diagnostic_dashboard.py
+"""
+Diagnostic script for AURA Dashboard issues
+Run: python diagnostic_dashboard.py
+"""
+
+import os
+import sys
+from pathlib import Path
+
+def diagnose_dashboard():
+    """Diagnose dashboard setup issues"""
+    print("🔍 AURA Dashboard Diagnostic")
+    print("=" * 50)
+    
+    # Check current directory
+    current_dir = Path.cwd()
+    print(f"📁 Current directory: {current_dir}")
+    
+    # Check if aura_v2 exists
+    aura_dir = current_dir / "aura_v2"
+    if not aura_dir.exists():
+        print("❌ aura_v2 directory not found!")
+        print(f"   Looking in: {aura_dir}")
+        return False
+    else:
+        print("✅ aura_v2 directory found")
+    
+    # Check web_dashboard directory
+    dashboard_dir = aura_dir / "web_dashboard"
+    if not dashboard_dir.exists():
+        print("❌ web_dashboard directory not found!")
+        print("   Creating directory...")
+        dashboard_dir.mkdir(exist_ok=True)
+        print("✅ web_dashboard directory created")
+    else:
+        print("✅ web_dashboard directory exists")
+    
+    # Check for dashboard files
+    files_to_check = [
+        ("__init__.py", '"""AURA v2 Web Dashboard"""\n'),
+        ("api.py", None),  # Will be checked separately
+        ("dashboard.html", None)  # Will be created
+    ]
+    
+    for filename, default_content in files_to_check:
+        file_path = dashboard_dir / filename
+        if file_path.exists():
+            print(f"✅ {filename} exists ({file_path.stat().st_size} bytes)")
+        else:
+            print(f"❌ {filename} missing!")
+            if default_content:
+                print(f"   Creating {filename}...")
+                file_path.write_text(default_content)
+                print(f"✅ {filename} created")
+    
+    # Create the dashboard.html file
+    html_file = dashboard_dir / "dashboard.html"
+    print("\n📝 Creating/updating dashboard.html...")
+    
+    # Get the HTML content from our diagnostic version
+    html_content = get_dashboard_html()
+    html_file.write_text(html_content)
+    print(f"✅ dashboard.html created/updated ({len(html_content)} characters)")
+    
+    # Check main.py
+    main_file = aura_dir / "main.py" 
+    if main_file.exists():
+        print("✅ main.py exists")
+        
+        # Check if it has dashboard integration
+        main_content = main_file.read_text()
+        if "web_dashboard" in main_content:
+            print("✅ main.py has dashboard integration")
+        else:
+            print("⚠️  main.py missing dashboard integration")
+    else:
+        print("❌ main.py not found!")
+    
+    # Test imports
+    print("\n🧪 Testing imports...")
+    try:
+        # Add current directory to Python path
+        sys.path.insert(0, str(current_dir))
+        
+        import aura_v2
+        print("✅ aura_v2 import successful")
+        
+        try:
+            from aura_v2.web_dashboard.api import router
+            if router:
+                print("✅ Dashboard router created successfully")
+            else:
+                print("⚠️  Dashboard router is None (FastAPI may be missing)")
+        except Exception as e:
+            print(f"⚠️  Dashboard import issue: {e}")
+        
+        try:
+            from aura_v2.main import get_app
+            get_app()
+            print("✅ Main app creation successful")
+        except Exception as e:
+            print(f"❌ Main app creation failed: {e}")
+            
+    except Exception as e:
+        print(f"❌ Import failed: {e}")
+    
+    print("\n🚀 Diagnostic complete!")
+    print("\n📋 Next steps:")
+    print("1. Start the server: python -m aura_v2.main dev-server --host 0.0.0.0 --port 8000")
+    print("2. Open browser to: http://localhost:8000")
+    print("3. Check browser console (F12) for any JavaScript errors")
+    
+    return True
+
+def get_dashboard_html():
+    """Get the diagnostic dashboard HTML content"""
+    return '''<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -312,4 +429,7 @@
         }
     </script>
 </body>
-</html>
+</html>'''
+
+if __name__ == "__main__":
+    diagnose_dashboard()

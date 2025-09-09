@@ -1,57 +1,38 @@
+# aura_v2/main.py
+from __future__ import annotations
+
+import asyncio
+import json
+import os
+import uuid
+from contextlib import asynccontextmanager, suppress
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, AsyncIterator, Callable, Dict, List, Optional
 
-import numpy as np
 import typer
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
-from pydantic import BaseModel, Field
 
-from aura_v2.domain import Detection, Position3D, Confidence, Track
+from aura_v2.api.schemas import DetectionInput, TrackOutput, TrackRequest, TrackResponse
+from aura_v2.domain import Confidence, Detection, Position3D, Track
 from aura_v2.domain.services import (
     BasicFusionService,
     FusionService,
     SensorCharacteristics,
 )
 from aura_v2.infrastructure.tracking.modern_tracker import ModernTracker, TrackingResult
+from aura_v2.utils.time import to_utc
 
-
-class DetectionInput(BaseModel):
-    timestamp: datetime
-    position: Dict[str, float]
-    confidence: float = Field(ge=0.0, le=1.0)
-    sensor_id: str
-    attributes: Optional[Dict[str, Any]] = None
-
-
-class TrackOutput(BaseModel):
-    id: str
-    position: Dict[str, float]
-    velocity: Dict[str, float]
-    confidence: float
-    status: str
-    threat_level: int
-    created_at: datetime
-    updated_at: datetime
-
-
-class TrackRequest(BaseModel):
-    radar_detections: List[DetectionInput] = Field(default_factory=list)
-    camera_detections: List[DetectionInput] = Field(default_factory=list)
-    lidar_detections: List[DetectionInput] = Field(default_factory=list)
-    timestamp: Optional[datetime] = None
-
-
-class TrackResponse(BaseModel):
-    active_tracks: List[TrackOutput]
-    new_tracks: List[TrackOutput] = Field(default_factory=list)
-    deleted_tracks: List[str] = Field(default_factory=list)
-    threats: List[Dict[str, Any]] = Field(default_factory=list)
-    processing_time_ms: float = 0.0
-    frame_id: int = 0
+# Optional telemetry guard (no-op if missing)
+try:  # pragma: no cover - optional
+    from aura_v2.infrastructure.telemetry.time_guard import (  # type: ignore
+        validate_and_record as _tg_validate,
+    )
+except Exception:  # pragma: no cover - optional
+    _tg_validate = None  # type: ignore[assignment]
 
 
 class AURAApplication:
@@ -63,6 +44,7 @@ class AURAApplication:
         self.fusion_service: Optional[FusionService] = None
         self._frame_id: int = 0
         self._initialized: bool = False
+        self._last_active_count: int = 0  # reported via /simple
 
     def _initialize_sync(self) -> None:
         if self._initialized:
@@ -70,21 +52,66 @@ class AURAApplication:
         self._build_app()
         self.tracker = ModernTracker()
         self.fusion_service = BasicFusionService(
-            {
-                "radar": SensorCharacteristics("radar", 2.0, 20.0, 0.95, 0.01, np.eye(3) * 4.0),
-                "camera": SensorCharacteristics(
-                    "camera", 5.0, 30.0, 0.90, 0.05, np.diag([25.0, 1.0, 25.0])
-                ),
-                "lidar": SensorCharacteristics("lidar", 0.2, 10.0, 0.85, 0.001, np.eye(3) * 0.04),
-            }
+            sensor_characteristics=[
+                SensorCharacteristics(name="camera_1", accuracy=0.90, latency_ms=20),
+                SensorCharacteristics(name="radar_1", accuracy=0.95, latency_ms=15),
+                SensorCharacteristics(name="lidar_1", accuracy=0.97, latency_ms=10),
+            ]
         )
         self._initialized = True
 
-    async def initialize(self) -> None:
-        self._initialize_sync()
+    def _lifespan(self) -> Callable[[FastAPI], AsyncIterator[None]]:
+        @asynccontextmanager
+        async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+            # --- startup ---
+            pump_task: Optional[asyncio.Task[Any]] = None
+            if os.environ.get("AURA_PUMP_ENABLED", "0") == "1":
+                dsn = os.environ.get("AURA_SOURCE_DSN", "")
+                host = os.environ.get("AURA_PUMP_HOST", "127.0.0.1")
+                try:
+                    port = int(os.environ.get("AURA_PUMP_PORT", "8000"))
+                except Exception:
+                    port = 8000
+
+                try:
+                    from aura_v2.sources import from_dsn  # type: ignore
+                    src = from_dsn(dsn)
+                except Exception as e:  # pragma: no cover - optional
+                    print(f"⚠️  Source disabled: {e}")
+                    src = None
+
+                if src is not None:
+                    async def pump() -> None:
+                        # Local import keeps app import time small
+                        import httpx  # type: ignore
+
+                        url = f"http://{host}:{port}/track"
+                        async with httpx.AsyncClient(timeout=10.0) as client:
+                            async for frame in src.frames():
+                                try:
+                                    await client.post(url, json=frame)
+                                except Exception:
+                                    # ignore transient errors
+                                    pass
+
+                    pump_task = asyncio.create_task(pump())
+
+            app.state.pump_task = pump_task
+            try:
+                yield
+            finally:
+                # --- shutdown ---
+                task = getattr(app.state, "pump_task", None)
+                if task is not None:
+                    task.cancel()
+                    with suppress(asyncio.CancelledError):
+                        await task
+
+        return lifespan
 
     def _build_app(self) -> None:
-        app = FastAPI(title="AURA Enterprise", version="2.0.0")
+        app = FastAPI(title="AURA Enterprise", version="2.0.0", lifespan=self._lifespan())
+
         app.add_middleware(
             CORSMiddleware,
             allow_origins=["*"],
@@ -92,112 +119,30 @@ class AURAApplication:
             allow_methods=["*"],
             allow_headers=["*"],
         )
-        
-        # 🔥 NEW: Add dashboard API routes with proper error handling
-        try:
-            from .web_dashboard.api import router as dashboard_router
-            if dashboard_router is not None:
-                app.include_router(dashboard_router)
-                print("✅ Dashboard API loaded successfully")
-            else:
-                print("⚠️  Dashboard API not available - dependencies missing")
-                print("   Install FastAPI to enable dashboard: pip install fastapi")
-        except ImportError as e:
-            print(f"⚠️  Dashboard module not found: {e}")
-            print("   Run: python -m aura_v2.setup_dashboard")
-        except Exception as e:
-            print(f"⚠️  Dashboard setup error: {e}")
 
-        @app.get("/health", tags=["system"])
-        async def health():
-            return {"status": "ok", "service": "aura", "version": "2.0.0"}
-
-        @app.get("/ready", tags=["system"])
-        async def ready():
-            has_services = self.tracker is not None and self.fusion_service is not None
-            return {"ready": has_services}
-
-        # 🔥 NEW: Serve the development dashboard at root
         @app.get("/", response_class=HTMLResponse, tags=["ui"])
-        async def development_dashboard():
-            """Serve the React development dashboard"""
-            dashboard_path = Path(__file__).parent / "web_dashboard" / "dashboard.html"
-            if dashboard_path.exists():
-                return HTMLResponse(dashboard_path.read_text())
-            else:
-                # Fallback to simple dashboard if file doesn't exist
-                return HTMLResponse("""
-                <html><body style="font-family:ui-sans-serif;padding:20px;background:#1f2937;color:white">
-                    <h1 style="color:#60a5fa">AURA v2 Enterprise</h1>
-                    <div style="background:#374151;padding:20px;border-radius:8px;margin:20px 0">
-                        <h3>🎛️ Development Dashboard</h3>
-                        <p>Full dashboard not found. To install:</p>
-                        <pre style="background:#111827;padding:10px;border-radius:4px">python -m aura_v2.setup_dashboard</pre>
-                    </div>
-                    <div style="background:#374151;padding:20px;border-radius:8px">
-                        <h3>🚀 Quick Actions</h3>
-                        <p><a href="/simple" style="color:#60a5fa">Simple Dashboard</a> | <a href="/track" style="color:#60a5fa">API Endpoint</a> | <a href="/docs" style="color:#60a5fa">API Documentation</a></p>
-                        <button onclick="testTrack()" style="background:#3b82f6;color:white;padding:8px 16px;border:none;border-radius:4px;cursor:pointer">Test /track Endpoint</button>
-                        <pre id="output" style="background:#111827;padding:10px;border-radius:4px;margin-top:10px;min-height:100px"></pre>
-                    </div>
-                    <script>
-                    async function testTrack() {
-                        document.getElementById('output').textContent = 'Testing...';
-                        try {
-                            const response = await fetch('/track', {
-                                method: 'POST',
-                                headers: {'Content-Type': 'application/json'},
-                                body: JSON.stringify({
-                                    radar_detections: [],
-                                    camera_detections: [{
-                                        timestamp: new Date().toISOString(),
-                                        position: {x: 10, y: 20, z: 0},
-                                        confidence: 0.9,
-                                        sensor_id: 'test_camera'
-                                    }],
-                                    lidar_detections: [],
-                                    timestamp: new Date().toISOString()
-                                })
-                            });
-                            const result = await response.json();
-                            document.getElementById('output').textContent = JSON.stringify(result, null, 2);
-                        } catch (error) {
-                            document.getElementById('output').textContent = 'Error: ' + error.message;
-                        }
-                    }
-                    </script>
-                </body></html>
-                """)
-
-        # 🔥 NEW: Alternative simple dashboard route
-        @app.get("/simple", response_class=HTMLResponse, tags=["ui"])
-        async def simple_dashboard():
-            return HTMLResponse("""
-            <html><body style="font-family:ui-sans-serif;background:#1f2937;color:white;padding:20px">
-                <h2 style="color:#60a5fa">AURA Simple Panel</h2>
-                <div style="background:#374151;padding:20px;border-radius:8px;margin:20px 0">
-                    <button onclick="send()" style="background:#3b82f6;color:white;padding:12px 24px;border:none;border-radius:6px;cursor:pointer;font-size:16px">🚀 Test /track Endpoint</button>
-                    <pre id='out' style="border:1px solid #4b5563;padding:15px;margin-top:15px;background:#111827;border-radius:6px;min-height:200px;overflow:auto"></pre>
-                </div>
-                <script>
-                async function send(){
-                    document.getElementById('out').textContent = 'Sending request...';
+        async def root() -> HTMLResponse:
+            return HTMLResponse(
+                """
+            <html><head><title>AURA</title></head>
+            <body>
+              <h2>AURA Enterprise</h2>
+              <p>OpenAPI: <a href="/docs">/docs</a></p>
+              <button onclick="send()">Send sample detections</button>
+              <pre id="out">Testing...</pre>
+              <script>
+                async function send() {
                     try {
-                        const r = await fetch('/track',{
-                            method:'POST',
-                            headers:{'Content-Type':'application/json'},
-                            body: JSON.stringify({
-                                radar_detections:[],
-                                camera_detections:[{
-                                    timestamp: new Date().toISOString(),
-                                    position: {x: Math.random() * 100, y: Math.random() * 100, z: 0},
-                                    confidence: 0.8 + Math.random() * 0.2,
-                                    sensor_id: 'simple_test'
-                                }],
-                                lidar_detections:[],
-                                timestamp:new Date().toISOString()
-                            })
-                        });
+                        const body = {
+                          radar_detections: [],
+                          camera_detections: [
+                            {sensor_id: "camera_1", timestamp: new Date().toISOString(), position: {x: 10.1, y: 20.2}, confidence: 0.95}
+                          ],
+                          lidar_detections: [],
+                          timestamp: new Date().toISOString()
+                        };
+                        const r = await fetch('/track', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+                        document.getElementById('out').textContent = 'Sending request...';
                         const result = await r.json();
                         document.getElementById('out').textContent = JSON.stringify(result,null,2);
                     } catch(error) {
@@ -205,20 +150,68 @@ class AURAApplication:
                     }
                 }
                 </script>
-            </body></html>""")
+            </body></html>"""
+            )
+
+        @app.get("/simple", tags=["system"])
+        async def simple() -> Dict[str, int]:
+            return {"frame_id": self._frame_id, "active": self._last_active_count}
+
+        @app.get("/health", tags=["system"])
+        async def health() -> Dict[str, str]:
+            return {"status": "ok", "service": "aura", "version": "2.0.0"}
+
+        @app.get("/ready", tags=["system"])
+        async def ready() -> Dict[str, bool]:
+            return {"ready": True}
+
+        # Optional dashboard router if present
+        try:
+            from .web_dashboard.api import router as dashboard_router  # type: ignore
+
+            if dashboard_router is not None:
+                app.include_router(dashboard_router)
+                print("✅ Dashboard API loaded successfully")
+            else:  # pragma: no cover - optional
+                print("⚠️  Dashboard API not available - dependencies missing")
+                print("   Install FastAPI to enable dashboard: pip install fastapi")
+        except ImportError as e:  # pragma: no cover - optional
+            print(f"⚠️  Dashboard module not found: {e}")
+            print("   Run: python -m aura_v2.setup_dashboard")
+        except Exception as e:  # pragma: no cover - optional
+            print(f"⚠️  Dashboard setup error: {e}")
 
         @app.post("/track", response_model=TrackResponse, tags=["tracking"])
         async def track(req: TrackRequest) -> TrackResponse:
             if self.tracker is None or self.fusion_service is None:
                 raise HTTPException(status_code=503, detail="Service not initialized")
-            ts = req.timestamp or datetime.now(timezone.utc)
+
+            # Normalize batch timestamp first (always UTC-aware)
+            ts_raw = req.timestamp or datetime.now(timezone.utc)
+            ts = to_utc(ts_raw)
+            if _tg_validate is not None:  # pragma: no cover - optional
+                try:
+                    _tg_validate(ts)
+                except Exception:
+                    pass
 
             def to_det(d: DetectionInput) -> Detection:
-                pos = d.position
+                p = d.position or {}
+                pos = Position3D(
+                    x=float(p.get("x", 0.0)),
+                    y=float(p.get("y", 0.0)),
+                    z=float(p.get("z", 0.0)),
+                )
+                dts = to_utc(d.timestamp)
+                if _tg_validate is not None:  # pragma: no cover - optional
+                    try:
+                        _tg_validate(dts)
+                    except Exception:
+                        pass
                 return Detection(
-                    timestamp=d.timestamp,
-                    position=Position3D(pos.get("x", 0.0), pos.get("y", 0.0), pos.get("z", 0.0)),
-                    confidence=Confidence(d.confidence),
+                    timestamp=dts,
+                    position=pos,
+                    confidence=Confidence(value=float(d.confidence)),
                     sensor_id=d.sensor_id,
                     attributes=d.attributes or {},
                 )
@@ -229,15 +222,14 @@ class AURAApplication:
 
             result: TrackingResult = await self.tracker.update(detections, ts)
 
-            threats: List[Dict[str, Any]] = []
-            for tr in result.active_tracks:
-                threats.append(
-                    {
-                        "track_id": tr.id,
-                        "threat_level": int(tr.threat_level),
-                        "confidence": float(tr.confidence),
-                    }
-                )
+            threats: List[Dict[str, Any]] = [
+                {
+                    "track_id": tr.id,
+                    "threat_level": int(tr.threat_level),
+                    "confidence": float(tr.confidence),
+                }
+                for tr in result.active_tracks
+            ]
 
             def out(tr: Track) -> TrackOutput:
                 return TrackOutput(
@@ -260,8 +252,11 @@ class AURAApplication:
                 )
 
             self._frame_id += 1
+            active = [out(t) for t in result.active_tracks]
+            self._last_active_count = len(active)
+
             return TrackResponse(
-                active_tracks=[out(t) for t in result.active_tracks],
+                active_tracks=active,
                 new_tracks=[out(t) for t in result.new_tracks],
                 deleted_tracks=[t.id for t in result.deleted_tracks],
                 threats=threats,
@@ -290,44 +285,120 @@ def dev_server(
     port: int = 8000,
     reload: bool = False,
     log_level: str = "info",
-):
-    uvicorn.run(
-        "aura_v2.main:get_app",
-        host=host,
-        port=port,
-        reload=reload,
-        factory=True,
-        log_level=log_level,
-    )
+    https: bool = False,
+    source: Optional[str] = "demo://?fps=2",
+    no_source: bool = False,
+) -> None:
+    """Start development server with optional HTTPS."""
+    # Configure source pump env for the app factory
+    if no_source or not source:
+        os.environ["AURA_PUMP_ENABLED"] = "0"
+    else:
+        os.environ["AURA_PUMP_ENABLED"] = "1"
+        os.environ["AURA_SOURCE_DSN"] = source or ""
+        os.environ["AURA_PUMP_HOST"] = host
+        os.environ["AURA_PUMP_PORT"] = str(port)
+
+    if https:
+        cert_file = Path("certs/localhost.crt")
+        key_file = Path("certs/localhost.key")
+
+        if not cert_file.exists() or not key_file.exists():
+            print("HTTPS certificates not found. Run this first:")
+            print("mkdir -p certs && cd certs")
+            print("openssl genrsa -out localhost.key 2048")
+            print(
+                "openssl req -new -x509 -key localhost.key -out localhost.crt -days 365 -subj '/CN=localhost'",
+            )
+            return
+
+        print(f"Starting HTTPS server on https://{host}:{port}")
+        uvicorn.run(
+            "aura_v2.main:get_app",
+            host=host,
+            port=port,
+            reload=reload,
+            factory=True,
+            log_level=log_level,
+            ssl_keyfile=str(key_file),
+            ssl_certfile=str(cert_file),
+        )
+    else:
+        print(f"Starting HTTP server on http://{host}:{port}")
+        uvicorn.run(
+            "aura_v2.main:get_app",
+            host=host,
+            port=port,
+            reload=reload,
+            factory=True,
+            log_level=log_level,
+        )
 
 
 # ===== BEGIN-CLI-CMDS =====
-import json
-import uuid
-import asyncio
-from datetime import timezone
-import yaml  # type: ignore
 
 
 @app_cli.command("scenario-run")
-def scenario_run(file: str, out_dir: str = "out"):
-    run_id = str(uuid.uuid4())[:8]
-    outp = Path(out_dir) / run_id
+def scenario_run(outdir: Optional[str] = None) -> None:
+    """
+    Minimal offline scenario executor that runs a canned set of frames
+    through the tracking pipeline, then writes metrics.
+    """
+    outp = (
+        Path(outdir)
+        if outdir
+        else Path("runs") / datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+    )
     outp.mkdir(parents=True, exist_ok=True)
-    with open(file, "r", encoding="utf-8") as f:
-        scenario = yaml.safe_load(f) or {}
-    from aura_v2.infrastructure.container import Container
+    run_id = uuid.uuid4().hex[:8]
 
-    c = Container()
-    pipeline = c.tracking_pipeline()
+    async def _run() -> None:
+        # Replace this with real scenario loading as needed
+        scenario = {
+            "name": "demo",
+            "frames": [
+                {
+                    "detections": [
+                        {
+                            "sensor_id": "camera_1",
+                            "timestamp": datetime.now(timezone.utc),
+                            "position": {"x": 10.0, "y": 20.0},
+                            "confidence": 0.9,
+                        }
+                    ]
+                }
+                for _ in range(10)
+            ],
+        }
 
-    async def _run():
+        tracker = ModernTracker()
+
+        async def process(dets: List[Dict[str, Any]], ts: datetime) -> None:
+            def td(d: Dict[str, Any]) -> Detection:
+                p = d.get("position") or {}
+                pos = Position3D(
+                    x=float(p.get("x", 0.0)),
+                    y=float(p.get("y", 0.0)),
+                    z=float(p.get("z", 0.0)),
+                )
+                dts = to_utc(d["timestamp"])
+                return Detection(
+                    timestamp=dts,
+                    position=pos,
+                    confidence=Confidence(value=float(d["confidence"])),
+                    sensor_id=str(d["sensor_id"]),
+                    attributes=d.get("attributes", {}),
+                )
+
+            dd = [td(x) for x in dets]
+            await tracker.update(dd, ts)
+
         ts0 = datetime.now(timezone.utc)
         frames = scenario.get("frames") or []
         total = 0
         for frame in frames:
             detections = frame.get("detections", [])
-            await pipeline.process(detections, ts=ts0)
+            await process(detections, ts=ts0)
             total += 1
         metrics = {
             "run_id": run_id,
@@ -342,53 +413,62 @@ def scenario_run(file: str, out_dir: str = "out"):
 
 
 @app_cli.command("detections-send")
-def detections_send(jsonl_path: str, host: str = "127.0.0.1", port: int = 8000):
+def detections_send(
+    jsonl_path: str,
+    host: str = "127.0.0.1",
+    port: int = 8000,
+    repeat: int = 1,
+    interval: float = 1.0,
+) -> None:
+    # Local imports keep CLI startup snappy
+    import time  # type: ignore
     import httpx  # type: ignore
 
-    rows = []
+    rows: List[Dict[str, Any]] = []
     with open(jsonl_path, "r", encoding="utf-8") as f:
         for line in f:
-            line = line.strip()
-            if line:
-                rows.append(json.loads(line))
-    req = {
-        "radar_detections": [],
-        "camera_detections": rows,
-        "lidar_detections": [],
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-    }
-    url = f"http://{host}:{port}/track"
-    r = httpx.post(url, json=req, timeout=30.0)
-    r.raise_for_status()
-    print(r.json())
-
-
-@app_cli.command("tracks-tail")
-def tracks_tail(host: str = "127.0.0.1", port: int = 8000, interval: float = 1.0):
-    import httpx
-    import time  # type: ignore
+            s = line.strip()
+            if s:
+                rows.append(json.loads(s))
 
     url = f"http://{host}:{port}/track"
-    while True:
+    for _ in range(max(1, repeat)):
         req = {
             "radar_detections": [],
-            "camera_detections": [],
+            "camera_detections": rows,
             "lidar_detections": [],
             "timestamp": datetime.now(timezone.utc).isoformat(),
         }
+        r = httpx.post(url, json=req, timeout=10.0)
+        if r.status_code >= 400:
+            print("ERROR", r.status_code, r.text)
+            raise SystemExit(1)
+        print(r.json())
+        if repeat > 1:
+            time.sleep(max(0.0, interval))
+
+
+@app_cli.command("tracks-tail")
+def tracks_tail(host: str = "127.0.0.1", port: int = 8000, interval: float = 1.0) -> None:
+    # Local imports keep CLI startup snappy
+    import time  # type: ignore
+    import httpx  # type: ignore
+
+    url = f"http://{host}:{port}/simple"
+    while True:
         try:
-            r = httpx.post(url, json=req, timeout=10.0)
+            r = httpx.get(url, timeout=5.0)
             if r.status_code == 200:
                 data = r.json()
                 print(
-                    {"frame_id": data.get("frame_id"), "active": len(data.get("active_tracks", []))}
+                    {"frame_id": data.get("frame_id"), "active": data.get("active", 0)}
                 )
         except Exception:
             pass
         time.sleep(interval)
 
 
-def main():
+def main() -> None:
     app_cli()
 
 
