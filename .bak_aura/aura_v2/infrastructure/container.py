@@ -41,6 +41,4 @@ class Container(containers.DeclarativeContainer):
 
     def init_resources(self):
         """Initializes container resources."""
-        self.wire(
-            modules=["aura_v2.main", "aura_v2.application.pipelines.tracking_pipeline"]
-        )
+        self.wire(modules=["aura_v2.main", "aura_v2.application.pipelines.tracking_pipeline"])

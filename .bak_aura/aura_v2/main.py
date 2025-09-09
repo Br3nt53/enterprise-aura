@@ -67,15 +67,11 @@ class AURAApplication:
         self.tracker = ModernTracker()
         self.fusion_service = MultiSensorFusion(
             {
-                "radar": SensorCharacteristics(
-                    "radar", 2.0, 20.0, 0.95, 0.01, np.eye(3) * 4.0
-                ),
+                "radar": SensorCharacteristics("radar", 2.0, 20.0, 0.95, 0.01, np.eye(3) * 4.0),
                 "camera": SensorCharacteristics(
                     "camera", 5.0, 30.0, 0.90, 0.05, np.diag([25.0, 1.0, 25.0])
                 ),
-                "lidar": SensorCharacteristics(
-                    "lidar", 0.2, 10.0, 0.85, 0.001, np.eye(3) * 0.04
-                ),
+                "lidar": SensorCharacteristics("lidar", 0.2, 10.0, 0.85, 0.001, np.eye(3) * 0.04),
             }
         )
         self._initialized = True
@@ -113,18 +109,14 @@ class AURAApplication:
                 pos = d.position
                 return Detection(
                     timestamp=d.timestamp,
-                    position=Position3D(
-                        pos.get("x", 0.0), pos.get("y", 0.0), pos.get("z", 0.0)
-                    ),
+                    position=Position3D(pos.get("x", 0.0), pos.get("y", 0.0), pos.get("z", 0.0)),
                     confidence=Confidence(d.confidence),
                     sensor_id=d.sensor_id,
                     attributes=d.attributes or {},
                 )
 
             detections: List[Detection] = []
-            for d in (
-                req.radar_detections + req.camera_detections + req.lidar_detections
-            ):
+            for d in req.radar_detections + req.camera_detections + req.lidar_detections:
                 detections.append(to_det(d))
 
             result: TrackingResult = await self.tracker.update(detections, ts)

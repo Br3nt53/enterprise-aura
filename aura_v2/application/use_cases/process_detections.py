@@ -18,7 +18,11 @@ def _to_detection(d: Dict[str, Any]) -> Detection:
     z = float(d.get("z", 0.0))
     conf = float(d.get("confidence", 1.0))
     sensor_id = str(d.get("sensor_id", "unknown"))
-    attrs = {k: v for k, v in d.items() if k not in {"timestamp", "x", "y", "z", "confidence", "sensor_id"}}
+    attrs = {
+        k: v
+        for k, v in d.items()
+        if k not in {"timestamp", "x", "y", "z", "confidence", "sensor_id"}
+    }
     return Detection(
         timestamp=ts,
         position=Position3D(x=x, y=y, z=z),
@@ -39,7 +43,9 @@ class ProcessDetectionsUseCase:
     def __init__(self, tracker: Any, **_: Any) -> None:
         self.tracker = tracker
 
-    async def __call__(self, sensor_data: Iterable[Dict[str, Any]], ts: Optional[datetime] = None) -> Any:
+    async def __call__(
+        self, sensor_data: Iterable[Dict[str, Any]], ts: Optional[datetime] = None
+    ) -> Any:
         detections = [_to_detection(d) for d in sensor_data]
         ts = ts or datetime.now(timezone.utc)
         return await self.tracker.update(detections, ts)
