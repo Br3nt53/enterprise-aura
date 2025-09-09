@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA v2 Development Dashboard</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { margin: 0; padding: 0; }
+        .console-output { 
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace; 
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+        
+        // Lucide Icons as SVG components
+        const PlayIcon = () => (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <polygon points="5,3 19,12 5,21 5,3"></polygon>
+            </svg>
+        );
+        
+        const CheckCircleIcon = () => (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        );
+        
+        const XCircleIcon = () => (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        );
+        
+        const ClockIcon = () => (
+            <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12,6 12,12 16,14"></polyline>
+            </svg>
+        );
+
+        const TerminalIcon = () => (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <polyline points="4,17 10,11 4,5"></polyline>
+                <line x1="12" y1="19" x2="20" y2="19"></line>
+            </svg>
+        );
+
+        const TestTubeIcon = () => (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2z" />
+            </svg>
+        );
+
+        const AURADashboard = () => {
+            const [files, setFiles] = useState({});
+            const [testResults, setTestResults] = useState({});
+            const [activeTab, setActiveTab] = useState('overview');
+            const [consoleOutput, setConsoleOutput] = useState([]);
+            const [consoleInput, setConsoleInput] = useState('');
+            const [isConsoleRunning, setIsConsoleRunning] = useState(false);
+            const [systemStatus, setSystemStatus] = useState({});
+            const consoleRef = useRef(null);
+
+            const fileStructure = {
+                'main': {
+                    'aura_v2/main.py': {
+                        description: 'Main application entry point',
+                        testCommand: 'python -c "import aura_v2.main; print(\'Import successful\')"'
+                    },
+                    'aura_v2/__init__.py': {
+                        description: 'Package initialization',
+                        testCommand: 'python -c "import aura_v2; print(f\'Version: {aura_v2.__version__}\')"'
+                    }
+                },
+                'domain': {
+                    'aura_v2/domain/entities/detection.py': {
+                        description: 'Detection entity',
+                        testCommand: 'python -c "from aura_v2.domain.entities import Detection; print(\'Detection entity loaded\')"'
+                    },
+                    'aura_v2/domain/entities/track.py': {
+                        description: 'Track entity and states',
+                        testCommand: 'python -c "from aura_v2.domain.entities import Track, ThreatLevel; print(f\'Track loaded\')"'
+                    }
+                },
+                'tests': {
+                    'tests/integration/test_advanced_intelligence_coordinator.py': {
+                        description: 'AI coordinator tests',
+                        testCommand: 'pytest tests/integration/test_advanced_intelligence_coordinator.py -v',
+                        isTestFile: true
+                    },
+                    'tests/unit/test_threat_analyzer.py': {
+                        description: 'Threat analyzer tests',
+                        testCommand: 'pytest tests/unit/test_threat_analyzer.py -v',
+                        isTestFile: true
+                    }
+                }
+            };
+
+            const quickCommands = [
+                { name: 'Run All Tests', command: 'uv run pytest -v', description: 'Execute full test suite' },
+                { name: 'Start Dev Server', command: 'python -m aura_v2.main dev-server --host 0.0.0.0 --port 8000', description: 'Start development server' },
+                { name: 'Health Check', command: 'curl -f http://localhost:8000/health', description: 'Check server health' },
+                { name: 'Install Dependencies', command: 'uv pip install -e ".[tracking,observability,messaging,perf,test]"', description: 'Install dependencies' }
+            ];
+
+            useEffect(() => {
+                // Initialize files
+                const allFiles = {};
+                Object.entries(fileStructure).forEach(([category, categoryFiles]) => {
+                    Object.entries(categoryFiles).forEach(([filepath, config]) => {
+                        allFiles[filepath] = {
+                            category,
+                            description: config.description,
+                            testCommand: config.testCommand,
+                            isTestFile: config.isTestFile || false,
+                            status: 'untested'
+                        };
+                    });
+                });
+                setFiles(allFiles);
+
+                // Load system status
+                fetchSystemStatus();
+            }, []);
+
+            const fetchSystemStatus = async () => {
+                try {
+                    const response = await fetch('/dashboard/system-status');
+                    if (response.ok) {
+                        const status = await response.json();
+                        setSystemStatus(status);
+                    }
+                } catch (error) {
+                    console.error('Failed to fetch system status:', error);
+                }
+            };
+
+            const executeCommand = async (command) => {
+                setIsConsoleRunning(true);
+                addToConsole(`$ ${command}`, 'command');
+
+                try {
+                    const response = await fetch('/dashboard/execute', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ command, working_directory: '.' })
+                    });
+
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        addToConsole(result.output, 'success');
+                    } else {
+                        addToConsole(result.error || 'Command failed', 'error');
+                    }
+                    
+                    addToConsole(`Completed in ${result.duration_ms.toFixed(0)}ms`, 'info');
+                    
+                } catch (error) {
+                    addToConsole(`Error: ${error.message}`, 'error');
+                } finally {
+                    setIsConsoleRunning(false);
+                }
+            };
+
+            const addToConsole = (message, type = 'info') => {
+                const timestamp = new Date().toLocaleTimeString();
+                setConsoleOutput(prev => [...prev, { timestamp, message, type }]);
+            };
+
+            const runVerification = async (filepath) => {
+                const file = files[filepath];
+                if (!file?.testCommand) return;
+
+                setFiles(prev => ({
+                    ...prev,
+                    [filepath]: { ...prev[filepath], status: 'running' }
+                }));
+
+                try {
+                    const response = await fetch('/dashboard/execute', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            command: file.testCommand,
+                            working_directory: '.'
+                        })
+                    });
+
+                    const result = await response.json();
+                    const success = result.success;
+
+                    setFiles(prev => ({
+                        ...prev,
+                        [filepath]: { ...prev[filepath], status: success ? 'success' : 'error' }
+                    }));
+
+                    setTestResults(prev => ({
+                        ...prev,
+                        [filepath]: {
+                            success,
+                            details: success ? 'Verification passed' : result.error,
+                            timestamp: new Date().toISOString()
+                        }
+                    }));
+
+                } catch (error) {
+                    setFiles(prev => ({
+                        ...prev,
+                        [filepath]: { ...prev[filepath], status: 'error' }
+                    }));
+                }
+            };
+
+            const getStatusIcon = (status) => {
+                switch (status) {
+                    case 'success': return <CheckCircleIcon />;
+                    case 'error': return <XCircleIcon />;
+                    case 'running': return <ClockIcon />;
+                    default: return <PlayIcon />;
+                }
+            };
+
+            const getStatusColor = (status) => {
+                switch (status) {
+                    case 'success': return 'bg-green-500 hover:bg-green-600';
+                    case 'error': return 'bg-red-500 hover:bg-red-600';
+                    case 'running': return 'bg-yellow-500 hover:bg-yellow-600';
+                    default: return 'bg-gray-400 hover:bg-gray-500';
+                }
+            };
+
+            const handleConsoleSubmit = (e) => {
+                e.preventDefault();
+                if (consoleInput.trim() && !isConsoleRunning) {
+                    executeCommand(consoleInput.trim());
+                    setConsoleInput('');
+                }
+            };
+
+            return (
+                <div className="min-h-screen bg-gray-900 text-white">
+                    <div className="max-w-7xl mx-auto p-6">
+                        {/* Header */}
+                        <div className="mb-8">
+                            <h1 className="text-4xl font-bold mb-2 text-blue-400">AURA v2 Development Dashboard</h1>
+                            <p className="text-gray-400">Real-time tracking system with integrated testing and debugging</p>
+                        </div>
+
+                        {/* System Status */}
+                        <div className="bg-gray-800 rounded-lg p-4 mb-6">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-6">
+                                    {Object.entries(systemStatus).map(([key, value]) => (
+                                        <div key={key} className="flex items-center space-x-2">
+                                            <div className={`w-2 h-2 rounded-full ${value.includes('available') ? 'bg-green-400' : 'bg-red-400'}`}></div>
+                                            <span className="text-sm text-gray-300 capitalize">{key}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                                <button onClick={fetchSystemStatus} className="text-blue-400 hover:text-blue-300 text-sm">
+                                    Refresh
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Tabs */}
+                        <div className="flex space-x-1 mb-6 bg-gray-800 p-1 rounded-lg">
+                            <button
+                                onClick={() => setActiveTab('overview')}
+                                className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium ${
+                                    activeTab === 'overview' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:text-white'
+                                }`}
+                            >
+                                <TestTubeIcon />
+                                <span>Overview</span>
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('console')}
+                                className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium ${
+                                    activeTab === 'console' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:text-white'
+                                }`}
+                            >
+                                <TerminalIcon />
+                                <span>Console</span>
+                            </button>
+                        </div>
+
+                        {/* Content */}
+                        {activeTab === 'overview' && (
+                            <div className="space-y-8">
+                                {Object.entries(fileStructure).map(([category, categoryFiles]) => (
+                                    <div key={category} className="bg-gray-800 rounded-lg p-6">
+                                        <h2 className="text-xl font-semibold mb-4 capitalize">{category} Layer</h2>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                            {Object.entries(categoryFiles).map(([filepath, config]) => {
+                                                const file = files[filepath];
+                                                const result = testResults[filepath];
+                                                if (!file) return null;
+
+                                                return (
+                                                    <button
+                                                        key={filepath}
+                                                        onClick={() => runVerification(filepath)}
+                                                        disabled={file.status === 'running'}
+                                                        className={`p-4 rounded-lg text-left transition-all ${getStatusColor(file.status)} disabled:cursor-not-allowed`}
+                                                    >
+                                                        <div className="flex items-start justify-between mb-2">
+                                                            <div className="flex-1 min-w-0">
+                                                                <div className="text-sm font-medium text-white truncate">
+                                                                    {filepath.split('/').pop()}
+                                                                </div>
+                                                                <div className="text-xs text-white opacity-80 mt-1">
+                                                                    {config.description}
+                                                                </div>
+                                                            </div>
+                                                            <div className="ml-2 flex-shrink-0">
+                                                                {getStatusIcon(file.status)}
+                                                            </div>
+                                                        </div>
+                                                        {result && (
+                                                            <div className="mt-2 text-xs text-white opacity-90">
+                                                                {result.details}
+                                                            </div>
+                                                        )}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {activeTab === 'console' && (
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                <div className="lg:col-span-1">
+                                    <h3 className="text-lg font-semibold mb-4">Quick Commands</h3>
+                                    <div className="space-y-2">
+                                        {quickCommands.map((cmd, index) => (
+                                            <button
+                                                key={index}
+                                                onClick={() => executeCommand(cmd.command)}
+                                                disabled={isConsoleRunning}
+                                                className="w-full text-left p-3 bg-gray-800 hover:bg-gray-700 disabled:bg-gray-900 rounded-lg transition-colors"
+                                            >
+                                                <div className="text-sm font-medium">{cmd.name}</div>
+                                                <div className="text-xs text-gray-400 mt-1">{cmd.description}</div>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="lg:col-span-2">
+                                    <h3 className="text-lg font-semibold mb-4">Debug Console</h3>
+                                    <div className="bg-black rounded-lg p-4 font-mono text-sm console-output">
+                                        <div ref={consoleRef} className="h-96 overflow-y-auto mb-4 space-y-1">
+                                            {consoleOutput.map((entry, index) => (
+                                                <div key={index} className="flex">
+                                                    <span className="text-gray-500 mr-2">{entry.timestamp}</span>
+                                                    <span className={
+                                                        entry.type === 'command' ? 'text-yellow-400' :
+                                                        entry.type === 'error' ? 'text-red-400' :
+                                                        entry.type === 'success' ? 'text-green-400' :
+                                                        'text-gray-300'
+                                                    }>
+                                                        {entry.message}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        <form onSubmit={handleConsoleSubmit} className="flex">
+                                            <span className="text-green-400 mr-2">$</span>
+                                            <input
+                                                type="text"
+                                                value={consoleInput}
+                                                onChange={(e) => setConsoleInput(e.target.value)}
+                                                disabled={isConsoleRunning}
+                                                className="flex-1 bg-transparent border-none outline-none text-white"
+                                                placeholder="Enter command..."
+                                            />
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<AURADashboard />, document.getElementById('root'));
+    </script>
+</body>
+</html>
