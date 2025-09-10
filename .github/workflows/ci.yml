@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd="mongosh --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval=5s --health-timeout=5s --health-retries=12
+    env:
+      PYTHON_VERSION: "3.11"
+      AURA_ASSOCIATION_METHOD: greedy
+      MONGO_URI: mongodb://localhost:27017
+      MONGO_DB: aura_db
+      MONGO_COLLECTION: tracks
+      AURA_METRICS_STRICT: "1"
+      AURA_P99_LATENCY_MS_BUDGET: "750"
+      AURA_MAX_ID_SWITCH_RATE: "0.02"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Set up Python
+        run: uv python install $PYTHON_VERSION
+
+      - name: Cache uv
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/uv
+          key: uv-${{ runner.os }}-${{ env.PYTHON_VERSION }}-${{ hashFiles('pyproject.toml') }}
+
+      - name: Install deps
+        run: |
+          uv pip install -e ".[tracking,observability,messaging,test]" --upgrade
+          uv pip install motor pytest pytest-asyncio ruff
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Wait for Mongo healthy
+        run: |
+          for i in $(seq 1 30); do
+            mongosh --eval 'db.runCommand({ ping: 1 })' || true
+            sleep 1
+          done
+          mongosh --eval 'db.runCommand({ ping: 1 })'
+
+      - name: Tests
+        run: pytest -q
