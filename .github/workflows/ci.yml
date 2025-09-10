@@ -1,7 +1,10 @@
 name: CI
+
 on:
-  push: { branches: [ main ] }
-  pull_request: { branches: [ main ] }
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   test:
@@ -9,7 +12,8 @@ jobs:
     services:
       mongo:
         image: mongo:6.0
-        ports: [ "27017:27017" ]
+        ports:
+          - 27017:27017
         options: >-
           --health-cmd="mongosh --eval 'db.runCommand({ ping: 1 })'"
           --health-interval=5s --health-timeout=5s --health-retries=12
@@ -28,12 +32,8 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v4
 
-      - name: Set up Python & venv
-        run: |
-          uv python install "$PYTHON_VERSION"
-          uv venv --python "$PYTHON_VERSION"
-          echo "VIRTUAL_ENV=$PWD/.venv" >> "$GITHUB_ENV"
-          echo "$PWD/.venv/bin"       >> "$GITHUB_PATH"
+      - name: Set up Python
+        run: uv python install $PYTHON_VERSION
 
       - name: Cache uv
         uses: actions/cache@v4
@@ -44,27 +44,18 @@ jobs:
       - name: Install deps
         run: |
           uv pip install -e ".[tracking,observability,messaging,test]" --upgrade
-          uv pip install motor pymongo pytest pytest-asyncio ruff psutil
+          uv pip install motor pytest pytest-asyncio ruff
 
       - name: Lint
-        run: uv run ruff check .
+        run: ruff check .
 
       - name: Wait for Mongo healthy (pymongo)
         run: |
-          uv run python - <<'PY2'
-          import os, time
-          from pymongo import MongoClient
-          uri = os.environ.get("MONGO_URI","mongodb://localhost:27017")
-          deadline = time.time() + 90
-          while time.time() < deadline:
-              try:
-                  MongoClient(uri, serverSelectionTimeoutMS=1000).admin.command("ping")
-                  print("Mongo is ready"); break
-              except Exception as e:
-                  print("waiting for mongo:", e); time.sleep(2)
-          else:
-              raise SystemExit("Mongo never became healthy")
-          PY2
+          for i in $(seq 1 30); do
+            mongosh --eval 'db.runCommand({ ping: 1 })' || true
+            sleep 1
+          done
+          mongosh --eval 'db.runCommand({ ping: 1 })'
 
       - name: Tests
-        run: uv run pytest -q
+        run: pytest -q
