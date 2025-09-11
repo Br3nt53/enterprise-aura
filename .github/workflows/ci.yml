@@ -44,15 +44,27 @@ jobs:
       - name: Install deps
         run: |
           uv pip install -e ".[tracking,observability,messaging,test]" --upgrade
-          uv pip install motor pytest pytest-asyncio ruff psutil
+          uv pip install motor pymongo pytest pytest-asyncio ruff psutil
 
       - name: Lint
         run: uv run ruff check .
 
-      - name: Wait for Mongo healthy
+      - name: Wait for Mongo healthy (pymongo)
         run: |
-          for i in $(seq 1 30); do mongosh --eval 'db.runCommand({ ping: 1 })' && break || sleep 1; done
-          mongosh --eval 'db.runCommand({ ping: 1 })'
+          uv run python - <<'PY2'
+          import os, time
+          from pymongo import MongoClient
+          uri = os.environ.get("MONGO_URI","mongodb://localhost:27017")
+          deadline = time.time() + 90
+          while time.time() < deadline:
+              try:
+                  MongoClient(uri, serverSelectionTimeoutMS=1000).admin.command("ping")
+                  print("Mongo is ready"); break
+              except Exception as e:
+                  print("waiting for mongo:", e); time.sleep(2)
+          else:
+              raise SystemExit("Mongo never became healthy")
+          PY2
 
       - name: Tests
         run: uv run pytest -q
