@@ -88,3 +88,4 @@ venv.bak
 .DS_Store
 '@ | Set-Content -Path ".gitignore"
 *.egg-info/
+artifacts/env.txt
