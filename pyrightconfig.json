@@ -3,20 +3,13 @@
   "venv": ".venv",
   "pythonVersion": "3.11",
   "typeCheckingMode": "basic",
+  "reportMissingImports": true,
   "executionEnvironments": [
     {
-      "root": ".",
-      "extraPaths": [
-        "aura_v2",
-        "tests"
-      ]
+      "root": "./",
+      "pythonVersion": "3.11",
+      "venv": ".venv"
     }
   ],
-  "exclude": [
-    "**/__pycache__",
-    ".venv",
-    ".pytest_cache",
-    ".ruff_cache",
-    "tmp"
-  ]
+  "include": ["aura_v2", "tests"]
 }
