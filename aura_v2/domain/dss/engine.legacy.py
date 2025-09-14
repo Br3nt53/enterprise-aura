@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Sequence
-
 
 class Decision:
     def __init__(self, track_id: str, action: str, score: float):

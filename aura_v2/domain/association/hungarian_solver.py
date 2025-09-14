@@ -29,7 +29,7 @@ def solve_assignment(
     row_ind, col_ind = linear_sum_assignment(C)
     matches, unm_det, unm_trk = [], [], []
     assigned_trk = set()
-    for r, c in zip(row_ind, col_ind):
+    for r, c in zip(row_ind, col_ind, strict=False):
         if C[r, c] < max_cost:
             matches.append((r, c))
             assigned_trk.add(c)

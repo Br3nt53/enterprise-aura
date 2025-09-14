@@ -1,13 +1,15 @@
 from __future__ import annotations
 
-from typing import Dict, List
+from typing import Dict
 
 import numpy as np
 
 from .kbest_murty import MurtyKBest
 
 
-def kbest_to_marginals(C: np.ndarray, k: int, beta: float = 1.0) -> Dict[str, np.ndarray]:
+def kbest_to_marginals(
+    C: np.ndarray, k: int, beta: float = 1.0
+) -> Dict[str, np.ndarray]:
     """
     Convert top-k assignments into approximate association marginals.
     Cost matrix C: shape (M,N)
@@ -28,7 +30,7 @@ def kbest_to_marginals(C: np.ndarray, k: int, beta: float = 1.0) -> Dict[str, np
     Z = np.sum(weights)
 
     P = np.zeros_like(C, dtype=float)
-    for s, w in zip(sols, weights):
+    for s, w in zip(sols, weights, strict=False):
         for r, c in s.assignment:
             P[r, c] += w
 

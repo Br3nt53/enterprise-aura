@@ -4,7 +4,6 @@ from datetime import datetime
 from logging import Logger
 from typing import Dict
 
-from ...domain.entities import ThreatLevel
 from ...domain.ports import SensorStream
 from ...domain.services import FusionService
 from ...infrastructure.tracking import ModernTracker
@@ -54,7 +53,9 @@ class RealTimeTrackingPipeline:
     def process_frame(self, detections: list) -> None:
         """Process a single frame of detections."""
         self.sequence_id += 1
-        self.logger.debug(f"Processing frame {self.sequence_id} with {len(detections)} detections.")
+        self.logger.debug(
+            f"Processing frame {self.sequence_id} with {len(detections)} detections."
+        )
 
         if not detections:
             return

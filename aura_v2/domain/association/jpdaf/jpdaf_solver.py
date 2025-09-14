@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 import numpy as np
 
@@ -23,7 +23,9 @@ def cluster_jpda(
       P_missed: (N,) probability of miss for each track
     """
     allowed = {d: [t for t in trk_indices if gating_mask[d, t]] for d in det_indices}
-    hyps = enumerate_hypotheses(det_indices, trk_indices, allowed, max_hypotheses=max_hypotheses)
+    hyps = enumerate_hypotheses(
+        det_indices, trk_indices, allowed, max_hypotheses=max_hypotheses
+    )
 
     track_lh_map = {}
     for d in det_indices:
@@ -46,7 +48,7 @@ def cluster_jpda(
     P_assoc = np.zeros((M, N), dtype=np.float64)
     P_miss = np.zeros(N, dtype=np.float64)
 
-    for h, w in zip(hyps, hyp_weights):
+    for h, w in zip(hyps, hyp_weights, strict=False):
         for d, t in h["pairs"]:
             P_assoc[d, t] += w
         for t in h["unmatched_tracks"]:

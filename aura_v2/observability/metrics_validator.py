@@ -34,7 +34,9 @@ def validate_id_switch_rate(switches: int, total_associations: int) -> float:
 
 
 def validate_memory_mb(current_mb: float, cap_mb: float | None = None) -> float:
-    cap = cap_mb if cap_mb is not None else float(os.getenv("AURA_MAX_MEMORY_MB", "1024"))
+    cap = (
+        cap_mb if cap_mb is not None else float(os.getenv("AURA_MAX_MEMORY_MB", "1024"))
+    )
     if current_mb > cap:
         raise AssertionError(f"Memory {current_mb:.1f}MB exceeds cap {cap:.1f}MB")
     return current_mb

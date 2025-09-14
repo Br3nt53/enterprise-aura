@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-import math
-from typing import Sequence
-
 from aura_v2.domain.tracking.track_state import TrackState
 
 
@@ -18,7 +15,7 @@ class UnscentedKalmanFilter:
         track.state.y += track.state.vy * dt
         track.state.P = track.state.P + self.process_var
 
-    def update(self, track: TrackState, reading: "SensorReading") -> None:
+    def update(self, track: TrackState, reading: object) -> None:
         # Simplified update
         k = track.state.P / (track.state.P + self.meas_var)
         track.state.x += k * (reading.x - track.state.x)

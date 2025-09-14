@@ -5,7 +5,9 @@ from numpy.typing import NDArray
 
 
 # bboxes: shape (M,4) and (N,4), format: [x, y, w, h] with x,y = center coords (or adapt)
-def aabb_iou_matrix(b1: NDArray[np.floating], b2: NDArray[np.floating]) -> NDArray[np.floating]:
+def aabb_iou_matrix(
+    b1: NDArray[np.floating], b2: NDArray[np.floating]
+) -> NDArray[np.floating]:
     # Convert center (cx, cy, w, h) -> corners (x1,y1,x2,y2)
     b1_xy1 = b1[:, :2] - b1[:, 2:] / 2
     b1_xy2 = b1[:, :2] + b1[:, 2:] / 2

@@ -41,7 +41,7 @@ class HungarianAssociationStrategy:
 
         rows, cols = linear_sum_assignment(cost)
         matched, used_t, used_d = [], set(), set()
-        for i, j in zip(rows, cols):
+        for i, j in zip(rows, cols, strict=False):
             if cost[i, j] < 1e6:
                 matched.append((tracks[i], detections[j]))
                 used_t.add(i)

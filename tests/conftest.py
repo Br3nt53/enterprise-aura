@@ -33,7 +33,7 @@ async def _wait_ready(client: AsyncIOMotorClient, *, timeout: float = 20.0) -> N
             return
         except Exception:
             if loop.time() >= deadline:
-                raise RuntimeError("Mongo not reachable")
+                raise RuntimeError("Mongo not reachable") from None
             await asyncio.sleep(0.5)
 
 

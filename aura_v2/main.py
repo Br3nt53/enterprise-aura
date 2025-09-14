@@ -18,7 +18,11 @@ from fastapi.responses import HTMLResponse
 
 from aura_v2.api.schemas import DetectionInput, TrackOutput, TrackRequest, TrackResponse
 from aura_v2.domain import Confidence, Detection, Position3D, Track
-from aura_v2.domain.services import BasicFusionService, FusionService, SensorCharacteristics
+from aura_v2.domain.services import (
+    BasicFusionService,
+    FusionService,
+    SensorCharacteristics,
+)
 from aura_v2.infrastructure.tracking.modern_tracker import ModernTracker, TrackingResult
 from aura_v2.utils.time import to_utc
 
@@ -108,7 +112,9 @@ class AURAApplication:
         return lifespan
 
     def _build_app(self) -> None:
-        app = FastAPI(title="AURA Enterprise", version="2.0.0", lifespan=self._lifespan())
+        app = FastAPI(
+            title="AURA Enterprise", version="2.0.0", lifespan=self._lifespan()
+        )
 
         app.add_middleware(
             CORSMiddleware,
@@ -215,7 +221,9 @@ class AURAApplication:
                 )
 
             detections: List[Detection] = []
-            for d in req.radar_detections + req.camera_detections + req.lidar_detections:
+            for d in (
+                req.radar_detections + req.camera_detections + req.lidar_detections
+            ):
                 detections.append(to_det(d))
 
             result: TrackingResult = await self.tracker.update(detections, ts)
@@ -448,7 +456,9 @@ def detections_send(
 
 
 @app_cli.command("tracks-tail")
-def tracks_tail(host: str = "127.0.0.1", port: int = 8000, interval: float = 1.0) -> None:
+def tracks_tail(
+    host: str = "127.0.0.1", port: int = 8000, interval: float = 1.0
+) -> None:
     # Local imports keep CLI startup snappy
     import time  # type: ignore
 
@@ -460,7 +470,9 @@ def tracks_tail(host: str = "127.0.0.1", port: int = 8000, interval: float = 1.0
             r = httpx.get(url, timeout=5.0)
             if r.status_code == 200:
                 data = r.json()
-                print({"frame_id": data.get("frame_id"), "active": data.get("active", 0)})
+                print(
+                    {"frame_id": data.get("frame_id"), "active": data.get("active", 0)}
+                )
         except Exception:
             pass
         time.sleep(interval)

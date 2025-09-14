@@ -4,7 +4,6 @@ Diagnostic script for AURA Dashboard issues
 Run: python diagnostic_dashboard.py
 """
 
-import os
 import sys
 from pathlib import Path
 
@@ -84,8 +83,6 @@ def diagnose_dashboard():
         # Add current directory to Python path
         sys.path.insert(0, str(current_dir))
 
-        import aura_v2
-
         print("✅ aura_v2 import successful")
 
         try:
@@ -111,7 +108,9 @@ def diagnose_dashboard():
 
     print("\n🚀 Diagnostic complete!")
     print("\n📋 Next steps:")
-    print("1. Start the server: python -m aura_v2.main dev-server --host 0.0.0.0 --port 8000")
+    print(
+        "1. Start the server: python -m aura_v2.main dev-server --host 0.0.0.0 --port 8000"
+    )
     print("2. Open browser to: http://localhost:8000")
     print("3. Check browser console (F12) for any JavaScript errors")
 

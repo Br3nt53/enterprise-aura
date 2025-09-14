@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-import random
 import time
 
 import numpy as np
@@ -10,8 +9,9 @@ from scipy.optimize import linear_sum_assignment
 try:
     from aura_v2.domain.association.jpdaf.kbest_jpda_solver import kbest_to_marginals
     from aura_v2.domain.association.jpdaf.kbest_murty import MurtyKBest
-except ImportError:
-    raise SystemExit("Ensure PYTHONPATH includes project root")
+except ImportError as err:
+    raise SystemExit("Ensure PYTHONPATH includes project root") from err
+    raise SystemExit("Ensure PYTHONPATH includes project root") from None
 
 
 def random_cost_matrix(m: int, n: int, seed: int = 42, structure: str = "uniform"):

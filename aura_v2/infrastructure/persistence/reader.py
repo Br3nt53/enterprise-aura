@@ -16,6 +16,8 @@ async def iter_tracks(
 
 
 async def latest_metrics(name: str, limit: int = 100) -> AsyncIterator[Dict[str, Any]]:
-    cursor = MongoProvider.db()["metrics"].find({"name": name}).sort("ts", -1).limit(limit)
+    cursor = (
+        MongoProvider.db()["metrics"].find({"name": name}).sort("ts", -1).limit(limit)
+    )
     async for doc in cursor:
         yield doc

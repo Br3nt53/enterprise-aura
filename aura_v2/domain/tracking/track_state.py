@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import time
 import uuid
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 TRACK_TTL_SECONDS = 5.0
 
@@ -25,7 +25,7 @@ class TrackState:
     measurements: int = 0
 
     @classmethod
-    def new_from_reading(cls, r: "SensorReading") -> "TrackState":
+    def new_from_reading(cls, r: object) -> "TrackState":
         return cls(
             id=str(uuid.uuid4()),
             state=InternalState(x=r.x, y=r.y, vx=0.0, vy=0.0),

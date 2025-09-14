@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 from typing import Optional
 
-from fastapi import Depends, HTTPException
+from fastapi import HTTPException
 
 API_KEY_HEADER = "X-AURA-API-KEY"
 

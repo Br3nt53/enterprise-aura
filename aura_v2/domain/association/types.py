@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Mapping, Protocol, Sequence, Tuple
+from typing import Any, Protocol, Sequence, Tuple
 
 
 class Position2D(Protocol):

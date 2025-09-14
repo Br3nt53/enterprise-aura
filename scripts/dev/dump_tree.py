@@ -30,7 +30,9 @@ def should_skip(p: Path, exclude: set[str]) -> bool:
 def iter_tree(root: Path, exclude: set[str]) -> Iterable[Path]:
     for dirpath, dirnames, filenames in os.walk(root, topdown=True):
         # prune excluded dirs in-place for speed
-        dirnames[:] = sorted([d for d in dirnames if not should_skip(Path(dirpath, d), exclude)])
+        dirnames[:] = sorted(
+            [d for d in dirnames if not should_skip(Path(dirpath, d), exclude)]
+        )
         for f in sorted(filenames):
             fp = Path(dirpath, f)
             if not should_skip(fp, exclude):
@@ -64,16 +66,22 @@ def to_json(root: Path, exclude: set[str]) -> dict:
             key=lambda p: (p.is_file(), p.name.lower()),
         ):
             if p.is_dir():
-                children.append({"type": "dir", "name": p.name, "children": build(p)["children"]})
+                children.append(
+                    {"type": "dir", "name": p.name, "children": build(p)["children"]}
+                )
             else:
-                children.append({"type": "file", "name": p.name, "size": p.stat().st_size})
+                children.append(
+                    {"type": "file", "name": p.name, "size": p.stat().st_size}
+                )
         return {"type": "dir", "name": d.name, "children": children}
 
     return build(root)
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Dump project structure (tree + optional JSON).")
+    ap = argparse.ArgumentParser(
+        description="Dump project structure (tree + optional JSON)."
+    )
     ap.add_argument("--root", default=".", help="Root folder (default: .)")
     ap.add_argument(
         "--exclude",
@@ -81,7 +89,9 @@ def main():
         default=[],
         help="Extra names to exclude (repeatable)",
     )
-    ap.add_argument("--json", dest="json_out", default=None, help="Write JSON to this path")
+    ap.add_argument(
+        "--json", dest="json_out", default=None, help="Write JSON to this path"
+    )
     args = ap.parse_args()
 
     root = Path(args.root).resolve()

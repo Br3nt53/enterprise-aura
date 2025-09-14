@@ -66,7 +66,7 @@ class MurtyKBest:
         # Validate feasibility: any chosen inf => infeasible
         pairs = []
         total_cost = 0.0
-        for r, c in zip(row_ind, col_ind):
+        for r, c in zip(row_ind, col_ind, strict=False):
             cost = C[r, c]
             if math.isinf(cost):
                 return None
@@ -101,7 +101,9 @@ class MurtyKBest:
             for idx, (ri, ci) in enumerate(best.assignment):
                 fixed_prefix = best.assignment[:idx]
                 forbid_pair = (ri, ci)
-                node = self._solve(fixed=fixed_prefix, forbid=best.forbidden_pairs + [forbid_pair])
+                node = self._solve(
+                    fixed=fixed_prefix, forbid=best.forbidden_pairs + [forbid_pair]
+                )
                 if node:
                     heapq.heappush(heap, node)
 

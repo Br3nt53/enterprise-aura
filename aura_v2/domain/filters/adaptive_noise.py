@@ -21,7 +21,9 @@ class InnovationTracker:
         return (diffs @ diffs.T) / arr.shape[1]
 
 
-def adapt_measurement_noise(R_current: np.ndarray, innovation_cov: np.ndarray, rho: float = 0.95):
+def adapt_measurement_noise(
+    R_current: np.ndarray, innovation_cov: np.ndarray, rho: float = 0.95
+):
     if innovation_cov is None:
         return R_current
     return rho * R_current + (1 - rho) * innovation_cov

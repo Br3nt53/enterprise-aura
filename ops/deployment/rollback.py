@@ -14,7 +14,9 @@ def check_metrics_health(new_metrics: Dict, baseline_metrics: Dict) -> bool:
 
     for key in ["mota", "precision", "recall"]:
         if key in new_metrics and key in baseline_metrics:
-            degradation = (baseline_metrics[key] - new_metrics[key]) / baseline_metrics[key]
+            degradation = (baseline_metrics[key] - new_metrics[key]) / baseline_metrics[
+                key
+            ]
             if degradation > degradation_threshold:
                 return False
     return True

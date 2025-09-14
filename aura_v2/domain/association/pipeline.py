@@ -5,8 +5,7 @@ from typing import Any, Dict, List
 import numpy as np
 from domain.association.jpdaf.jpdaf_solver import cluster_jpda
 from domain.association.jpdaf.kbest_jpda_solver import kbest_to_marginals
-from domain.association.jpdaf.kbest_murty import MurtyKBest
-from tracking.imm_integration import convert_hard_assignment_to_probs, extract_track_probabilities
+from tracking.imm_integration import extract_track_probabilities
 from tracking.track import Track
 
 
@@ -103,7 +102,7 @@ class AssociationPipeline:
                 row_ind, col_ind = linear_sum_assignment(C)
                 P_assoc_local = np.zeros((Md, Nt), dtype=float)
                 # Hard set each assigned pair probability 1
-                for r, c in zip(row_ind, col_ind):
+                for r, c in zip(row_ind, col_ind, strict=False):
                     if local_mask[r, c]:
                         P_assoc_local[r, c] = 1.0
                 P_miss_local = 1.0 - P_assoc_local.sum(axis=0)

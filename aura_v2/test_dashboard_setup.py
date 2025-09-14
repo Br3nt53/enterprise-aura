@@ -4,7 +4,6 @@ Validation script for AURA v2 Dashboard Setup
 Run: python test_dashboard_setup.py
 """
 
-import os
 import sys
 from pathlib import Path
 

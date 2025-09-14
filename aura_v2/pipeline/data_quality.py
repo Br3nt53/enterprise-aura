@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
-
 from aura_v2.ml.model.inference import load_quality_model, score_reading
 
 

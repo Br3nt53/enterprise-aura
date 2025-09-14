@@ -49,7 +49,7 @@ class GNN_AssociationStrategy(AssociationStrategy):
         track_indices, detection_indices = linear_sum_assignment(cost_matrix)
 
         associations = []
-        for track_idx, det_idx in zip(track_indices, detection_indices):
+        for track_idx, det_idx in zip(track_indices, detection_indices, strict=False):
             if cost_matrix[track_idx, det_idx] <= self.max_distance:
                 track = tracks[track_idx]
                 detection = detections[det_idx]

@@ -4,7 +4,7 @@ from datetime import datetime
 import pytest
 
 from aura_v2.infrastructure.integrations.wms.client import WMSClient
-from aura_v2.infrastructure.integrations.wms.schemas import alert_payload, fused_track_payload
+from aura_v2.infrastructure.integrations.wms.schemas import fused_track_payload
 
 
 @pytest.mark.asyncio

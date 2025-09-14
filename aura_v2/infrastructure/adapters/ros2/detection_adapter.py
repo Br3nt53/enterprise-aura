@@ -20,7 +20,6 @@ class ROS2DetectionAdapter:
     def _setup_ros2_node(self, node_name: str) -> None:
         """Initialize ROS2 node if available."""
         try:
-            import rclpy
             from rclpy.node import Node
             from std_msgs.msg import Float32MultiArray
 
@@ -34,7 +33,9 @@ class ROS2DetectionAdapter:
 
                 def _now_dt(self) -> datetime:
                     t = self.get_clock().now().to_msg()  # builtin_interfaces/Time
-                    return datetime.fromtimestamp(t.sec + t.nanosec / 1e9, tz=timezone.utc)
+                    return datetime.fromtimestamp(
+                        t.sec + t.nanosec / 1e9, tz=timezone.utc
+                    )
 
                 def _detection_callback(self, msg: Float32MultiArray) -> None:
                     data = msg.data or []

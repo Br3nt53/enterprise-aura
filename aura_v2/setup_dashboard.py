@@ -4,8 +4,6 @@ Setup script to install the AURA v2 Development Dashboard
 Run: python -m aura_v2.setup_dashboard
 """
 
-import os
-import shutil
 import subprocess
 import sys
 from pathlib import Path

@@ -18,7 +18,7 @@ def fuse(
         for k in keys:
             w = float(weights.get(k, 0.0))
             b = tracks_by_modality[k][i]["bbox"]
-            accum = [a + w * v for a, v in zip(accum, b)]
+            accum = [a + w * v for a, v in zip(accum, b, strict=False)]
             wsum += w
         if wsum > 0:
             fused.append(
