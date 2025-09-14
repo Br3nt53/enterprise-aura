@@ -91,3 +91,6 @@ venv.bak
 artifacts/env.txt
 .env
 artifacts/env.txt
+
+tmp/
+
