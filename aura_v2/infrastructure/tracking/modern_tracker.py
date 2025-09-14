@@ -1,21 +1,32 @@
 # aura_v2/infrastructure/tracking/modern_tracker.py
+# pyright: reportMissingImports=false
+from __future__ import annotations
 
 import os
 import time
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Protocol, Tuple, runtime_checkable
 
-import numpy as np
+import numpy as np  # type: ignore[import-not-found]
 from filterpy.kalman import KalmanFilter
 
-# Domain imports
 from ...domain.entities import Detection, Track, TrackState, TrackStatus
+from ...infrastructure.persistence.in_memory import InMemoryTrackRepository  # type: ignore
+from ...infrastructure.persistence.mongo import MongoTrackRepository  # type: ignore
 
 try:
     from ...domain.value_objects.velocity import Velocity3D
 except Exception:
     from ...domain.entities import Velocity3D
+
+
+@runtime_checkable
+class TrackRepo(Protocol):
+    async def save(self, track: Any) -> str: ...
+    async def get_by_id(self, track_id: str) -> Optional[Track]: ...
+    async def list(self) -> List[Track]: ...
+    async def delete(self, track_id: str) -> int: ...
 
 
 @dataclass
@@ -27,7 +38,7 @@ class TrackingResult:
 
 
 class ModernTracker:
-    def _to_dt(self, ts) -> datetime:
+    def _to_dt(self, ts: datetime | str) -> datetime:
         if isinstance(ts, datetime):
             return ts if ts.tzinfo else ts.replace(tzinfo=timezone.utc)
         if isinstance(ts, str):
@@ -37,56 +48,61 @@ class ModernTracker:
             return datetime.fromisoformat(t)
         raise TypeError("Unsupported timestamp type")
 
-    """Minimal, test-oriented multi-sensor tracker with timing metrics."""
-
-    def __init__(self, max_distance: float = 50.0, max_missed: int = 2) -> None:
-        self.tracks: Dict[str, Track] = {}
+    def __init__(
+        self,
+        track_repository: (
+            TrackRepo | InMemoryTrackRepository | MongoTrackRepository | None
+        ) = None,
+        max_distance: float = 50.0,
+        max_missed: int = 2,
+    ) -> None:
+        self.track_repository: TrackRepo = track_repository or InMemoryTrackRepository()  # type: ignore[assignment]
         self.kalman_filters: Dict[str, KalmanFilter] = {}
         self._id_counter: int = 0
-
         self.max_distance = float(max_distance)
         self.max_missed = int(max_missed)
-
-        # prune TTL in seconds (env override)
         self.stale_after_sec = float(os.getenv("AURA_TRACK_STALE_SEC", "5.0"))
-        self._frame_timestamp = None
+        self._frame_timestamp: Optional[datetime] = None
         self._last_obs: Dict[str, datetime] = {}
 
-    async def update(self, detections: List[Detection], timestamp: datetime) -> TrackingResult:
+    async def update(
+        self, detections: List[Detection], timestamp: datetime
+    ) -> TrackingResult:
         start_time = time.time()
-
-        # record current frame timestamp for pruning
         self._frame_timestamp = self._to_dt(timestamp)
 
-        # 1) Predict all current tracks to this timestamp
-        for t in list(self.tracks.values()):
-            self.predict_track(t, timestamp)
+        current_tracks = await self.track_repository.list()
 
-        # 2) Associate detections to tracks (greedy nearest-neighbor)
-        matched, unmatched_dets, unmatched_tracks = self._associate(detections)
+        for t in current_tracks:
+            self.predict_track(t, self._frame_timestamp)
 
-        # 3) Update matched tracks
+        matched, unmatched_dets, unmatched_tracks = self._associate(
+            detections, current_tracks
+        )
+
         for track, det, score in matched:
-            self._update_track(track, det, score, timestamp)
+            self._update_track(track, det, score, self._frame_timestamp)
+            await self.track_repository.save(track)
 
-        # 4) Spawn new tracks for unmatched detections
         new_tracks: List[Track] = []
         for det in unmatched_dets:
             nt = self._new_track_from_detection(det, self._frame_timestamp)
-            self.tracks[nt.id] = nt
-            self._last_obs[nt.id] = self._frame_timestamp
-
+            await self.track_repository.save(nt)
+            self._last_obs[nt.id] = self._frame_timestamp or datetime.now(timezone.utc)
             new_tracks.append(nt)
 
-        # 5) Keep unmatched tracks alive; increment missed
         for t in unmatched_tracks:
             t.missed = getattr(t, "missed", 0) + 1
+            await self.track_repository.save(t)
 
-        # 6) Prune old tracks
-        deleted_tracks = self._prune()
+        deleted_tracks = await self._prune()
 
-        processing_time = (time.time() - start_time) * 1000  # Convert to milliseconds
-        active_tracks = [t for t in self.tracks.values() if t.status != TrackStatus.DELETED]
+        processing_time = (time.time() - start_time) * 1000.0
+        active_tracks = [
+            t
+            for t in await self.track_repository.list()
+            if t.status != TrackStatus.DELETED
+        ]
 
         return TrackingResult(
             active_tracks=active_tracks,
@@ -95,21 +111,20 @@ class ModernTracker:
             processing_time_ms=processing_time,
         )
 
-    def predict_track(self, track: Track, timestamp: datetime) -> None:
-        """Advance a single track's KF to 'timestamp' and rebuild frozen state."""
+    def predict_track(self, track: Track, timestamp: datetime | None) -> None:
         if track.id not in self.kalman_filters:
             self._init_kf(track)
+        if timestamp is None or track.updated_at is None:
+            return
 
         kf = self.kalman_filters[track.id]
         dt = (timestamp - track.updated_at).total_seconds()
         if dt <= 0:
             return
 
-        # Constant-velocity model: insert dt into F
         kf.F[0, 3] = dt
         kf.F[1, 4] = dt
         kf.F[2, 5] = dt
-
         kf.predict()
 
         pos = replace(
@@ -128,9 +143,12 @@ class ModernTracker:
         track.state = replace(track.state, position=pos, velocity=vel)
 
     def _update_track(
-        self, track: Track, detection: Detection, score: float, timestamp: datetime
+        self,
+        track: Track,
+        detection: Detection,
+        score: float,
+        timestamp: datetime | None,
     ) -> None:
-        """KF measurement update and immutable state rebuild."""
         kf = self.kalman_filters[track.id]
         z = np.array(
             [detection.position.x, detection.position.y, detection.position.z],
@@ -153,20 +171,19 @@ class ModernTracker:
         )
         track.state = replace(track.state, position=pos, velocity=vel)
 
-        # Domain update (if present); keep counters sane
         if hasattr(track, "update"):
             track.update(detection, score)
-        track.updated_at = self._frame_timestamp
-        self._last_obs[track.id] = self._frame_timestamp
+
+        ts_nonnull = timestamp or datetime.now(timezone.utc)
+        track.updated_at = ts_nonnull
+        self._last_obs[track.id] = ts_nonnull
 
         track.missed = 0
         track.hits = getattr(track, "hits", 0) + 1
 
     def _associate(
-        self, detections: List[Detection]
+        self, detections: List[Detection], live_tracks: List[Track]
     ) -> Tuple[List[Tuple[Track, Detection, float]], List[Detection], List[Track]]:
-        """Greedy nearest-neighbor association within max_distance."""
-        live_tracks = [t for t in self.tracks.values() if t.status != TrackStatus.DELETED]
         if not live_tracks:
             return [], detections, []
 
@@ -190,21 +207,25 @@ class ModernTracker:
                 used_dets.add(j)
 
         unmatched_dets = [d for j, d in enumerate(detections) if j not in used_dets]
-        unmatched_tracks = [t for i, t in enumerate(live_tracks) if i not in used_tracks]
+        unmatched_tracks = [
+            t for i, t in enumerate(live_tracks) if i not in used_tracks
+        ]
         return matched, unmatched_dets, unmatched_tracks
 
-    def _new_track_from_detection(self, detection: Detection, now: datetime) -> Track:
+    def _new_track_from_detection(
+        self, detection: Detection, now: datetime | None
+    ) -> Track:
+        now_nn = now or datetime.now(timezone.utc)
         track_id = self._next_track_id()
         state = TrackState(
-            position=detection.position,
-            velocity=Velocity3D(0.0, 0.0, 0.0),
+            position=detection.position, velocity=Velocity3D(0.0, 0.0, 0.0)
         )
         track = Track(
             id=track_id,
             state=state,
             status=TrackStatus.ACTIVE,
-            created_at=now,
-            updated_at=now,
+            created_at=now_nn,
+            updated_at=now_nn,
             hits=1,
             missed=0,
         )
@@ -234,22 +255,31 @@ class ModernTracker:
         )
         self.kalman_filters[track.id] = kf
 
-    def _prune(self) -> List[Track]:
+    async def _prune(self) -> List[Track]:
         deleted: List[Track] = []
         ttl = getattr(self, "stale_after_sec", 5.0)
-        ts = getattr(self, "_frame_timestamp", None)
-        for t in list(self.tracks.values()):
+        ts = self._frame_timestamp
+
+        current_tracks = await self.track_repository.list()
+        for t in current_tracks:
             too_old = False
-            if ts is not None and getattr(t, "updated_at", None) is not None and ttl > 0:
+            if (
+                ts is not None
+                and getattr(t, "updated_at", None) is not None
+                and ttl > 0
+            ):
                 try:
-                    age = (ts - t.updated_at).total_seconds()
+                    age = (ts - t.updated_at).total_seconds()  # type: ignore[arg-type]
                     too_old = age > ttl
                 except Exception:
                     too_old = False
             if t.missed > self.max_missed or too_old:
                 t.status = TrackStatus.DELETED
                 deleted.append(t)
-                self.kalman_filters.pop(t.id, None)
+                try:
+                    await self.track_repository.delete(t.id)
+                finally:
+                    self.kalman_filters.pop(t.id, None)
         return deleted
 
     def _next_track_id(self) -> str:

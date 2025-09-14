@@ -89,3 +89,8 @@ venv.bak
 '@ | Set-Content -Path ".gitignore"
 *.egg-info/
 artifacts/env.txt
+.env
+artifacts/env.txt
+
+tmp/
+

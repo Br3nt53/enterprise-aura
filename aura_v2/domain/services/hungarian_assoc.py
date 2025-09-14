@@ -8,11 +8,13 @@ from scipy.optimize import linear_sum_assignment
 #  - Track: .id (str), .state.position -> tuple[float,float] or (x,y,...) indexable
 #  - Detection: .id (str), .position -> tuple[float,float] or (x,y,...) indexable
 
+
 def _euclidean(a, b) -> float:
     ax, ay = a[0], a[1]
     bx, by = b[0], b[1]
     dx, dy = ax - bx, ay - by
     return math.hypot(dx, dy)
+
 
 class HungarianAssociationStrategy:
     def __init__(self, max_distance: float = 5.0) -> None:

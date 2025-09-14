@@ -2,18 +2,22 @@ import time
 import random
 from aura_v2.domain.services.hungarian_assoc import HungarianAssociationStrategy
 
+
 class _T:
     def __init__(self, id, pos):
         self.id = id
         self.state = type("S", (), {"position": pos})
+
 
 class _D:
     def __init__(self, id, pos):
         self.id = id
         self.position = pos
 
+
 def _pairs(matched):
     return {(t.id, d.id) for t, d in matched}
+
 
 def test_one_to_one_exact():
     tracks = [_T("t1", (0, 0, 0)), _T("t2", (10, 0, 0))]
@@ -23,6 +27,7 @@ def test_one_to_one_exact():
     assert _pairs(matched) == {("t1", "d1"), ("t2", "d2")}
     assert not u_d and not u_t
 
+
 def test_cutoff_blocks_far_pairs():
     tracks = [_T("t1", (0, 0, 0))]
     dets = [_D("d1", (10, 0, 0))]
@@ -31,6 +36,7 @@ def test_cutoff_blocks_far_pairs():
     assert not matched
     assert [d.id for d in u_d] == ["d1"]
     assert [t.id for t in u_t] == ["t1"]
+
 
 def test_perf_50x50():
     random.seed(0)

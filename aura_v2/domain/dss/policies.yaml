@@ -1,0 +1,19 @@
+rules:
+  - id: COLLISION_HIGH
+    when:
+      any:
+        - metric: "collision_risk"
+          op: ">="
+          value: 0.9
+    then:
+      level: "SEV2"
+      message: "High collision risk"
+  - id: LATENCY_BREACH
+    when:
+      any:
+        - metric: "latency_p99_ms"
+          op: ">"
+          value: 750
+    then:
+      level: "SEV2"
+      message: "Latency budget breach"

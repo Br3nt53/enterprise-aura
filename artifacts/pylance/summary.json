@@ -1,0 +1,99 @@
+{
+  "totals_by_severity_rule": {
+    "warning:reportUnknownVariableType": 191,
+    "error:reportMissingImports": 18,
+    "error:reportArgumentType": 25,
+    "warning:reportUnknownMemberType": 225,
+    "warning:reportUnknownArgumentType": 92,
+    "error:reportAttributeAccessIssue": 17,
+    "error:reportReturnType": 6,
+    "warning:reportMissingTypeStubs": 5,
+    "error:reportIncompatibleMethodOverride": 4,
+    "error:None": 1,
+    "error:reportCallIssue": 21,
+    "error:reportAssignmentType": 5,
+    "error:reportOptionalMemberAccess": 1
+  },
+  "top_files": [
+    [
+      45,
+      "/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py"
+    ],
+    [
+      33,
+      "/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py"
+    ],
+    [
+      31,
+      "/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py"
+    ],
+    [
+      31,
+      "/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py"
+    ],
+    [
+      31,
+      "/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py"
+    ],
+    [
+      29,
+      "/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py"
+    ],
+    [
+      27,
+      "/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py"
+    ],
+    [
+      26,
+      "/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py"
+    ],
+    [
+      26,
+      "/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py"
+    ],
+    [
+      25,
+      "/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py"
+    ],
+    [
+      24,
+      "/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py"
+    ],
+    [
+      20,
+      "/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py"
+    ],
+    [
+      15,
+      "/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_assoc.py"
+    ],
+    [
+      15,
+      "/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/dss/engine.py"
+    ],
+    [
+      14,
+      "/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/association.py"
+    ],
+    [
+      12,
+      "/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo_client.py"
+    ],
+    [
+      12,
+      "/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/coordinators/advanced_intelligence_coordinator.py"
+    ],
+    [
+      11,
+      "/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo.py"
+    ],
+    [
+      11,
+      "/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/value_objects/metrics.py"
+    ],
+    [
+      10,
+      "/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_persistence.py"
+    ]
+  ]
+}

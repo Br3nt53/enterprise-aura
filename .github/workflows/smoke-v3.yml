@@ -1,0 +1,91 @@
+name: smoke-v3
+
+on:
+  push:
+    branches: [ main, "chore/**", "feat/**" ]
+  pull_request:
+    branches: [ main ]
+
+concurrency:
+  group: smoke-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mongo:
+        image: mongo:6.0
+        ports: [ "27017:27017" ]
+        options: >-
+          --health-cmd="mongosh --quiet --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=24
+
+    env:
+      PYTHON_VERSION: "3.11"
+      MONGO_URI: "mongodb://localhost:27017/?directConnection=true"
+      MONGO_DB: "aura_ci"
+      AURA_USE_MONGO: "1"
+      AURA_USE_HUNGARIAN: "1"
+      AURA_USE_UFK: "1"
+      AURA_USE_WMS: "0"
+      AURA_USE_DSS: "1"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Set up Python & venv
+        run: |
+          uv python install "$PYTHON_VERSION"
+          uv venv --python "$PYTHON_VERSION"
+          echo "VIRTUAL_ENV=$PWD/.venv" >> "$GITHUB_ENV"
+          echo "$PWD/.venv/bin"       >> "$GITHUB_PATH"
+
+      - name: Cache uv
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/uv
+          key: uv-${{ runner.os }}-${{ env.PYTHON_VERSION }}-${{ hashFiles('pyproject.toml') }}
+
+      - name: Install deps
+        run: |
+          uv pip install -e ".[tracking,observability,messaging,test]" --upgrade
+          uv pip install motor pymongo psutil
+
+      - name: Wait for Mongo healthy
+        run: |
+          uv run python - <<'PY'
+          import os, time
+          from pymongo import MongoClient
+          uri = os.environ.get("MONGO_URI","mongodb://localhost:27017/?directConnection=true")
+          deadline = time.time() + 120
+          while time.time() < deadline:
+              try:
+                  MongoClient(uri, serverSelectionTimeoutMS=1500).admin.command("ping")
+                  print("Mongo is ready"); break
+              except Exception as e:
+                  print("waiting for mongo:", e); time.sleep(2)
+          else:
+              raise SystemExit("Mongo never became healthy")
+          PY
+
+      - name: Run unit tests (fast)
+        run: uv run pytest -q -k "not e2e"
+
+      - name: Run fusion & persistence tests
+        run: uv run pytest -q tests/fusion tests/persistence tests/dss tests/integration
+
+      - name: Archive test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-logs
+          path: |
+            .pytest_cache
+            artifacts/**

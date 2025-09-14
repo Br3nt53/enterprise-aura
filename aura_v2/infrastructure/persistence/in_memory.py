@@ -1,135 +1,80 @@
+# aura_v2/infrastructure/persistence/in_memory.py
 from __future__ import annotations
 
-# aura_v2/infrastructure/persistence/in_memory.py
-from dataclasses import dataclass, field
-import asyncio
-from typing import AsyncIterator, List, Optional, TYPE_CHECKING, Dict, Iterable
+from copy import deepcopy
+from threading import RLock
+from typing import Dict, List, Optional
 
-from ...domain.entities import Detection  # runtime import only
-from ...domain.entities import Track
+try:
+    from aura_v2.domain.entities import Track
+except Exception:
+    from aura_v2.domain.entities.track import Track  # type: ignore[no-redef]
 
-if TYPE_CHECKING:
-    from ...domain.entities.track import Track
-    from ...domain.value_objects import TrackID  # alias is fine; used as str here
-
-
-# ---- In-memory detection source ---------------------------------------------
-class InMemoryDetectionSource:
-    """Simple in-memory source. Push detections, consume as async stream."""
-
-    def __init__(self, maxsize: int = 100, batch_timeout: float = 0.1) -> None:
-        self._q: asyncio.Queue[Detection] = asyncio.Queue(maxsize=maxsize)
-        self._batch_timeout = batch_timeout
-
-    def push(self, det: Detection) -> None:
-        try:
-            self._q.put_nowait(det)
-        except asyncio.QueueFull:
-            pass
-
-    async def stream(self) -> AsyncIterator[List[Detection]]:
-        batch: List[Detection] = []
-        loop = asyncio.get_running_loop()
-        while True:
-            deadline = loop.time() + self._batch_timeout
-            while True:
-                timeout = deadline - loop.time()
-                if timeout <= 0:
-                    break
-                try:
-                    batch.append(await asyncio.wait_for(self._q.get(), timeout=timeout))
-                except asyncio.TimeoutError:
-                    break
-            if batch:
-                yield batch
-                batch = []
+__all__ = ["InMemoryTrackRepository", "TrackHistoryRepository"]
 
 
-# ---- In-memory Track repository ---------------------------------------------
 class InMemoryTrackRepository:
-    """Simple in-memory repo keyed by TrackID."""
+    """Async in-memory store for current tracks."""
 
     def __init__(self) -> None:
-        self._store: Dict[str, "Track"] = {}
+        self._store: Dict[str, Track] = {}
+        self._lock = RLock()
 
-    def save(self, track: "Track") -> None:
-        tid = getattr(track, "id", None) or getattr(track, "track_id", None)
-        if tid is None:
-            return
-        self._store[str(tid)] = track
+    async def save(self, track: Track) -> str:
+        with self._lock:
+            self._store[track.id] = track
+            return track.id
 
-    def get(self, track_id: "TrackID") -> Optional["Track"]:
-        return self._store.get(str(track_id))
+    async def get_by_id(self, track_id: str) -> Optional[Track]:
+        with self._lock:
+            return self._store.get(str(track_id))
 
-    def list(self) -> List["Track"]:
-        return list(self._store.values())
+    async def list(self) -> List[Track]:
+        with self._lock:
+            return list(self._store.values())
 
-    def delete(self, track_id: "TrackID") -> None:
-        self._store.pop(str(track_id), None)
+    async def delete(self, track_id: str) -> int:
+        with self._lock:
+            return 1 if self._store.pop(str(track_id), None) is not None else 0
 
-    def clear(self) -> None:
-        self._store.clear()
-
-
-# ---- In-memory Track history -----------------------------------------------
-from typing import TYPE_CHECKING, Dict, List, Set
-
-if TYPE_CHECKING:
-    from ...domain.entities.track import Track  # noqa: F401
+    async def delete_all(self) -> int:
+        with self._lock:
+            n = len(self._store)
+            self._store.clear()
+            return n
 
 
 class TrackHistoryRepository:
-    """Keeps a simple append-only history of tracks by id."""
+    """Synchronous in-memory history used by the coordinator."""
 
     def __init__(self) -> None:
-        self._hist: Dict[str, List["Track"]] = {}
+        self._hist: Dict[str, List[Track]] = {}
+        self._lock = RLock()
 
-    # Backwards-compat: some callers used `add` / `append` / `update`
-    def add(self, track: "Track") -> None:
-        self.append(track)
+    def update(self, track: Track) -> None:
+        """Append a snapshot of the track to its history."""
+        with self._lock:
+            self._hist.setdefault(track.id, []).append(deepcopy(track))
 
-    def append(self, track: "Track") -> None:
-        tid = getattr(track, "id", None) or getattr(track, "track_id", None)
-        if tid is None:
-            return
-        self._hist.setdefault(str(tid), []).append(track)
+    def prune(self, active_track_ids: List[str] | set[str]) -> int:
+        """Drop histories for tracks not in the active set. Returns count removed."""
+        active = set(map(str, active_track_ids))
+        removed = 0
+        with self._lock:
+            for tid in list(self._hist.keys()):
+                if tid not in active:
+                    del self._hist[tid]
+                    removed += 1
+        return removed
 
-    def update(self, track: "Track") -> None:
-        self.append(track)
+    def get_history(self, track_id: str) -> List[Track]:
+        with self._lock:
+            return list(self._hist.get(str(track_id), []))
 
-    def get(self, track_id: object) -> List["Track"]:
-        return list(self._hist.get(str(track_id), []))
-
-    def prune(self, active_ids: Set[str]) -> None:
-        for tid in list(self._hist.keys()):
-            if tid not in active_ids:
-                self._hist.pop(tid, None)
+    def last(self, track_id: str) -> Optional[Track]:
+        hist = self.get_history(track_id)
+        return hist[-1] if hist else None
 
     def clear(self) -> None:
-        self._hist.clear()
-
-    # ---- In-memory Evaluation use case ------------------------------------------
-    def update(self, track: "Track") -> None:
-        # Keep API simple: update == append latest snapshot
-        self.add(track)
-
-
-class InMemoryEvaluationUseCase:
-    """No-op evaluator that records the last batch size."""
-
-    def __init__(self) -> None:
-        self.last_count: int = 0
-
-    def evaluate(self, tracks: List["Track"]) -> None:
-        self.last_count = len(tracks)
-
-
-# ---- In-memory Output sink ---------------------------------------------------
-class InMemoryOutputSink:
-    """No-op sink that records the last write size."""
-
-    def __init__(self) -> None:
-        self.last_count: int = 0
-
-    def write(self, tracks: List["Track"]) -> None:
-        self.last_count = len(tracks)
+        with self._lock:
+            self._hist.clear()

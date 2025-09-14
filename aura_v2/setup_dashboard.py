@@ -10,24 +10,35 @@ import subprocess
 import sys
 from pathlib import Path
 
+
 def check_fastapi():
     """Check if FastAPI is available"""
     try:
         import fastapi
+
         return True
     except ImportError:
         return False
+
 
 def install_dashboard_dependencies():
     """Install required dependencies for the dashboard"""
     print("📦 Installing dashboard dependencies...")
     try:
         # Try to install FastAPI and uvicorn
-        result = subprocess.run([
-            sys.executable, "-m", "pip", "install", 
-            "fastapi>=0.100.0", "uvicorn[standard]>=0.23.0"
-        ], capture_output=True, text=True)
-        
+        result = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "pip",
+                "install",
+                "fastapi>=0.100.0",
+                "uvicorn[standard]>=0.23.0",
+            ],
+            capture_output=True,
+            text=True,
+        )
+
         if result.returncode == 0:
             print("✅ Dashboard dependencies installed successfully")
             return True
@@ -38,11 +49,12 @@ def install_dashboard_dependencies():
         print(f"❌ Error installing dependencies: {e}")
         return False
 
+
 def setup_dashboard():
     """Install the development dashboard files"""
-    
+
     print("🚀 Setting up AURA v2 Development Dashboard...")
-    
+
     # Check if FastAPI is available
     fastapi_available = check_fastapi()
     if not fastapi_available:
@@ -51,45 +63,46 @@ def setup_dashboard():
             print("❌ Dashboard setup failed - could not install FastAPI")
             print("   Please run: pip install fastapi uvicorn")
             return False
-    
+
     # Get the current directory structure
     aura_dir = Path(__file__).parent
     dashboard_dir = aura_dir / "web_dashboard"
-    
+
     # Create dashboard directory
     dashboard_dir.mkdir(exist_ok=True)
     print(f"✅ Created directory: {dashboard_dir}")
-    
+
     # Create __init__.py
     init_file = dashboard_dir / "__init__.py"
     init_file.write_text('"""AURA v2 Web Dashboard"""\n')
     print(f"✅ Created: {init_file}")
-    
+
     # Write the fixed API file
     api_file = dashboard_dir / "api.py"
-    with open(api_file, 'w') as f:
+    with open(api_file, "w") as f:
         f.write(get_api_content())
     print(f"✅ Created: {api_file}")
-    
+
     # Create dashboard.html
     dashboard_html = dashboard_dir / "dashboard.html"
-    with open(dashboard_html, 'w') as f:
+    with open(dashboard_html, "w") as f:
         f.write(get_dashboard_html())
     print(f"✅ Created: {dashboard_html}")
-    
+
     # Test the installation
     print("\n🧪 Testing dashboard installation...")
     try:
         # Try importing the dashboard module
         sys.path.insert(0, str(aura_dir.parent))
         from aura_v2.web_dashboard.api import router
+
         if router is not None:
             print("✅ Dashboard API is functional")
         else:
             print("⚠️  Dashboard API created but FastAPI not fully available")
     except Exception as e:
         print(f"⚠️  Dashboard test failed: {e}")
-    
+
     print("\n🎉 Dashboard setup complete!")
     print("\n📋 Next steps:")
     print("1. Start your development server:")
@@ -98,6 +111,7 @@ def setup_dashboard():
     print("   http://localhost:8000")
     print("\n3. The dashboard will be available with command execution!")
     return True
+
 
 def get_api_content():
     """Return the API module content"""
@@ -274,9 +288,10 @@ def get_router():
     return router
 '''
 
+
 def get_dashboard_html():
     """Return the dashboard HTML content"""
-    return '''<!DOCTYPE html>
+    return """<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -454,7 +469,8 @@ def get_dashboard_html():
         ReactDOM.render(<AURADashboard />, document.getElementById('root'));
     </script>
 </body>
-</html>'''
+</html>"""
+
 
 if __name__ == "__main__":
     setup_dashboard()

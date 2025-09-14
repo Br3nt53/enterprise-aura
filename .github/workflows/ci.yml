@@ -1,27 +1,41 @@
 name: CI
+
 on:
-  push: { branches: [ main ] }
-  pull_request: { branches: [ main ] }
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
     services:
       mongo:
         image: mongo:6.0
         ports: [ "27017:27017" ]
         options: >-
-          --health-cmd="mongosh --eval 'db.runCommand({ ping: 1 })'"
-          --health-interval=5s --health-timeout=5s --health-retries=12
+          --health-cmd="mongosh --quiet --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=24
+
     env:
       PYTHON_VERSION: "3.11"
-      AURA_ASSOCIATION_METHOD: greedy
-      MONGO_URI: mongodb://localhost:27017
-      MONGO_DB: aura_db
-      MONGO_COLLECTION: tracks
-      AURA_METRICS_STRICT: "1"
+      # Use unauthenticated local Mongo for CI services:
+      MONGO_URI: "mongodb://localhost:27017/?directConnection=true"
+      MONGO_DB: "aura_ci"
+      AURA_USE_MONGO: "1"
+      AURA_USE_HUNGARIAN: "1"
+      AURA_USE_UFK: "1"
+      AURA_USE_WMS: "0"
+      AURA_USE_DSS: "1"
       AURA_P99_LATENCY_MS_BUDGET: "750"
-      AURA_MAX_ID_SWITCH_RATE: "0.02"
+
     steps:
       - uses: actions/checkout@v4
 
@@ -44,27 +58,30 @@ jobs:
       - name: Install deps
         run: |
           uv pip install -e ".[tracking,observability,messaging,test]" --upgrade
-          uv pip install motor pymongo pytest pytest-asyncio ruff psutil
+          uv pip install motor pymongo ruff psutil
 
       - name: Lint
         run: uv run ruff check .
 
-      - name: Wait for Mongo healthy (pymongo)
+      - name: Wait for Mongo healthy
         run: |
-          uv run python - <<'PY2'
+          uv run python - <<'PY'
           import os, time
           from pymongo import MongoClient
-          uri = os.environ.get("MONGO_URI","mongodb://localhost:27017")
-          deadline = time.time() + 90
+          uri = os.environ.get("MONGO_URI","mongodb://localhost:27017/?directConnection=true")
+          deadline = time.time() + 120
+          last = None
           while time.time() < deadline:
               try:
-                  MongoClient(uri, serverSelectionTimeoutMS=1000).admin.command("ping")
+                  MongoClient(uri, serverSelectionTimeoutMS=1500).admin.command("ping")
                   print("Mongo is ready"); break
               except Exception as e:
-                  print("waiting for mongo:", e); time.sleep(2)
+                  last = e
+                  print("waiting for mongo:", e)
+                  time.sleep(2)
           else:
-              raise SystemExit("Mongo never became healthy")
-          PY2
+              raise SystemExit(f"Mongo never became healthy: {last}")
+          PY
 
-      - name: Tests
+      - name: Run tests
         run: uv run pytest -q

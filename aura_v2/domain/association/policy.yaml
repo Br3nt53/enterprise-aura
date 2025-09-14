@@ -1,0 +1,8 @@
+# Hungarian association policy for v2.5
+weights:
+  iou: 0.6
+  motion: 0.3
+  confidence: 0.1
+gating:
+  iou_min: 0.1
+  max_cost: 1.5
