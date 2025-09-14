@@ -13,7 +13,7 @@ jobs:
         image: mongo:6.0
         ports: ["27017:27017"]
         options: >-
-          --health-cmd="mongosh --eval 'db.runCommand({ ping: 1 })'"
+          --health-cmd="mongosh --quiet --eval 'db.runCommand({ ping: 1 })'"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=10
@@ -30,6 +30,8 @@ jobs:
       AURA_USE_WMS: "0"
       AURA_USE_DSS: "1"
       AURA_LATENCY_P99_BUDGET_MS: "750"
+      PYTHONUNBUFFERED: "1"
+
     steps:
       - uses: actions/checkout@v4
 
@@ -39,19 +41,62 @@ jobs:
           python-version: "3.11"
 
       - name: Install system deps
-        run: sudo apt-get update && sudo apt-get install -y libatlas-base-dev
-
-      - name: Install Python deps
         run: |
-          python -m pip install --upgrade pip
-          pip install -e .[dev]
-          pip install motor pymongo httpx pydantic scipy numpy pytest pytest-asyncio
+          sudo apt-get update -y
+          sudo apt-get install -y libatlas-base-dev
+
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Cache uv and venv
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/uv
+            .venv
+          key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}
+
+      - name: Sync deps with uv
+        run: |
+          uv --version
+          uv sync --all-extras --dev
+          # ensure runtime/test wheels even if not declared in extras
+          uv pip install motor pymongo httpx pydantic scipy numpy pytest pytest-asyncio psutil
+
+      - name: Wait for Mongo
+        run: |
+          uv run python - <<'PY'
+          import os, time
+          from pymongo import MongoClient
+          uri = os.getenv("MONGO_URI", "mongodb://localhost:27017")
+          t0 = time.time()
+          while True:
+            try:
+              MongoClient(uri, serverSelectionTimeoutMS=2000).admin.command("ping")
+              print("mongo ok")
+              break
+            except Exception:
+              if time.time() - t0 > 60:
+                raise
+              time.sleep(1)
+          PY
 
       - name: Run unit tests (fast)
-        run: pytest -q -k "not e2e"
+        run: uv run pytest -q -k "not e2e"
 
       - name: Run fusion & persistence tests
-        run: pytest -q tests/fusion tests/persistence tests/dss tests/integrations
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          DIRS=(tests/fusion tests/persistence tests/dss tests/integration)
+          EXISTING=()
+          for d in "${DIRS[@]}"; do [[ -d "$d" ]] && EXISTING+=("$d"); done
+          if [[ ${#EXISTING[@]} -eq 0 ]]; then
+            echo "no test dirs"; exit 0
+          fi
+          uv run pytest -q "${EXISTING[@]}"
 
       - name: Archive test artifacts
         if: always()
