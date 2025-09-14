@@ -1,6 +1,7 @@
 from __future__ import annotations
 import os
 from typing import List, Optional
+from aura_v2.infrastructure.persistence.mongo_client import MongoProvider
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection
 from ...domain.entities import Track
 
@@ -38,7 +39,15 @@ class MongoTrackRepository:
     async def delete(self, track_id: str) -> None:
         await self._ensure_indexes()
         await self._collection.delete_one({"track_id": track_id})
-
     async def get_by_id(self, track_id: str):
-        doc = await self._collection.find_one({'_id': track_id})
+        q = {"$or": [{"_id": track_id}, {"id": track_id}, {"track_id": track_id}]}
+        doc = await self._collection.find_one(q)
+        if doc is not None and 'id' not in doc:
+            doc['id'] = doc.get('_id', track_id)
         return doc
+
+
+    async def delete_all(self) -> int:
+        res = await self._collection.delete_many({})
+        return int(res.deleted_count)
+
