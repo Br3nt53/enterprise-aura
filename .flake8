@@ -20,3 +20,11 @@ per-file-ignores =
   aura_v2/pipeline/data_quality.py: F821
   aura_v2_domain_*_Version1.py: F401,F821
   tests_*_Version1.py: F401,F821
+
+[flake8]
+max-line-length = 120
+per-file-ignores =
+    aura_v2/api/routes/tracks.py: B008
+    aura_v2/diagnostic_dashboard.py: E501
+    aura_v2/setup_dashboard.py: E501
+    aura_v2/infrastructure/adapters/legacy/bridge.py: E402
