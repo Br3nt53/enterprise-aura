@@ -1,20 +1,21 @@
 import json
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 # aura_v2/infrastructure/adapters/legacy/bridge.py
 """
 Bridge adapter to use existing evaluator with new architecture
 """
 
-import sys
 import os
+import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from evaluation.mot_evaluator import MOTEvaluator as LegacyEvaluator
 from evaluation.mot_evaluator import EvalParams as LegacyParams
-from ....domain.ports import EvaluationService
+from evaluation.mot_evaluator import MOTEvaluator as LegacyEvaluator
+
 from ....domain.entities import Track
+from ....domain.ports import EvaluationService
 
 
 class LegacyEvaluatorAdapter(EvaluationService):
@@ -23,9 +24,7 @@ class LegacyEvaluatorAdapter(EvaluationService):
     def __init__(self):
         self.legacy_evaluator = LegacyEvaluator()
 
-    async def evaluate(
-        self, tracks: List[Track], ground_truth: List[Track]
-    ) -> Dict[str, Any]:
+    async def evaluate(self, tracks: List[Track], ground_truth: List[Track]) -> Dict[str, Any]:
         """Convert new domain objects to legacy format and evaluate"""
 
         # Convert tracks to legacy JSONL format
@@ -58,9 +57,7 @@ class LegacyEvaluatorAdapter(EvaluationService):
         for track in tracks:
             for detection in track.history:
                 line = {
-                    "frame": int(
-                        detection.timestamp.timestamp() * 10
-                    ),  # Convert to frame number
+                    "frame": int(detection.timestamp.timestamp() * 10),  # Convert to frame number
                     "id": str(track.id),
                     "x": detection.position.x,
                     "y": detection.position.y,

@@ -1,8 +1,9 @@
 from __future__ import annotations
+
 import abc
 import asyncio
 import datetime as dt
-from typing import AsyncIterator, Dict, Any, Iterable
+from typing import Any, AsyncIterator, Dict, Iterable
 
 Detection = Dict[str, Any]
 

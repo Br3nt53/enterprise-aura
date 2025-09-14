@@ -1,11 +1,10 @@
-import pytest
 import json
 from datetime import datetime
-from aura_v2.infrastructure.integrations.wms.schemas import (
-    fused_track_payload,
-    alert_payload,
-)
+
+import pytest
+
 from aura_v2.infrastructure.integrations.wms.client import WMSClient
+from aura_v2.infrastructure.integrations.wms.schemas import alert_payload, fused_track_payload
 
 
 @pytest.mark.asyncio

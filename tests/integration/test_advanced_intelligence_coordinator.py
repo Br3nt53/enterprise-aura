@@ -1,17 +1,18 @@
 # aura_v2/tests/integration/test_advanced_intelligence_coordinator.py
-import pytest
 import logging
+
+import pytest
 
 from aura_v2.application.coordinators.advanced_intelligence_coordinator import (
     AdvancedIntelligenceCoordinator,
 )
 from aura_v2.domain.entities import (
+    Confidence,
+    Position3D,
+    ThreatLevel,
     Track,
     TrackState,
-    Position3D,
     Velocity3D,
-    Confidence,
-    ThreatLevel,
 )
 from aura_v2.domain.value_objects import Collision
 from aura_v2.infrastructure.persistence.in_memory import TrackHistoryRepository

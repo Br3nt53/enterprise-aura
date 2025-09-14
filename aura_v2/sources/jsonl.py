@@ -1,6 +1,7 @@
 import asyncio
 import json
 import pathlib
+
 from .base import DetectionSource, batch
 
 
@@ -12,11 +13,7 @@ class JsonlSource(DetectionSource):
 
     async def frames(self):
         while True:
-            rows = [
-                json.loads(line)
-                for line in self.path.read_text().splitlines()
-                if line.strip()
-            ]
+            rows = [json.loads(line) for line in self.path.read_text().splitlines() if line.strip()]
             # put all rows into camera_detections by default
             yield batch(camera=rows)
             if not self.loop:

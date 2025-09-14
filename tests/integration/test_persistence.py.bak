@@ -18,14 +18,14 @@ async def mongo_repository():
     """
     mongo_uri = os.getenv("MONGO_URI_TEST", "mongodb://localhost:27017")
     db_name = f"aura_test_db_{uuid.uuid4().hex}"
-    
+
     os.environ["MONGO_URI"] = mongo_uri
     os.environ["MONGO_DB"] = db_name
-    
+
     repo = MongoTrackRepository()
-    
+
     yield repo
-    
+
     await repo._collection.database.client.drop_database(db_name)
     del os.environ["MONGO_URI"]
     del os.environ["MONGO_DB"]
@@ -58,7 +58,7 @@ async def test_full_crud_lifecycle(mongo_repository: MongoTrackRepository, sampl
     """
     await mongo_repository.save(sample_track)
     retrieved_track = await mongo_repository.get(sample_track.id)
-    
+
     assert retrieved_track is not None
     assert retrieved_track == sample_track
 
@@ -77,14 +77,14 @@ async def test_state_recovery_across_instances(mongo_repository: MongoTrackRepos
     """
     repo_A = mongo_repository
     await repo_A.save(sample_track)
-    
+
     repo_B = MongoTrackRepository()
 
     retrieved_track = await repo_B.get(sample_track.id)
-    
+
     assert retrieved_track is not None
     assert retrieved_track == sample_track
-    
+
     await repo_B._collection.database.client.close()
 
 @pytest.mark.asyncio
@@ -104,15 +104,15 @@ async def test_save_performance(mongo_repository: MongoTrackRepository):
                 velocity=Velocity3D(vx=0.1, vy=0.2, vz=0.3)
             )
         )
-        
+
         start_time = time.perf_counter()
         await mongo_repository.save(track)
         end_time = time.perf_counter()
-        
+
         latencies.append(end_time - start_time)
 
     average_latency_sec = sum(latencies) / num_iterations
-    
+
     print(f"\nAverage save latency: {average_latency_sec * 1000:.4f} ms")
-    
+
     assert average_latency_sec <= 0.005

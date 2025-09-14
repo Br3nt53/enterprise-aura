@@ -1,6 +1,8 @@
 import asyncio
 import json
+
 from aiokafka import AIOKafkaConsumer
+
 from .base import DetectionSource, batch
 
 

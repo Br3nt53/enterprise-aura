@@ -1,7 +1,9 @@
 from __future__ import annotations
-from typing import Dict, Any
+
+from typing import Any, Dict
+
 from .mongo_client import MongoProvider
-from .schemas import Detection, TrackEvent, MetricPoint, AuditLog
+from .schemas import AuditLog, Detection, MetricPoint, TrackEvent
 
 
 class MongoWriter:

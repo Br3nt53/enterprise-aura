@@ -1,6 +1,8 @@
-from fastapi.testclient import TestClient
-from aura_v2.main import get_app
 from datetime import datetime, timezone
+
+from fastapi.testclient import TestClient
+
+from aura_v2.main import get_app
 
 
 def test_track_accepts_utc():

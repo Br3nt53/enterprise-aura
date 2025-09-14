@@ -1,8 +1,10 @@
 from __future__ import annotations
-from typing import Dict, Any, List
+
 import operator
-import yaml
 from datetime import datetime
+from typing import Any, Dict, List
+
+import yaml
 
 OPS = {
     ">": operator.gt,

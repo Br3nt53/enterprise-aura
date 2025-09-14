@@ -1,5 +1,5 @@
 # aura_v2/application/services/threat_analyzer.py
-from ...domain.entities.track import Track, ThreatLevel
+from ...domain.entities.track import ThreatLevel, Track
 from ...domain.services.threat_analysis import ThreatAnalyzer
 
 

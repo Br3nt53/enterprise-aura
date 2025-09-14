@@ -1,5 +1,6 @@
 # aura_v2/tests/integration/test_pipeline_e2e.py
 import pytest
+
 from aura_v2.infrastructure.container import Container
 
 

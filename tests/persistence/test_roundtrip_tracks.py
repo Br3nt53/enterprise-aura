@@ -1,10 +1,12 @@
 import os
-import pytest
 from datetime import datetime
+
+import pytest
+
 from aura_v2.infrastructure.persistence.mongo_client import MongoProvider
-from aura_v2.infrastructure.persistence.writer import MongoWriter
 from aura_v2.infrastructure.persistence.reader import iter_tracks
 from aura_v2.infrastructure.persistence.schemas import TrackEvent
+from aura_v2.infrastructure.persistence.writer import MongoWriter
 
 pytestmark = pytest.mark.asyncio
 

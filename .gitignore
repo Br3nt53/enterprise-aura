@@ -94,3 +94,6 @@ artifacts/env.txt
 
 tmp/
 
+# build & local data
+aura_v2.egg-info/
+tmp/

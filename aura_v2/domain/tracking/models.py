@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from typing import List, Protocol, Dict, Any
+from typing import Any, Dict, List, Protocol
+
 from ..entities import Detection, Track
 from ..value_objects import TrackID
 

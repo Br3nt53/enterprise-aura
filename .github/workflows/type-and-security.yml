@@ -1,0 +1,25 @@
+name: type-and-security
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+jobs:
+  type_and_sec:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+      - run: uv python install 3.11
+      - run: uv venv --python 3.11
+      - run: |
+          echo "VIRTUAL_ENV=$PWD/.venv" >> "$GITHUB_ENV"
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
+      - run: uv pip install -e ".[tracking,observability,messaging,test]" --upgrade
+      - name: Type Check
+        run: uv run pyright
+      - name: Security Scan (Bandit)
+        run: uv pip install bandit && uv run bandit -q -r aura_v2
+      - name: Dependency Audit
+        run: |
+          uv pip install pip-audit
+          uv run pip-audit -r pyproject.toml || true  # optionally fail later

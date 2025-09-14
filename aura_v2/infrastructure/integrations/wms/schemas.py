@@ -1,5 +1,6 @@
 from __future__ import annotations
-from typing import Dict, Any, List
+
+from typing import Any, Dict, List
 
 
 def fused_track_payload(track: Dict[str, Any]) -> Dict[str, Any]:

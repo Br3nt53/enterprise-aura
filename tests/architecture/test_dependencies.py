@@ -34,6 +34,4 @@ def test_application_depends_only_on_domain():
             if isinstance(node, ast.ImportFrom):
                 if node.module and node.module.startswith("aura_v2"):
                     # Should only import from domain or application itself
-                    assert node.module.startswith(
-                        ("aura_v2.domain", "aura_v2.application")
-                    )
+                    assert node.module.startswith(("aura_v2.domain", "aura_v2.application"))

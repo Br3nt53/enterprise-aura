@@ -2,11 +2,11 @@
 import asyncio
 import logging
 from dataclasses import dataclass
-from typing import List, Coroutine, Optional
+from typing import Coroutine, List, Optional
 
-from ...domain.entities import Track, ThreatLevel
-from ...domain.services import ThreatAnalyzer, CollisionPredictor
-from ...domain.value_objects import Threat, TacticalAlert, Collision
+from ...domain.entities import ThreatLevel, Track
+from ...domain.services import CollisionPredictor, ThreatAnalyzer
+from ...domain.value_objects import Collision, TacticalAlert, Threat
 from ...infrastructure.persistence.in_memory import TrackHistoryRepository
 
 
@@ -55,17 +55,13 @@ class AdvancedIntelligenceCoordinator:
         threat_assessment_tasks: List[Coroutine] = [
             self._assess_individual_threat(track) for track in tracks
         ]
-        assessed_threats: List[Optional[Threat]] = await asyncio.gather(
-            *threat_assessment_tasks
-        )
+        assessed_threats: List[Optional[Threat]] = await asyncio.gather(*threat_assessment_tasks)
 
         # Step 3: Filter for threats that meet the required level for further analysis
         priority_threats = [
             threat
             for threat in assessed_threats
-            if threat
-            and threat.threat_level.value
-            >= self.config.threat_assessment_threshold.value
+            if threat and threat.threat_level.value >= self.config.threat_assessment_threshold.value
         ]
 
         if not priority_threats:

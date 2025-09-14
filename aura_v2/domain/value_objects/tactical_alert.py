@@ -4,8 +4,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional
 
-from .threat import Threat
 from .collision import Collision
+from .threat import Threat
 
 
 @dataclass(frozen=True)

@@ -1,8 +1,9 @@
 # aura_v2/domain/entities/detection.py
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Dict, Any, Optional
-from ..value_objects import Position3D, Velocity3D, Confidence, CovarianceMatrix
+from typing import Any, Dict, Optional
+
+from ..value_objects import Confidence, CovarianceMatrix, Position3D, Velocity3D
 
 
 @dataclass(frozen=True)

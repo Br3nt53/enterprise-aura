@@ -1,6 +1,9 @@
 from __future__ import annotations
-from typing import Dict, Any, List
+
+from typing import Any, Dict, List
+
 import yaml
+
 from .adapters import camera as cam_adapt
 from .adapters import uwb as uwb_adapt
 from .strategies import weighted as strat_weighted

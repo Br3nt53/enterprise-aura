@@ -1,8 +1,8 @@
 # aura_v2/infrastructure/adapters/ros2/detection_adapter.py
-import logging
 import asyncio
-from typing import AsyncIterator, List
+import logging
 from datetime import datetime, timezone
+from typing import AsyncIterator, List
 
 from ....domain.entities import Detection
 from ....domain.value_objects import Position3D
@@ -34,9 +34,7 @@ class ROS2DetectionAdapter:
 
                 def _now_dt(self) -> datetime:
                     t = self.get_clock().now().to_msg()  # builtin_interfaces/Time
-                    return datetime.fromtimestamp(
-                        t.sec + t.nanosec / 1e9, tz=timezone.utc
-                    )
+                    return datetime.fromtimestamp(t.sec + t.nanosec / 1e9, tz=timezone.utc)
 
                 def _detection_callback(self, msg: Float32MultiArray) -> None:
                     data = msg.data or []

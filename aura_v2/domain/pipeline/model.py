@@ -1,8 +1,8 @@
 # aura_v2/domain/pipeline/model.py
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import timedelta
-from typing import List, Any, Dict
-from abc import ABC, abstractmethod
+from typing import Any, Dict, List
 
 
 @dataclass

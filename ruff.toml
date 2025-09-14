@@ -1,9 +1,23 @@
 line-length = 100
 target-version = "py311"
-lint.extend-ignore = ["F401","F403","F811","E402"]
+
+[lint]
+select = ["E", "F", "B"]
 
 [lint.per-file-ignores]
-"aura_v2/domain/__init__.py" = ["F401","F403"]
-"aura_v2/infrastructure/adapters/legacy/bridge.py" = ["E402","F401","F841"]
-"aura_v2/infrastructure/adapters/ros2/detection_adapter.py" = ["F401"]
-# moved to .ruffignore
+"aura_v2/domain/association/hungarian.py" = ["F821"]
+"aura_v2/pipeline/data_quality.py" = ["F821", "F401"]
+"aura_v2/api/routes/tracks.py" = ["B008"]
+"aura_v2/application/services/collision_predictor.py" = ["B007"]
+"aura_v2/application/use_cases/process_detections.py" = ["B009"]
+"aura_v2/web_dashboard/api.py" = ["B014"]
+
+# Legacy “Version*” sources and stray copies kept for reference
+"aura_v2_domain_*_Version1.py" = ["F401", "F821", "E731", "F841"]
+"aura_v2_domain_*_Version2.py" = ["F401", "F821", "E731", "F841"]
+"*__Version1 copy.py" = ["F401", "F821", "E731", "F841"]
+"*__Version2 copy.py" = ["F401", "F821", "E731", "F841"]
+
+# Versioned tests that intentionally import/assign unused
+"tests_*_Version1.py" = ["F401", "F821", "F841"]
+"tests_*_Version2.py" = ["F401", "F821", "F841"]

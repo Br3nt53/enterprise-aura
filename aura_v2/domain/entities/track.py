@@ -2,8 +2,9 @@
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Dict, Any
-from ..value_objects import Position3D, Velocity3D, Confidence
+from typing import Any, Dict
+
+from ..value_objects import Confidence, Position3D, Velocity3D
 
 
 class TrackStatus(str, Enum):

@@ -1,6 +1,8 @@
 # aura_v2/application/services/collision_predictor.py
-import numpy as np
 from typing import List
+
+import numpy as np
+
 from ...domain.entities.track import Track
 from ...domain.services.collision_prediction import CollisionPredictor
 from ...domain.value_objects.collision import Collision
@@ -28,12 +30,8 @@ class BasicCollisionPredictor(CollisionPredictor):
     def _check_collision_pair(self, track1: Track, track2: Track) -> Collision:
         """Check if two tracks are on collision course."""
         # Current positions
-        p1 = np.array(
-            [track1.state.position.x, track1.state.position.y, track1.state.position.z]
-        )
-        p2 = np.array(
-            [track2.state.position.x, track2.state.position.y, track2.state.position.z]
-        )
+        p1 = np.array([track1.state.position.x, track1.state.position.y, track1.state.position.z])
+        p2 = np.array([track2.state.position.x, track2.state.position.y, track2.state.position.z])
 
         # Velocities
         v1 = np.array(

@@ -1,8 +1,8 @@
 # aura_v2/infrastructure/monitoring/telemetry.py
+import time
 from contextlib import contextmanager
 from logging import getLogger
 from typing import Any, Dict
-import time
 
 
 class TelemetrySystem:

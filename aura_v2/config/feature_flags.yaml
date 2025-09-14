@@ -3,18 +3,18 @@ features:
   use_new_tracker:
     enabled: false
     rollout_percentage: 0
-  
+
   use_new_association:
     enabled: true
     rollout_percentage: 50
-  
+
   use_new_evaluation:
     enabled: true
     rollout_percentage: 100
-  
+
   use_event_bus:
     enabled: true
-  
+
   use_new_pipeline:
     enabled: false
     gradual_rollout:

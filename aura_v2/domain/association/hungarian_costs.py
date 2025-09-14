@@ -1,6 +1,7 @@
 from __future__ import annotations
-from typing import List, Dict
+
 import math
+from typing import Dict, List
 
 
 def iou_cost(b1: List[float], b2: List[float]) -> float:

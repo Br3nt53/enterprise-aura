@@ -1,5 +1,6 @@
 import asyncio
 import math
+
 from .base import DetectionSource, batch
 
 

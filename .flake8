@@ -1,0 +1,22 @@
+[flake8]
+max-line-length = 100
+extend-ignore = E203,W503,E501
+per-file-ignores =
+  aura_v2/domain/__init__.py: F401,F403
+  aura_v2/infrastructure/persistence/__init__.py: F811
+  aura_v2/api/auth.py: F401
+  aura_v2/application/pipelines/real_time_tracking_pipeline.py: F401
+  aura_v2/diagnostic_dashboard.py: F401
+  aura_v2/test_dashboard_setup.py: F401
+  aura_v2/domain/pipeline/model.py: F401
+  aura_v2/domain/ports/sensor_port.py: F401
+  aura_v2/infrastructure/adapters/ros2/detection_adapter.py: F401
+  aura_v2/infrastructure/sensors/radar_adapter.py: F401
+  tests/fusion/test_end_to_end_fuse.py: F401
+  tests/integration/test_wms_payloads.py: F401
+  tests/tracking/test_hungarian_costs.py: F401
+  tests/tracking/test_hungarian_solver.py: F401
+  aura_v2/domain/association/hungarian.py: F821
+  aura_v2/pipeline/data_quality.py: F821
+  aura_v2_domain_*_Version1.py: F401,F821
+  tests_*_Version1.py: F401,F821

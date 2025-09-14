@@ -1,8 +1,8 @@
 from aura_v2.domain.association.hungarian_costs import (
+    combined_cost,
+    confidence_cost,
     iou_cost,
     motion_cost,
-    confidence_cost,
-    combined_cost,
 )
 
 

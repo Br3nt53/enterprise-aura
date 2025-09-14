@@ -1,5 +1,6 @@
 # tests/integration/test_track_ttl.py
 from fastapi.testclient import TestClient
+
 from aura_v2.main import get_app
 
 

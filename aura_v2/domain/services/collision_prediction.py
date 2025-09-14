@@ -1,6 +1,7 @@
 # aura_v2/domain/services/collision_prediction.py
 from abc import ABC, abstractmethod
 from typing import List
+
 from ...domain.entities.track import Track
 from ...domain.value_objects.collision import Collision
 

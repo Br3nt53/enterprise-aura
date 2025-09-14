@@ -1,5 +1,6 @@
-import time
 import random
+import time
+
 from aura_v2.domain.services.hungarian_assoc import HungarianAssociationStrategy
 
 

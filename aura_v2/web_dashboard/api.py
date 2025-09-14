@@ -8,7 +8,7 @@ import asyncio
 import os
 import sys
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 # Defensive imports - handle missing dependencies gracefully
 FASTAPI_AVAILABLE = False
@@ -223,9 +223,7 @@ def create_router():
                         try:
                             structure[str(item)] = {
                                 "type": "directory",
-                                "children": scan_directory(
-                                    item, max_depth, current_depth + 1
-                                ),
+                                "children": scan_directory(item, max_depth, current_depth + 1),
                             }
                         except (OSError, PermissionError):
                             pass
@@ -245,15 +243,11 @@ def create_router():
         """Run specific test files or directories"""
 
         if not test_path.startswith("tests/"):
-            raise HTTPException(
-                status_code=400, detail="Test path must start with 'tests/'"
-            )
+            raise HTTPException(status_code=400, detail="Test path must start with 'tests/'")
 
         test_file = Path(test_path)
         if not test_file.exists():
-            raise HTTPException(
-                status_code=404, detail=f"Test file not found: {test_path}"
-            )
+            raise HTTPException(status_code=404, detail=f"Test file not found: {test_path}")
 
         command = f"pytest {test_path} -v --tb=short"
 

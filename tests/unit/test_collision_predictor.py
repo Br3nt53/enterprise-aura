@@ -1,13 +1,8 @@
 # aura_v2/tests/application/services/test_collision_predictor.py
 import pytest
+
 from aura_v2.application.services.collision_predictor import BasicCollisionPredictor
-from aura_v2.domain.entities import (
-    Track,
-    TrackState,
-    Position3D,
-    Velocity3D,
-    Confidence,
-)
+from aura_v2.domain.entities import Confidence, Position3D, Track, TrackState, Velocity3D
 
 
 @pytest.fixture

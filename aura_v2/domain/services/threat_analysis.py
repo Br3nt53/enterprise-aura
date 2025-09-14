@@ -1,6 +1,7 @@
 # aura_v2/domain/services/threat_analysis.py
 from abc import ABC, abstractmethod
-from ...domain.entities.track import Track, ThreatLevel
+
+from ...domain.entities.track import ThreatLevel, Track
 
 
 class ThreatAnalyzer(ABC):

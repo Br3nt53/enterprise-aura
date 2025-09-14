@@ -2,6 +2,7 @@
 import asyncio
 from abc import ABC, abstractmethod
 from typing import AsyncIterator, List
+
 from ..entities import Detection
 
 

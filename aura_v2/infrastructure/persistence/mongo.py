@@ -3,31 +3,31 @@ from __future__ import annotations
 import dataclasses
 import os
 from enum import Enum
-from typing import Any, Dict, Mapping, Optional, List
+from typing import Any, Dict, List, Mapping, Optional
 
 try:
     import numpy as _np  # type: ignore
 except Exception:  # pragma: no cover
     _np = None  # type: ignore
 
-from motor.motor_asyncio import (
-    AsyncIOMotorClient,
-    AsyncIOMotorCollection,
-    AsyncIOMotorDatabase,
-)
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection, AsyncIOMotorDatabase
 
 from aura_v2.infrastructure.persistence.mongo_client import MongoProvider
 
 try:
-    from aura_v2.domain.entities import (
-        Track,  # type: ignore[attr-defined]
-        TrackState,  # type: ignore[attr-defined]
-        Position3D,  # type: ignore[attr-defined]
-        Velocity3D,  # type: ignore[attr-defined]
-        TrackStatus,  # type: ignore[attr-defined]
-    )
+    from aura_v2.domain.entities import Position3D  # type: ignore[attr-defined]
+    from aura_v2.domain.entities import Track  # type: ignore[attr-defined]
+    from aura_v2.domain.entities import TrackState  # type: ignore[attr-defined]
+    from aura_v2.domain.entities import TrackStatus  # type: ignore[attr-defined]
+    from aura_v2.domain.entities import Velocity3D  # type: ignore[attr-defined]
 except Exception:  # noqa: BLE001
-    from aura_v2.domain.entities.track import Track, TrackState, Position3D, Velocity3D, TrackStatus  # type: ignore[no-redef]
+    from aura_v2.domain.entities.track import (  # type: ignore[no-redef]
+        Position3D,
+        Track,
+        TrackState,
+        TrackStatus,
+        Velocity3D,
+    )
 
 
 def _is_dc_instance(o: Any) -> bool:

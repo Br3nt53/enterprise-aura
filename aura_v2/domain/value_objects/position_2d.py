@@ -1,5 +1,6 @@
 # aura_v2/domain/value_objects/position_2d.py
 from dataclasses import dataclass
+
 import numpy as np
 
 

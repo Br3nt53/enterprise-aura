@@ -21,7 +21,7 @@ This document defines the steps, acceptance criteria, and evidence to validate A
 - Package set resolves.
 
 **Evidence**
-- `artifacts/validation/00_env/system.txt`  
+- `artifacts/validation/00_env/system.txt`
 - `artifacts/validation/00_env/pip_freeze.txt`
 
 **Commands**

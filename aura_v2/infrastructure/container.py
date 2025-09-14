@@ -1,11 +1,12 @@
 # aura_v2/infrastructure/container.py
 import os
+
 from dependency_injector import containers, providers
 
 from aura_v2.application.use_cases.process_detections import ProcessDetectionsUseCase
-from aura_v2.infrastructure.tracking.modern_tracker import ModernTracker
-from aura_v2.infrastructure.persistence.mongo import MongoTrackRepository
 from aura_v2.infrastructure.persistence.in_memory import InMemoryTrackRepository
+from aura_v2.infrastructure.persistence.mongo import MongoTrackRepository
+from aura_v2.infrastructure.tracking.modern_tracker import ModernTracker
 
 
 class Container(containers.DeclarativeContainer):
@@ -19,9 +20,7 @@ class Container(containers.DeclarativeContainer):
 
     # Configuration provider to read environment variables
     config = providers.Configuration()
-    config.from_dict(
-        {"persistence": {"backend": os.getenv("AURA_TRACK_REPO", "IN_MEMORY")}}
-    )
+    config.from_dict({"persistence": {"backend": os.getenv("AURA_TRACK_REPO", "IN_MEMORY")}})
 
     # --- Persistence Layer ---
 

@@ -1,8 +1,10 @@
 # aura_v2/domain/services/association.py
 from abc import ABC, abstractmethod
 from typing import List, Tuple
+
 import numpy as np
 from scipy.optimize import linear_sum_assignment
+
 from ..entities import Detection, Track
 
 

@@ -1,0 +1,251 @@
+diff --git a/aura_v2_infrastructure_persistence_mongo_repository_Version1.py b/aura_v2/infrastructure/persistence/mongo_repository.py
+similarity index 100%
+rename from aura_v2_infrastructure_persistence_mongo_repository_Version1.py
+rename to aura_v2/infrastructure/persistence/mongo_repository.py
+diff --git a/aura_v2_infrastructure_migrations_0001_init_Version1.py b/aura_v2/infrastructure/persistence/migrations/0001_init.py
+similarity index 100%
+rename from aura_v2_infrastructure_migrations_0001_init_Version1.py
+rename to aura_v2/infrastructure/persistence/migrations/0001_init.py
+diff --git a/aura_v2_infrastructure_migrations_READMe_Version1.md b/aura_v2/infrastructure/persistence/migrations/README.md
+similarity index 100%
+rename from aura_v2_infrastructure_migrations_READMe_Version1.md
+rename to aura_v2/infrastructure/persistence/migrations/README.md
+diff --git a/aura_v2_observability_logging_config_Version1.py b/aura_v2/observability/logging_config.py
+similarity index 100%
+rename from aura_v2_observability_logging_config_Version1.py
+rename to aura_v2/observability/logging_config.py
+diff --git a/aura_v2_observability_metrics_Version1.py b/aura_v2/observability/metrics.py
+similarity index 100%
+rename from aura_v2_observability_metrics_Version1.py
+rename to aura_v2/observability/metrics.py
+diff --git a/aura_v2_observability_tracing_Version1.py b/aura_v2/observability/tracing.py
+similarity index 100%
+rename from aura_v2_observability_tracing_Version1.py
+rename to aura_v2/observability/tracing.py
+diff --git a/aura_v2_api_auth_Version1.py b/aura_v2/api/auth.py
+similarity index 100%
+rename from aura_v2_api_auth_Version1.py
+rename to aura_v2/api/auth.py
+diff --git a/aura_v2_api_routes_tracks_Version1.py b/aura_v2/api/routes/tracks.py
+similarity index 100%
+rename from aura_v2_api_routes_tracks_Version1.py
+rename to aura_v2/api/routes/tracks.py
+diff --git a/aura_v2_config_performance_Version1.py b/aura_v2/config/performance.py
+similarity index 100%
+rename from aura_v2_config_performance_Version1.py
+rename to aura_v2/config/performance.py
+diff --git a/aura_v2_ml_model_inference_Version1.py b/aura_v2/ml/model/inference.py
+similarity index 100%
+rename from aura_v2_ml_model_inference_Version1.py
+rename to aura_v2/ml/model/inference.py
+diff --git a/aura_v2_ml_model_trainer_Version1.py b/aura_v2/ml/model/trainer.py
+similarity index 100%
+rename from aura_v2_ml_model_trainer_Version1.py
+rename to aura_v2/ml/model/trainer.py
+diff --git a/aura_v2_pipeline_data_quality_Version1.py b/aura_v2/pipeline/data_quality.py
+similarity index 100%
+rename from aura_v2_pipeline_data_quality_Version1.py
+rename to aura_v2/pipeline/data_quality.py
+diff --git a/association_pipeline_Version2.py b/aura_v2/domain/association/pipeline.py
+similarity index 100%
+rename from association_pipeline_Version2.py
+rename to aura_v2/domain/association/pipeline.py
+diff --git a/association_log_domain_murty_wrapper_Version2.py b/aura_v2/domain/association/log_domain_murty_wrapper.py
+similarity index 100%
+rename from association_log_domain_murty_wrapper_Version2.py
+rename to aura_v2/domain/association/log_domain_murty_wrapper.py
+diff --git a/aura_v2_domain_association_hungarian_Version1.py b/aura_v2/domain/association/hungarian.py
+similarity index 100%
+rename from aura_v2_domain_association_hungarian_Version1.py
+rename to aura_v2/domain/association/hungarian.py
+diff --git a/aura_v2_domain_association_hungarian_solver_refactored_Version1.py b/aura_v2/domain/association/hungarian_solver.py
+similarity index 100%
+rename from aura_v2_domain_association_hungarian_solver_refactored_Version1.py
+rename to aura_v2/domain/association/hungarian_solver.py
+diff --git a/aura_v2_domain_association_hybrid_cost_Version2.py b/aura_v2/domain/association/costs/hybrid.py
+similarity index 100%
+rename from aura_v2_domain_association_hybrid_cost_Version2.py
+rename to aura_v2/domain/association/costs/hybrid.py
+diff --git a/aura_v2_domain_association_iou_Version2.py b/aura_v2/domain/association/costs/iou.py
+similarity index 100%
+rename from aura_v2_domain_association_iou_Version2.py
+rename to aura_v2/domain/association/costs/iou.py
+diff --git a/aura_v2_domain_association_cost_aabb_iou_numba_Version2.py b/aura_v2/domain/association/costs/aabb_iou_numba.py
+similarity index 100%
+rename from aura_v2_domain_association_cost_aabb_iou_numba_Version2.py
+rename to aura_v2/domain/association/costs/aabb_iou_numba.py
+diff --git a/aura_v2_domain_association_rotated_iou_Version2.py b/aura_v2/domain/association/costs/rotated_iou.py
+similarity index 100%
+rename from aura_v2_domain_association_rotated_iou_Version2.py
+rename to aura_v2/domain/association/costs/rotated_iou.py
+diff --git a/aura_v2_domain_association_geometry_Version2.py b/aura_v2/domain/association/geometry.py
+similarity index 100%
+rename from aura_v2_domain_association_geometry_Version2.py
+rename to aura_v2/domain/association/geometry.py
+diff --git a/.pre-commit-config.yaml b/.pre-commit-config.yaml
+new file mode 100644
+index 0000000..2222222
+--- /dev/null
++++ b/.pre-commit-config.yaml
+@@ -0,0 +1,31 @@
++repos:
++  - repo: https://github.com/psf/black
++    rev: 24.8.0
++    hooks:
++      - id: black
++        args: ["--line-length=100"]
++  - repo: https://github.com/pycqa/isort
++    rev: 5.13.2
++    hooks:
++      - id: isort
++        args: ["--profile=black", "--line-length=100"]
++  - repo: https://github.com/astral-sh/ruff-pre-commit
++    rev: v0.6.4
++    hooks:
++      - id: ruff
++        args: ["--line-length=100"]
++      - id: ruff-format
++        args: []
+diff --git a/ruff.toml.bak b/ruff.toml.bak
+deleted file mode 100644
+index e69de29..0000000
+--- a/ruff.toml.bak
++++ /dev/null
+@@ -1 +0,0 @@
+-
+diff --git a/ruff.toml b/ruff.toml
+index e69de29..3333333 100644
+--- a/ruff.toml
++++ b/ruff.toml
+@@ -0,0 +1,13 @@
++# Ruff configuration (M0 hygiene)
++line-length = 100
++extend-select = ["W", "E", "F"]
++ignore = [
++  "E203",  # whitespace before ':', black compatibility
++  "E501",  # line length handled by formatter
++]
++target-version = "py311"
++
++[format]
++quote-style = "double"
++indent-style = "space"
++skip-magic-trailing-comma = false
+diff --git a/.ruffignore b/.ruffignore
+index 0000000..4444444 100644
+--- a/.ruffignore
++++ b/.ruffignore
+@@ -1,3 +1,24 @@
+-# existing entries (deduplicated)
+-__pycache__/
+-.venv/
++# Normalized, de-duplicated ignore list (M0)
++__pycache__/
++.venv/
++.pytest_cache/
++.mypy_cache/
++.ruff_cache/
++build/
++dist/
++*.egg-info/
++.eggs/
++artifacts/
++tmp/
++.DS_Store
++.idea/
++.vscode/
++node_modules/
++.coverage
++coverage.xml
++*.pyc
++*.pyo
++*.pyd
++.bak_aura/
++*.bak
+diff --git a/pyproject.toml b/pyproject.toml
+index 1c2b3d4..5e6f7a8 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,3 +1,9 @@
+ [build-system]
+ requires = ["setuptools>=61.0"]
+ build-backend = "setuptools.build_meta"
++
++[tool.black]
++line-length = 100
++target-version = ["py311"]
++
++[tool.isort]
++profile = "black"
+diff --git a/Makefile b/Makefile
+index 1234567..89abcde 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,3 +1,20 @@
++# M0 hygiene: lint/format helpers
++.PHONY: lint fmt hooks
++
++lint:
++	ruff check .
++	black --check .
++
++fmt:
++	ruff --fix .
++	black .
++	isort .
++
++hooks:
++	pre-commit install
++
+ # existing content below...
+
+diff --git a/tests/m0/test_guardrails.py b/tests/m0/test_guardrails.py
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/tests/m0/test_guardrails.py
+@@ -0,0 +1,84 @@
++from __future__ import annotations
++
++import importlib
++import importlib.util
++import os
++import pathlib
++import tomllib
++
++
++def test_package_imports() -> None:
++    import aura_v2  # noqa: F401
++
++
++def test_optional_numba_fallback_does_not_block_import() -> None:
++    """
++    Guardrail: if numba is not installed, the cost module must still import.
++    """
++    spec = importlib.util.find_spec("aura_v2.domain.association.costs.aabb_iou_numba")
++    assert spec is not None
++    mod = importlib.import_module("aura_v2.domain.association.costs.aabb_iou_numba")
++    assert hasattr(mod, "aabb_iou")
++
++
++def test_configs_present_and_reasonable() -> None:
++    root = pathlib.Path(__file__).resolve().parents[2]
++    assert (root / "ruff.toml").exists()
++    pyproject = root / "pyproject.toml"
++    assert pyproject.exists()
++    data = tomllib.loads(pyproject.read_text())
++    black_cfg = data.get("tool", {}).get("black", {})
++    if "line-length" in black_cfg:
++        assert int(black_cfg["line-length"]) in (88, 100)
++
++
++def test_migrations_readme_exists_for_idempotency_notes() -> None:
++    mig_readme = (
++        pathlib.Path(__file__).resolve().parents[2]
++        / "aura_v2"
++        / "infrastructure"
++        / "persistence"
++        / "migrations"
++        / "README.md"
++    )
++    assert mig_readme.exists()

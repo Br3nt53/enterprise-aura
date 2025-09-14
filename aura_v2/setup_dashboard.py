@@ -141,21 +141,21 @@ except ImportError:
     # Create dummy classes for when FastAPI isn't available
     class BaseModel:
         pass
-    
+
     class APIRouter:
         def __init__(self, *args, **kwargs):
             pass
-        
+
         def post(self, *args, **kwargs):
             def decorator(func):
                 return func
             return decorator
-        
+
         def get(self, *args, **kwargs):
             def decorator(func):
                 return func
             return decorator
-    
+
     class HTTPException(Exception):
         def __init__(self, status_code, detail):
             self.status_code = status_code
@@ -186,7 +186,7 @@ def create_router():
     """Create dashboard router only if dependencies are available"""
     if not FASTAPI_AVAILABLE:
         return None
-    
+
     router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 
     @router.post("/execute", response_model=CommandResponse)
@@ -194,24 +194,24 @@ def create_router():
         """Execute a shell command and return the result"""
         import time
         start_time = time.time()
-        
+
         try:
             # Security: Only allow safe commands for development
             safe_commands = [
                 'python', 'pytest', 'pip', 'uv', 'curl', 'ruff', 'black', 'mypy',
                 'docker', 'git', 'npm', 'node', 'yarn', 'poetry', 'ls', 'cat', 'which'
             ]
-            
+
             command_parts = request.command.split()
             if not command_parts:
                 raise HTTPException(status_code=400, detail="Empty command")
-            
+
             if command_parts[0] not in safe_commands:
                 raise HTTPException(
-                    status_code=400, 
+                    status_code=400,
                     detail=f"Command '{command_parts[0]}' not allowed. Allowed: {safe_commands}"
                 )
-            
+
             # Execute the command
             process = await asyncio.create_subprocess_shell(
                 request.command,
@@ -219,10 +219,10 @@ def create_router():
                 stderr=asyncio.subprocess.PIPE,
                 cwd=request.working_directory
             )
-            
+
             stdout, stderr = await process.communicate()
             duration_ms = (time.time() - start_time) * 1000
-            
+
             return CommandResponse(
                 success=process.returncode == 0,
                 output=stdout.decode('utf-8') if stdout else "",
@@ -230,7 +230,7 @@ def create_router():
                 exit_code=process.returncode or 0,
                 duration_ms=duration_ms
             )
-            
+
         except Exception as e:
             duration_ms = (time.time() - start_time) * 1000
             return CommandResponse(
@@ -244,7 +244,7 @@ def create_router():
     @router.get("/system-status", response_model=SystemStatusResponse)
     async def get_system_status():
         """Check system status for various components"""
-        
+
         async def check_command(cmd: str) -> str:
             try:
                 process = await asyncio.create_subprocess_shell(
@@ -253,7 +253,7 @@ def create_router():
                     stderr=asyncio.subprocess.PIPE
                 )
                 stdout, stderr = await process.communicate()
-                
+
                 if process.returncode == 0:
                     output = stdout.decode().strip() if stdout else 'ok'
                     # Get first word for version info
@@ -264,16 +264,16 @@ def create_router():
                     return f"error: {error_msg[:50]}..."  # Truncate long errors
             except Exception as e:
                 return f"unavailable: {str(e)[:50]}..."
-        
+
         # Check various system components
         status = SystemStatusResponse(
             python=await check_command("python --version"),
-            pytest=await check_command("pytest --version"), 
+            pytest=await check_command("pytest --version"),
             dependencies=await check_command("pip show fastapi"),
             server=await check_command("curl -f http://localhost:8000/health --connect-timeout 2 --max-time 5"),
             aura_imports=await check_command("python -c \\"import aura_v2; print('v' + aura_v2.__version__)\\""')
         )
-        
+
         return status
 
     return router
@@ -303,8 +303,8 @@ def get_dashboard_html():
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { margin: 0; padding: 0; }
-        .console-output { 
-            font-family: 'Menlo', 'Monaco', 'Courier New', monospace; 
+        .console-output {
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
             line-height: 1.4;
         }
     </style>
@@ -314,7 +314,7 @@ def get_dashboard_html():
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
-        
+
         const AURADashboard = () => {
             const [consoleOutput, setConsoleOutput] = useState([]);
             const [consoleInput, setConsoleInput] = useState('');
@@ -357,15 +357,15 @@ def get_dashboard_html():
                     });
 
                     const result = await response.json();
-                    
+
                     if (result.success) {
                         addToConsole(result.output, 'success');
                     } else {
                         addToConsole(result.error || 'Command failed', 'error');
                     }
-                    
+
                     addToConsole(`Completed in ${result.duration_ms.toFixed(0)}ms`, 'info');
-                    
+
                 } catch (error) {
                     addToConsole(`Error: ${error.message}`, 'error');
                 } finally {

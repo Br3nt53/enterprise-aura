@@ -111,9 +111,7 @@ def diagnose_dashboard():
 
     print("\n🚀 Diagnostic complete!")
     print("\n📋 Next steps:")
-    print(
-        "1. Start the server: python -m aura_v2.main dev-server --host 0.0.0.0 --port 8000"
-    )
+    print("1. Start the server: python -m aura_v2.main dev-server --host 0.0.0.0 --port 8000")
     print("2. Open browser to: http://localhost:8000")
     print("3. Check browser console (F12) for any JavaScript errors")
 
@@ -134,8 +132,8 @@ def get_dashboard_html():
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-        .console-output { 
-            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace; 
+        .console-output {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
             line-height: 1.4;
         }
         .loading { text-align: center; padding: 40px; }
@@ -151,24 +149,24 @@ def get_dashboard_html():
 
     <script type="text/babel">
         console.log("🚀 Starting AURA Dashboard...");
-        
+
         const { useState, useEffect, useRef } = React;
-        
+
         // Error boundary
         class ErrorBoundary extends React.Component {
             constructor(props) {
                 super(props);
                 this.state = { hasError: false, error: null };
             }
-            
+
             static getDerivedStateFromError(error) {
                 return { hasError: true, error };
             }
-            
+
             componentDidCatch(error, errorInfo) {
                 console.error('Dashboard Error:', error, errorInfo);
             }
-            
+
             render() {
                 if (this.state.hasError) {
                     return (
@@ -180,11 +178,11 @@ def get_dashboard_html():
                         </div>
                     );
                 }
-                
+
                 return this.props.children;
             }
         }
-        
+
         const AURADashboard = () => {
             const [consoleOutput, setConsoleOutput] = useState([]);
             const [consoleInput, setConsoleInput] = useState('');
@@ -202,14 +200,14 @@ def get_dashboard_html():
 
             useEffect(() => {
                 console.log("📡 Dashboard component mounted");
-                
+
                 // Hide loading message
                 const loadingEl = document.getElementById('loading');
                 if (loadingEl) {
                     loadingEl.style.display = 'none';
                     console.log("✅ Loading message hidden");
                 }
-                
+
                 setDashboardReady(true);
                 fetchSystemStatus();
                 addToConsole('Dashboard loaded successfully', 'success');
@@ -252,15 +250,15 @@ def get_dashboard_html():
 
                     const result = await response.json();
                     console.log("📤 Command result:", result);
-                    
+
                     if (result.success) {
                         addToConsole(result.output || 'Command completed successfully', 'success');
                     } else {
                         addToConsole(result.error || 'Command failed', 'error');
                     }
-                    
+
                     addToConsole(`Completed in ${result.duration_ms?.toFixed(0) || 0}ms`, 'info');
-                    
+
                 } catch (error) {
                     addToConsole(`Error: ${error.message}`, 'error');
                     console.error("❌ Command execution error:", error);
@@ -301,7 +299,7 @@ def get_dashboard_html():
                             timestamp: new Date().toISOString()
                         })
                     });
-                    
+
                     const result = await response.json();
                     addToConsole(`✅ /track working: ${result.active_tracks?.length || 0} tracks`, 'success');
                 } catch (error) {
@@ -420,7 +418,7 @@ def get_dashboard_html():
             ReactDOM.render(
                 <ErrorBoundary>
                     <AURADashboard />
-                </ErrorBoundary>, 
+                </ErrorBoundary>,
                 document.getElementById('root')
             );
             console.log("✅ React app rendered successfully");
