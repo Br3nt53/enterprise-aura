@@ -38,3 +38,7 @@ class MongoTrackRepository:
     async def delete(self, track_id: str) -> None:
         await self._ensure_indexes()
         await self._collection.delete_one({"track_id": track_id})
+
+    async def get_by_id(self, track_id: str):
+        doc = await self._collection.find_one({'_id': track_id})
+        return doc
