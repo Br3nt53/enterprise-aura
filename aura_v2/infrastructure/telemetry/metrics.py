@@ -6,5 +6,5 @@ naive_ts_rejections = Counter(
 ts_skew_seconds = Histogram(
     "aura_ts_skew_seconds",
     "Absolute timestamp skew vs server (seconds)",
-    buckets=[1,5,10,30,60,120,300,600]
+    buckets=[1, 5, 10, 30, 60, 120, 300, 600],
 )

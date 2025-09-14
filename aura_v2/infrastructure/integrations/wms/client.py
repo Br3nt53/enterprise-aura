@@ -5,8 +5,14 @@ from typing import List, Dict, Any, Optional
 import httpx
 from .schemas import fused_track_payload, alert_payload
 
+
 class WMSClient:
-    def __init__(self, base_url: Optional[str] = None, api_key: Optional[str] = None, timeout_s: float = 5.0):
+    def __init__(
+        self,
+        base_url: Optional[str] = None,
+        api_key: Optional[str] = None,
+        timeout_s: float = 5.0,
+    ):
         self.base_url = base_url or os.getenv("WMS_BASE_URL", "")
         self.api_key = api_key or os.getenv("WMS_API_KEY", "")
         self.timeout_s = timeout_s

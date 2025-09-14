@@ -3,10 +3,13 @@ import os
 from typing import Any, Mapping, Optional, Dict
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection
 
+
 class MongoTrackRepository:
     collection_name = "tracks"
 
-    def __init__(self, client: AsyncIOMotorClient, db_name: Optional[str] = None) -> None:
+    def __init__(
+        self, client: AsyncIOMotorClient, db_name: Optional[str] = None
+    ) -> None:
         db_name = db_name or os.getenv("MONGO_DB", "aura_test")
         self._db = client[db_name]
         self._col: AsyncIOMotorCollection = self._db[self.collection_name]

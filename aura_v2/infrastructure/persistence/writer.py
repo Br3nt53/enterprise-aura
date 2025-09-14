@@ -3,6 +3,7 @@ from typing import Dict, Any
 from .mongo_client import MongoProvider
 from .schemas import Detection, TrackEvent, MetricPoint, AuditLog
 
+
 class MongoWriter:
     @staticmethod
     async def write_detection(doc: Detection) -> None:

@@ -12,7 +12,7 @@ class TelemetrySystem:
         self.config = config
         self.logger = getLogger(__name__)
         self.metrics = {}
-    
+
     def record_metric(self, name: str, value: float, tags: Dict[str, str] = None):
         """Record a metric value"""
         self.metrics[name] = {
@@ -57,5 +57,7 @@ class JaegerTracing:
 
 class StructuredLogging:
     pass
+
+
 class OpenTelemetry:
-    pass    
+    pass

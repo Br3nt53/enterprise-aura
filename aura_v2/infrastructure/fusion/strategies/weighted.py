@@ -1,7 +1,10 @@
 from __future__ import annotations
 from typing import Dict, Any, List
 
-def fuse(tracks_by_modality: Dict[str, List[Dict[str, Any]]], weights: Dict[str, float]) -> List[Dict[str, Any]]:
+
+def fuse(
+    tracks_by_modality: Dict[str, List[Dict[str, Any]]], weights: Dict[str, float]
+) -> List[Dict[str, Any]]:
     """Simple weighted bbox fusion per track index. Assumes aligned lists per modality."""
     fused: List[Dict[str, Any]] = []
     keys = list(tracks_by_modality.keys())
@@ -17,5 +20,11 @@ def fuse(tracks_by_modality: Dict[str, List[Dict[str, Any]]], weights: Dict[str,
             accum = [a + w * v for a, v in zip(accum, b)]
             wsum += w
         if wsum > 0:
-            fused.append({"bbox": [v / wsum for v in accum], "score": 1.0, "meta": {"fused_from": keys}})
+            fused.append(
+                {
+                    "bbox": [v / wsum for v in accum],
+                    "score": 1.0,
+                    "meta": {"fused_from": keys},
+                }
+            )
     return fused

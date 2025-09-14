@@ -10,6 +10,7 @@ COLLECTION_TTLS: Dict[str, int] = {
     "audit": int(os.getenv("TTL_AUDIT_H", "720")),
 }
 
+
 async def ensure_ttls() -> None:
     """Create/update TTL indexes on time fields."""
     db = MongoProvider.db()

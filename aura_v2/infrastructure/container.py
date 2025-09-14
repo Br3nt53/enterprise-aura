@@ -19,7 +19,9 @@ class Container(containers.DeclarativeContainer):
 
     # Configuration provider to read environment variables
     config = providers.Configuration()
-    config.from_dict({"persistence": {"backend": os.getenv("AURA_TRACK_REPO", "IN_MEMORY")}})
+    config.from_dict(
+        {"persistence": {"backend": os.getenv("AURA_TRACK_REPO", "IN_MEMORY")}}
+    )
 
     # --- Persistence Layer ---
 

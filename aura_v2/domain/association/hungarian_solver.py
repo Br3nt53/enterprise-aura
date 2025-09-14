@@ -4,8 +4,12 @@ import numpy as np
 from scipy.optimize import linear_sum_assignment
 from .hungarian_costs import combined_cost
 
+
 def build_cost_matrix(
-    detections: List[Dict], tracks: List[Dict], weights: Dict[str, float], max_cost: float
+    detections: List[Dict],
+    tracks: List[Dict],
+    weights: Dict[str, float],
+    max_cost: float,
 ) -> np.ndarray:
     M, N = len(detections), len(tracks)
     C = np.full((M, N), fill_value=max_cost, dtype=float)
@@ -15,7 +19,10 @@ def build_cost_matrix(
             C[i, j] = min(cost, max_cost)
     return C
 
-def solve_assignment(C: np.ndarray, max_cost: float) -> Tuple[List[Tuple[int, int]], List[int], List[int]]:
+
+def solve_assignment(
+    C: np.ndarray, max_cost: float
+) -> Tuple[List[Tuple[int, int]], List[int], List[int]]:
     row_ind, col_ind = linear_sum_assignment(C)
     matches, unm_det, unm_trk = [], [], []
     assigned_trk = set()

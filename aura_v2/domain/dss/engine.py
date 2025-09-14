@@ -4,7 +4,14 @@ import operator
 import yaml
 from datetime import datetime
 
-OPS = {">": operator.gt, ">=": operator.ge, "<": operator.lt, "<=": operator.le, "==": operator.eq}
+OPS = {
+    ">": operator.gt,
+    ">=": operator.ge,
+    "<": operator.lt,
+    "<=": operator.le,
+    "==": operator.eq,
+}
+
 
 class DSSEngine:
     def __init__(self, policy_path: str):
@@ -26,10 +33,12 @@ class DSSEngine:
                     fired = True
                     break
             if fired:
-                alerts.append({
-                    "rule": r["id"],
-                    "level": r["then"]["level"],
-                    "message": r["then"]["message"],
-                    "ts": context.get("ts") or datetime.utcnow().isoformat(),
-                })
+                alerts.append(
+                    {
+                        "rule": r["id"],
+                        "level": r["then"]["level"],
+                        "message": r["then"]["message"],
+                        "ts": context.get("ts") or datetime.utcnow().isoformat(),
+                    }
+                )
         return alerts

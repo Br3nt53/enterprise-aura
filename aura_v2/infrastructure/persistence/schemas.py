@@ -3,8 +3,11 @@ from dataclasses import dataclass, asdict
 from typing import Any, Dict, List, Optional
 from datetime import datetime
 
+
 def _now() -> datetime:
     return _now(datetime.timezone.utc)
+
+
 #
 @dataclass
 class Detection:
@@ -19,6 +22,7 @@ class Detection:
         d["ts"] = self.ts
         return d
 
+
 @dataclass
 class TrackEvent:
     ts: datetime
@@ -32,6 +36,7 @@ class TrackEvent:
         d["ts"] = self.ts
         return d
 
+
 @dataclass
 class MetricPoint:
     ts: datetime
@@ -43,6 +48,7 @@ class MetricPoint:
         d = asdict(self)
         d["ts"] = self.ts
         return d
+
 
 @dataclass
 class AuditLog:

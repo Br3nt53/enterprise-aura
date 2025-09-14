@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Dict, Any
 
+
 def normalize(ping: Dict[str, Any]) -> Dict[str, Any]:
     # Map UWB ping to bbox-like envelope for fusion
     # Expect center (x,y) and radius r → approximate bbox

@@ -18,9 +18,10 @@ DEFAULT_SCAN_DIRS = ["aura_v2", "tests", "typings"]
 # Optional external imports you don't want to fail the audit
 OPTIONAL_PKGS = {"kafka", "ros2"}
 
+
 def iter_init_files(dirs: Iterable[str]) -> Iterable[Path]:
     for d in dirs:
-        base = (ROOT / d)
+        base = ROOT / d
         if not base.exists():
             continue
         for p in base.rglob("__init__.py"):
@@ -29,9 +30,11 @@ def iter_init_files(dirs: Iterable[str]) -> Iterable[Path]:
                 continue
             yield p
 
+
 def resolve_module_name(file: Path) -> str:
     rel = file.relative_to(ROOT).with_suffix("")
     return ".".join(rel.parts)
+
 
 def try_import(modname: str) -> Tuple[bool, str | None]:
     try:
@@ -39,6 +42,7 @@ def try_import(modname: str) -> Tuple[bool, str | None]:
         return True, None
     except Exception as e:
         return False, f"{type(e).__name__}: {e}"
+
 
 def validate_from(base_mod: str, names: Iterable[ast.alias]) -> list[str]:
     errs: list[str] = []
@@ -61,6 +65,7 @@ def validate_from(base_mod: str, names: Iterable[ast.alias]) -> list[str]:
             errs.append(f"from {base_mod} import {a.name} -> not found as attr; {err2}")
     return errs
 
+
 def validate_import(names: Iterable[ast.alias]) -> list[str]:
     errs: list[str] = []
     for a in names:
@@ -73,6 +78,7 @@ def validate_import(names: Iterable[ast.alias]) -> list[str]:
         if not ok:
             errs.append(f"import {target} -> {err}")
     return errs
+
 
 def audit_init(init_file: Path) -> list[str]:
     modname = resolve_module_name(init_file)
@@ -105,12 +111,23 @@ def audit_init(init_file: Path) -> list[str]:
             errs += validate_from(base, node.names)
     return errs
 
+
 def main():
-    ap = argparse.ArgumentParser(description="Audit __init__.py imports (project only).")
-    ap.add_argument("--dirs", nargs="*", default=DEFAULT_SCAN_DIRS,
-                    help="Directories to scan (relative to repo root).")
-    ap.add_argument("--fail-on", choices=["any", "project-only"], default="project-only",
-                    help="Fail on any error or only errors whose top-level is within project.")
+    ap = argparse.ArgumentParser(
+        description="Audit __init__.py imports (project only)."
+    )
+    ap.add_argument(
+        "--dirs",
+        nargs="*",
+        default=DEFAULT_SCAN_DIRS,
+        help="Directories to scan (relative to repo root).",
+    )
+    ap.add_argument(
+        "--fail-on",
+        choices=["any", "project-only"],
+        default="project-only",
+        help="Fail on any error or only errors whose top-level is within project.",
+    )
     args = ap.parse_args()
 
     all_errs: list[Tuple[str, str]] = []
@@ -125,8 +142,10 @@ def main():
             # Filter to project-only if requested
             if args.fail_on == "project-only":
                 # consider project if error mentions a target starting with aura_v2 or tests or typings
-                if not any(e.strip().startswith(prefix) or f" {prefix}" in e
-                           for prefix in ("aura_v2", "tests", "typings")):
+                if not any(
+                    e.strip().startswith(prefix) or f" {prefix}" in e
+                    for prefix in ("aura_v2", "tests", "typings")
+                ):
                     continue
             all_errs.append((modname, e))
 
@@ -138,6 +157,7 @@ def main():
     for mod, e in all_errs:
         print(f"[FAIL] {mod}\n    - {e}")
     return 1
+
 
 if __name__ == "__main__":
     raise SystemExit(main())

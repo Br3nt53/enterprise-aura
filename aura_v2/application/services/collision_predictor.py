@@ -28,8 +28,12 @@ class BasicCollisionPredictor(CollisionPredictor):
     def _check_collision_pair(self, track1: Track, track2: Track) -> Collision:
         """Check if two tracks are on collision course."""
         # Current positions
-        p1 = np.array([track1.state.position.x, track1.state.position.y, track1.state.position.z])
-        p2 = np.array([track2.state.position.x, track2.state.position.y, track2.state.position.z])
+        p1 = np.array(
+            [track1.state.position.x, track1.state.position.y, track1.state.position.z]
+        )
+        p2 = np.array(
+            [track2.state.position.x, track2.state.position.y, track2.state.position.z]
+        )
 
         # Velocities
         v1 = np.array(

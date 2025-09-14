@@ -16,7 +16,9 @@ from aura_v2.infrastructure.persistence.mongo import MongoTrackRepository
 pytestmark = pytest.mark.asyncio
 
 # Defaults suitable for docker-compose.mongo.yml
-_DEFAULT_URI = "mongodb://root:example@mongo:27017/?authSource=admin&directConnection=true"
+_DEFAULT_URI = (
+    "mongodb://root:example@mongo:27017/?authSource=admin&directConnection=true"
+)
 _DEFAULT_DB = "aura_test"
 
 
