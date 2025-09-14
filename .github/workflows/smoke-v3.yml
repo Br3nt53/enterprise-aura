@@ -1,102 +1,85 @@
 name: smoke-v3
+
 on:
   push:
     branches: [ main, "chore/**", "feat/**" ]
   pull_request:
     branches: [ main ]
 
+concurrency:
+  group: smoke-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
+
     services:
       mongo:
         image: mongo:6.0
-        ports: ["27017:27017"]
+        ports: [ "27017:27017" ]
         options: >-
           --health-cmd="mongosh --quiet --eval 'db.runCommand({ ping: 1 })'"
-          --health-interval=10s
+          --health-interval=5s
           --health-timeout=5s
-          --health-retries=10
+          --health-retries=24
+
     env:
-      MONGO_URI: mongodb://localhost:27017
-      MONGO_DB: aura_ci
-      TTL_TRACKS_H: 1
-      TTL_DETECTIONS_H: 1
-      TTL_METRICS_H: 1
-      TTL_AUDIT_H: 1
+      PYTHON_VERSION: "3.11"
+      MONGO_URI: "mongodb://localhost:27017/?directConnection=true"
+      MONGO_DB: "aura_ci"
       AURA_USE_MONGO: "1"
       AURA_USE_HUNGARIAN: "1"
       AURA_USE_UFK: "1"
       AURA_USE_WMS: "0"
       AURA_USE_DSS: "1"
-      AURA_LATENCY_P99_BUDGET_MS: "750"
-      PYTHONUNBUFFERED: "1"
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install system deps
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y libatlas-base-dev
-
       - name: Install uv
-        run: |
-          curl -LsSf https://astral.sh/uv/install.sh | sh
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+        uses: astral-sh/setup-uv@v4
 
-      - name: Cache uv and venv
+      - name: Set up Python & venv
+        run: |
+          uv python install "$PYTHON_VERSION"
+          uv venv --python "$PYTHON_VERSION"
+          echo "VIRTUAL_ENV=$PWD/.venv" >> "$GITHUB_ENV"
+          echo "$PWD/.venv/bin"       >> "$GITHUB_PATH"
+
+      - name: Cache uv
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.cache/uv
-            .venv
-          key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}
+          path: ~/.cache/uv
+          key: uv-${{ runner.os }}-${{ env.PYTHON_VERSION }}-${{ hashFiles('pyproject.toml') }}
 
-      - name: Sync deps with uv
+      - name: Install deps
         run: |
-          uv --version
-          uv sync --all-extras --dev
-          # ensure runtime/test wheels even if not declared in extras
-          uv pip install motor pymongo httpx pydantic scipy numpy pytest pytest-asyncio psutil
+          uv pip install -e ".[tracking,observability,messaging,test]" --upgrade
+          uv pip install motor pymongo psutil
 
-      - name: Wait for Mongo
+      - name: Wait for Mongo healthy
         run: |
           uv run python - <<'PY'
           import os, time
           from pymongo import MongoClient
-          uri = os.getenv("MONGO_URI", "mongodb://localhost:27017")
-          t0 = time.time()
-          while True:
-            try:
-              MongoClient(uri, serverSelectionTimeoutMS=2000).admin.command("ping")
-              print("mongo ok")
-              break
-            except Exception:
-              if time.time() - t0 > 60:
-                raise
-              time.sleep(1)
+          uri = os.environ.get("MONGO_URI","mongodb://localhost:27017/?directConnection=true")
+          deadline = time.time() + 120
+          while time.time() < deadline:
+              try:
+                  MongoClient(uri, serverSelectionTimeoutMS=1500).admin.command("ping")
+                  print("Mongo is ready"); break
+              except Exception as e:
+                  print("waiting for mongo:", e); time.sleep(2)
+          else:
+              raise SystemExit("Mongo never became healthy")
           PY
 
       - name: Run unit tests (fast)
         run: uv run pytest -q -k "not e2e"
 
       - name: Run fusion & persistence tests
-        run: |
-          set -euo pipefail
-          shopt -s nullglob
-          DIRS=(tests/fusion tests/persistence tests/dss tests/integration)
-          EXISTING=()
-          for d in "${DIRS[@]}"; do [[ -d "$d" ]] && EXISTING+=("$d"); done
-          if [[ ${#EXISTING[@]} -eq 0 ]]; then
-            echo "no test dirs"; exit 0
-          fi
-          uv run pytest -q "${EXISTING[@]}"
+        run: uv run pytest -q tests/fusion tests/persistence tests/dss tests/integration
 
       - name: Archive test artifacts
         if: always()

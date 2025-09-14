@@ -1,5 +1,3 @@
-# tests/conftest.py
-# pyright: reportMissingImports=false
 from __future__ import annotations
 
 import asyncio
@@ -11,18 +9,21 @@ import pytest_asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from aura_v2.infrastructure.persistence.mongo import MongoTrackRepository
+from aura_v2.infrastructure.persistence.mongo_client import MongoProvider
 
-# All async tests run on the pytest-asyncio loop
 pytestmark = pytest.mark.asyncio
 
-# Defaults suitable for docker-compose.mongo.yml
-_DEFAULT_URI = (
-    "mongodb://root:example@mongo:27017/?authSource=admin&directConnection=true"
-)
-_DEFAULT_DB = "aura_test"
+
+def _env_uri() -> str:
+    # CI service exposes Mongo on localhost; keep this as the default.
+    return os.getenv("MONGO_URI", "mongodb://localhost:27017")
 
 
-async def _wait_ready(client: AsyncIOMotorClient, *, timeout: float = 10.0) -> None:
+def _env_db() -> str:
+    return os.getenv("MONGO_DB", "aura_ci")
+
+
+async def _wait_ready(client: AsyncIOMotorClient, *, timeout: float = 20.0) -> None:
     """Poll ping until server is reachable or timeout."""
     loop = asyncio.get_running_loop()
     deadline = loop.time() + timeout
@@ -33,30 +34,34 @@ async def _wait_ready(client: AsyncIOMotorClient, *, timeout: float = 10.0) -> N
         except Exception:
             if loop.time() >= deadline:
                 raise RuntimeError("Mongo not reachable")
-            await asyncio.sleep(0.2)
+            await asyncio.sleep(0.5)
 
 
 @pytest_asyncio.fixture
-async def mongo_repository() -> AsyncGenerator[MongoTrackRepository, None]:
-    uri = os.getenv("MONGO_URI", _DEFAULT_URI)
-    dbn = os.getenv("MONGO_DB", _DEFAULT_DB)
+async def mongo_repository(
+    monkeypatch: pytest.MonkeyPatch,
+) -> AsyncGenerator[MongoTrackRepository, None]:
+    """Clean MongoTrackRepository bound to the CI/local DB; drops data on teardown."""
+    uri = _env_uri()
+    db_name = _env_db()
 
-    client = AsyncIOMotorClient(uri, serverSelectionTimeoutMS=5000)
-    await _wait_ready(client)
+    # Ensure the repo/provider read the intended env vars.
+    monkeypatch.setenv("MONGO_URI", uri)
+    monkeypatch.setenv("MONGO_DB", db_name)
 
-    repo = MongoTrackRepository(client, db_name=dbn)
+    # Sanity: ensure server is up before constructing the repo
+    sanity_client = AsyncIOMotorClient(uri, serverSelectionTimeoutMS=3000)
+    await _wait_ready(sanity_client)
 
-    # Ensure at least one TTL index exists for TTL tests
-    try:
-        await repo._collection.create_index("updated_at", expireAfterSeconds=3600)  # type: ignore[attr-defined]
-    except Exception:
-        pass
+    # Initialize the shared provider used by the repo implementation (env-driven)
+    MongoProvider.init()
 
+    repo = MongoTrackRepository()  # ctor takes no args; uses MongoProvider + env
     await repo.delete_all()
     try:
         yield repo
     finally:
         try:
-            await repo._collection.database.client.drop_database(dbn)  # type: ignore[attr-defined]
+            await repo.delete_all()
         finally:
-            client.close()
+            sanity_client.close()
