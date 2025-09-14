@@ -97,3 +97,10 @@ tmp/
 # build & local data
 aura_v2.egg-info/
 tmp/
+
+# build & local data
+aura_v2.egg-info/
+tmp/
+artifacts/**
+!artifacts/validation/
+!artifacts/validation/**
