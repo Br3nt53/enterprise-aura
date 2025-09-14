@@ -1,0 +1,12 @@
+adapters:
+  camera:
+    enabled: true
+  uwb:
+    enabled: true
+
+strategy: weighted
+weights:
+  camera: 0.7
+  uwb: 0.3
+
+timestamp_alignment_ms: 10

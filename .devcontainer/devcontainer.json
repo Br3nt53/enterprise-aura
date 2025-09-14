@@ -1,8 +1,10 @@
 {
   "name": "aura-enterprise (uv)",
-  "image": "ghcr.io/astral-sh/uv:python3.11-bookworm",
-  "features": { "ghcr.io/devcontainers/features/github-cli:1": {} },
-  "postCreateCommand": "uv sync && uv run pytest -q",
+  "dockerComposeFile": ["../docker-compose.devcontainer.yml"],
+  "service": "devcontainer",
+  "workspaceFolder": "/workspaces/enterprise-aura",
+  "postCreateCommand": "uv sync",
+  "updateContentCommand": "uv sync",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -12,9 +14,12 @@
         "ms-azuretools.vscode-docker"
       ],
       "settings": {
-        "python.defaultInterpreterPath": ".venv/bin/python"
+        "python.defaultInterpreterPath": "/workspaces/enterprise-aura/.venv/bin/python",
+        "python.testing.pytestEnabled": true,
+        "python.testing.pytestArgs": ["-q"],
+        "editor.codeActionsOnSave": { "source.organizeImports": "explicit" }
       }
     }
   },
-  "updateContentCommand": "uv sync"
+  "forwardPorts": [27017, 5015]
 }

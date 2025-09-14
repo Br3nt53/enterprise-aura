@@ -1,0 +1,1678 @@
+{
+  "type": "dir",
+  "name": "enterprise-aura",
+  "children": [
+    {
+      "type": "dir",
+      "name": ".devcontainer",
+      "children": [
+        {
+          "type": "file",
+          "name": "devcontainer.json",
+          "size": 761
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": ".github",
+      "children": [
+        {
+          "type": "dir",
+          "name": "workflows",
+          "children": [
+            {
+              "type": "file",
+              "name": "ci-cd-pipeline.yml",
+              "size": 1197
+            },
+            {
+              "type": "file",
+              "name": "ci.yml",
+              "size": 2172
+            },
+            {
+              "type": "file",
+              "name": "security.yml",
+              "size": 447
+            },
+            {
+              "type": "file",
+              "name": "smoke-v3.yml",
+              "size": 1652
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "artifacts",
+      "children": [
+        {
+          "type": "dir",
+          "name": "pylance",
+          "children": [
+            {
+              "type": "file",
+              "name": "pyright_output.json",
+              "size": 368858
+            },
+            {
+              "type": "file",
+              "name": "pyright_output.txt",
+              "size": 146559
+            },
+            {
+              "type": "file",
+              "name": "summary.json",
+              "size": 3158
+            }
+          ]
+        },
+        {
+          "type": "dir",
+          "name": "validation",
+          "children": [
+            {
+              "type": "file",
+              "name": "VALIDATION.md",
+              "size": 996
+            }
+          ]
+        },
+        {
+          "type": "file",
+          "name": "soak_pass.txt",
+          "size": 21
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "aura_v2",
+      "children": [
+        {
+          "type": "dir",
+          "name": "api",
+          "children": [
+            {
+              "type": "file",
+              "name": "__init__.py",
+              "size": 0
+            },
+            {
+              "type": "file",
+              "name": "schemas.py",
+              "size": 1928
+            }
+          ]
+        },
+        {
+          "type": "dir",
+          "name": "application",
+          "children": [
+            {
+              "type": "dir",
+              "name": "coordinators",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "__init__.py",
+                  "size": 76
+                },
+                {
+                  "type": "file",
+                  "name": "advanced_intelligence_coordinator.py",
+                  "size": 4695
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "dto",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "__init__.py",
+                  "size": 0
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "facades",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "__init__.py",
+                  "size": 0
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "mappers",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "__init__.py",
+                  "size": 0
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "pipelines",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "real_time_tracking_pipeline.py",
+                  "size": 3716
+                },
+                {
+                  "type": "file",
+                  "name": "tracking_pipeline.py",
+                  "size": 2984
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "services",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "__init__.py",
+                  "size": 197
+                },
+                {
+                  "type": "file",
+                  "name": "collision_predictor.py",
+                  "size": 2790
+                },
+                {
+                  "type": "file",
+                  "name": "threat_analyzer.py",
+                  "size": 655
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "use_cases",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "__init__.py",
+                  "size": 0
+                },
+                {
+                  "type": "file",
+                  "name": "detect_and_track.py",
+                  "size": 216
+                },
+                {
+                  "type": "file",
+                  "name": "process_detections.py",
+                  "size": 2048
+                }
+              ]
+            },
+            {
+              "type": "file",
+              "name": "__init__.py",
+              "size": 0
+            }
+          ]
+        },
+        {
+          "type": "dir",
+          "name": "config",
+          "children": [
+            {
+              "type": "file",
+              "name": "Dockerfile",
+              "size": 811
+            },
+            {
+              "type": "file",
+              "name": "feature_flags.yaml",
+              "size": 495
+            },
+            {
+              "type": "file",
+              "name": "production.yaml",
+              "size": 0
+            }
+          ]
+        },
+        {
+          "type": "dir",
+          "name": "domain",
+          "children": [
+            {
+              "type": "dir",
+              "name": "association",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "hungarian_costs.py",
+                  "size": 1086
+                },
+                {
+                  "type": "file",
+                  "name": "hungarian_solver.py",
+                  "size": 1303
+                },
+                {
+                  "type": "file",
+                  "name": "policy.yaml",
+                  "size": 131
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "dss",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "engine.py",
+                  "size": 1257
+                },
+                {
+                  "type": "file",
+                  "name": "policies.yaml",
+                  "size": 380
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "entities",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "__init__.py",
+                  "size": 395
+                },
+                {
+                  "type": "file",
+                  "name": "detection.py",
+                  "size": 1648
+                },
+                {
+                  "type": "file",
+                  "name": "track.py",
+                  "size": 4180
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "events",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "__init__.py",
+                  "size": 234
+                },
+                {
+                  "type": "file",
+                  "name": "tracking_events.py",
+                  "size": 934
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "pipeline",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "model.py",
+                  "size": 1183
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "ports",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "__init__.py",
+                  "size": 174
+                },
+                {
+                  "type": "file",
+                  "name": "sensor_port.py",
+                  "size": 574
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "services",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "__init__.py",
+                  "size": 471
+                },
+                {
+                  "type": "file",
+                  "name": "association.py",
+                  "size": 2164
+                },
+                {
+                  "type": "file",
+                  "name": "collision_prediction.py",
+                  "size": 466
+                },
+                {
+                  "type": "file",
+                  "name": "hungarian_assoc.py",
+                  "size": 1804
+                },
+                {
+                  "type": "file",
+                  "name": "multi_sensor_fusion.py",
+                  "size": 713
+                },
+                {
+                  "type": "file",
+                  "name": "sensor_characteristics.py",
+                  "size": 387
+                },
+                {
+                  "type": "file",
+                  "name": "threat_analysis.py",
+                  "size": 373
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "tracking",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "models.py",
+                  "size": 601
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "value_objects",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "__init__.py",
+                  "size": 679
+                },
+                {
+                  "type": "file",
+                  "name": "collision.py",
+                  "size": 332
+                },
+                {
+                  "type": "file",
+                  "name": "confidence.py",
+                  "size": 407
+                },
+                {
+                  "type": "file",
+                  "name": "covariance.py",
+                  "size": 636
+                },
+                {
+                  "type": "file",
+                  "name": "identifiers.py",
+                  "size": 446
+                },
+                {
+                  "type": "file",
+                  "name": "metrics.py",
+                  "size": 1528
+                },
+                {
+                  "type": "file",
+                  "name": "position.py",
+                  "size": 813
+                },
+                {
+                  "type": "file",
+                  "name": "position_2d.py",
+                  "size": 736
+                },
+                {
+                  "type": "file",
+                  "name": "tactical_alert.py",
+                  "size": 403
+                },
+                {
+                  "type": "file",
+                  "name": "threat.py",
+                  "size": 259
+                },
+                {
+                  "type": "file",
+                  "name": "velocity.py",
+                  "size": 611
+                }
+              ]
+            },
+            {
+              "type": "file",
+              "name": "__init__.py",
+              "size": 158
+            },
+            {
+              "type": "file",
+              "name": "confidence.py",
+              "size": 90
+            },
+            {
+              "type": "file",
+              "name": "position.py",
+              "size": 164
+            },
+            {
+              "type": "file",
+              "name": "velocity.py",
+              "size": 88
+            }
+          ]
+        },
+        {
+          "type": "dir",
+          "name": "infrastructure",
+          "children": [
+            {
+              "type": "dir",
+              "name": "adapters",
+              "children": [
+                {
+                  "type": "dir",
+                  "name": "legacy",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "bridge.py",
+                      "size": 2378
+                    }
+                  ]
+                },
+                {
+                  "type": "dir",
+                  "name": "ros2",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "__init__.py",
+                      "size": 0
+                    },
+                    {
+                      "type": "file",
+                      "name": "detection_adapter.py",
+                      "size": 3221
+                    }
+                  ]
+                },
+                {
+                  "type": "dir",
+                  "name": "sensors",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "__init__.py",
+                      "size": 0
+                    }
+                  ]
+                },
+                {
+                  "type": "dir",
+                  "name": "storage",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "__init__.py",
+                      "size": 0
+                    }
+                  ]
+                },
+                {
+                  "type": "dir",
+                  "name": "unity",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "__init__.py",
+                      "size": 0
+                    }
+                  ]
+                },
+                {
+                  "type": "file",
+                  "name": "__init__.py",
+                  "size": 0
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "config",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "__init__.py",
+                  "size": 0
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "fusion",
+              "children": [
+                {
+                  "type": "dir",
+                  "name": "adapters",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "camera.py",
+                      "size": 322
+                    },
+                    {
+                      "type": "file",
+                      "name": "uwb.py",
+                      "size": 458
+                    }
+                  ]
+                },
+                {
+                  "type": "dir",
+                  "name": "config",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "fusion.yaml",
+                      "size": 145
+                    }
+                  ]
+                },
+                {
+                  "type": "dir",
+                  "name": "strategies",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "weighted.py",
+                      "size": 866
+                    }
+                  ]
+                },
+                {
+                  "type": "file",
+                  "name": "ufk_core.py",
+                  "size": 1097
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "integrations",
+              "children": [
+                {
+                  "type": "dir",
+                  "name": "wms",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "client.py",
+                      "size": 1515
+                    },
+                    {
+                      "type": "file",
+                      "name": "schemas.py",
+                      "size": 569
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "messaging",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "__init__.py",
+                  "size": 0
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "mlops",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "__init__.py",
+                  "size": 897
+                },
+                {
+                  "type": "file",
+                  "name": "model_registry.py",
+                  "size": 0
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "monitoring",
+              "children": []
+            },
+            {
+              "type": "dir",
+              "name": "observability",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "__init__.py",
+                  "size": 0
+                },
+                {
+                  "type": "file",
+                  "name": "telemetry.py",
+                  "size": 1605
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "persistence",
+              "children": [
+                {
+                  "type": "dir",
+                  "name": "migrations",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "0001_init.js",
+                      "size": 357
+                    },
+                    {
+                      "type": "file",
+                      "name": "0002_ttl.js",
+                      "size": 468
+                    }
+                  ]
+                },
+                {
+                  "type": "file",
+                  "name": "__init__.py",
+                  "size": 40
+                },
+                {
+                  "type": "file",
+                  "name": "mongo.py",
+                  "size": 1586
+                },
+                {
+                  "type": "file",
+                  "name": "mongo_client.py",
+                  "size": 1101
+                },
+                {
+                  "type": "file",
+                  "name": "reader.py",
+                  "size": 662
+                },
+                {
+                  "type": "file",
+                  "name": "retention.py",
+                  "size": 1126
+                },
+                {
+                  "type": "file",
+                  "name": "schemas.py",
+                  "size": 1281
+                },
+                {
+                  "type": "file",
+                  "name": "writer.py",
+                  "size": 912
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "reporting",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "system_report.py",
+                  "size": 4350
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "sensors",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "radar_adapter.py",
+                  "size": 5280
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "telemetry",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "__init__.py",
+                  "size": 0
+                },
+                {
+                  "type": "file",
+                  "name": "metrics.py",
+                  "size": 305
+                },
+                {
+                  "type": "file",
+                  "name": "time_guard.py",
+                  "size": 664
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "tracking",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "modern_tracker.py",
+                  "size": 9642
+                }
+              ]
+            },
+            {
+              "type": "file",
+              "name": "__init__.py",
+              "size": 0
+            },
+            {
+              "type": "file",
+              "name": "container.py",
+              "size": 1973
+            }
+          ]
+        },
+        {
+          "type": "dir",
+          "name": "observability",
+          "children": [
+            {
+              "type": "file",
+              "name": "metrics_validator.py",
+              "size": 1324
+            }
+          ]
+        },
+        {
+          "type": "dir",
+          "name": "sources",
+          "children": [
+            {
+              "type": "file",
+              "name": "__init__.py",
+              "size": 1032
+            },
+            {
+              "type": "file",
+              "name": "base.py",
+              "size": 712
+            },
+            {
+              "type": "file",
+              "name": "demo.py",
+              "size": 572
+            },
+            {
+              "type": "file",
+              "name": "jsonl.py",
+              "size": 642
+            },
+            {
+              "type": "file",
+              "name": "kafka.py",
+              "size": 808
+            }
+          ]
+        },
+        {
+          "type": "dir",
+          "name": "utils",
+          "children": [
+            {
+              "type": "file",
+              "name": "time.py",
+              "size": 1044
+            }
+          ]
+        },
+        {
+          "type": "dir",
+          "name": "web_dashboard",
+          "children": [
+            {
+              "type": "file",
+              "name": "__init__.py",
+              "size": 28
+            },
+            {
+              "type": "file",
+              "name": "api.py",
+              "size": 8206
+            },
+            {
+              "type": "file",
+              "name": "dashboard.html",
+              "size": 16081
+            }
+          ]
+        },
+        {
+          "type": "file",
+          "name": "__init__.py",
+          "size": 352
+        },
+        {
+          "type": "file",
+          "name": "ARCHITECTURE.md",
+          "size": 297
+        },
+        {
+          "type": "file",
+          "name": "diagnostic_dashboard.py",
+          "size": 20047
+        },
+        {
+          "type": "file",
+          "name": "main.py",
+          "size": 17099
+        },
+        {
+          "type": "file",
+          "name": "setup_dashboard.py",
+          "size": 18574
+        },
+        {
+          "type": "file",
+          "name": "test_dashboard_setup.py",
+          "size": 3847
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "aura_v2.egg-info",
+      "children": [
+        {
+          "type": "file",
+          "name": "dependency_links.txt",
+          "size": 1
+        },
+        {
+          "type": "file",
+          "name": "entry_points.txt",
+          "size": 50
+        },
+        {
+          "type": "file",
+          "name": "PKG-INFO",
+          "size": 9087
+        },
+        {
+          "type": "file",
+          "name": "requires.txt",
+          "size": 910
+        },
+        {
+          "type": "file",
+          "name": "SOURCES.txt",
+          "size": 4321
+        },
+        {
+          "type": "file",
+          "name": "top_level.txt",
+          "size": 8
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "certs",
+      "children": [
+        {
+          "type": "file",
+          "name": "localhost.conf",
+          "size": 242
+        },
+        {
+          "type": "file",
+          "name": "localhost.crt",
+          "size": 1127
+        },
+        {
+          "type": "file",
+          "name": "localhost.key",
+          "size": 1704
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "config",
+      "children": [
+        {
+          "type": "file",
+          "name": "mongo.example.env",
+          "size": 223
+        },
+        {
+          "type": "file",
+          "name": "v2_5.flags.env.example",
+          "size": 194
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "db",
+      "children": [
+        {
+          "type": "dir",
+          "name": "migration",
+          "children": [
+            {
+              "type": "file",
+              "name": "run_parallel.py",
+              "size": 552
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "ops",
+      "children": [
+        {
+          "type": "dir",
+          "name": "deployment",
+          "children": [
+            {
+              "type": "file",
+              "name": "rollback.py",
+              "size": 841
+            }
+          ]
+        },
+        {
+          "type": "dir",
+          "name": "kubernetes",
+          "children": [
+            {
+              "type": "dir",
+              "name": "kubernetes",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "aura-deployment.yaml",
+                  "size": 0
+                }
+              ]
+            },
+            {
+              "type": "file",
+              "name": "aura-deployment.yaml",
+              "size": 0
+            }
+          ]
+        },
+        {
+          "type": "dir",
+          "name": "runbooks",
+          "children": [
+            {
+              "type": "file",
+              "name": "mongo_retention.md",
+              "size": 440
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "scripts",
+      "children": [
+        {
+          "type": "file",
+          "name": "bootstrap.sh",
+          "size": 1240
+        },
+        {
+          "type": "file",
+          "name": "demo.jsonl",
+          "size": 324
+        },
+        {
+          "type": "file",
+          "name": "pylance_report.sh",
+          "size": 1266
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "tests",
+      "children": [
+        {
+          "type": "dir",
+          "name": "architecture",
+          "children": [
+            {
+              "type": "file",
+              "name": "__init__.py",
+              "size": 0
+            },
+            {
+              "type": "file",
+              "name": "test_container_contract.py",
+              "size": 400
+            },
+            {
+              "type": "file",
+              "name": "test_dependencies.py",
+              "size": 1477
+            }
+          ]
+        },
+        {
+          "type": "dir",
+          "name": "dss",
+          "children": [
+            {
+              "type": "file",
+              "name": "__init__.py",
+              "size": 18
+            },
+            {
+              "type": "file",
+              "name": "test_integration_wms_dispatch.py",
+              "size": 1121
+            },
+            {
+              "type": "file",
+              "name": "test_policy_eval.py",
+              "size": 523
+            }
+          ]
+        },
+        {
+          "type": "dir",
+          "name": "fixtures",
+          "children": [
+            {
+              "type": "file",
+              "name": "__init__.py",
+              "size": 0
+            }
+          ]
+        },
+        {
+          "type": "dir",
+          "name": "fusion",
+          "children": [
+            {
+              "type": "file",
+              "name": "test_adapters_normalize.py",
+              "size": 475
+            },
+            {
+              "type": "file",
+              "name": "test_end_to_end_fuse.py",
+              "size": 516
+            },
+            {
+              "type": "file",
+              "name": "test_straight_api.py",
+              "size": 292
+            }
+          ]
+        },
+        {
+          "type": "dir",
+          "name": "integration",
+          "children": [
+            {
+              "type": "file",
+              "name": "__init__.py",
+              "size": 0
+            },
+            {
+              "type": "file",
+              "name": "test_advanced_intelligence_coordinator.py",
+              "size": 2945
+            },
+            {
+              "type": "file",
+              "name": "test_multi_sensor_tracking.py",
+              "size": 1139
+            },
+            {
+              "type": "file",
+              "name": "test_persistence.py",
+              "size": 1680
+            },
+            {
+              "type": "file",
+              "name": "test_persistence.py.bak",
+              "size": 3905
+            },
+            {
+              "type": "file",
+              "name": "test_pipeline_e2e.py",
+              "size": 801
+            },
+            {
+              "type": "file",
+              "name": "test_track_ttl.py",
+              "size": 1579
+            },
+            {
+              "type": "file",
+              "name": "test_wms_payloads.py",
+              "size": 1140
+            }
+          ]
+        },
+        {
+          "type": "dir",
+          "name": "observability",
+          "children": [
+            {
+              "type": "file",
+              "name": "test_budgets.py",
+              "size": 177
+            },
+            {
+              "type": "file",
+              "name": "test_metrics_validator.py",
+              "size": 1144
+            }
+          ]
+        },
+        {
+          "type": "dir",
+          "name": "persistence",
+          "children": [
+            {
+              "type": "file",
+              "name": "__init__.py",
+              "size": 0
+            },
+            {
+              "type": "file",
+              "name": "test_retention_ttl.py",
+              "size": 1168
+            },
+            {
+              "type": "file",
+              "name": "test_roundtrip_tracks.py",
+              "size": 998
+            },
+            {
+              "type": "file",
+              "name": "test_writer_reader_roundtrip.py",
+              "size": 653
+            }
+          ]
+        },
+        {
+          "type": "dir",
+          "name": "tracking",
+          "children": [
+            {
+              "type": "file",
+              "name": "test_hungarian_assoc.py",
+              "size": 1421
+            },
+            {
+              "type": "file",
+              "name": "test_hungarian_costs.py",
+              "size": 669
+            },
+            {
+              "type": "file",
+              "name": "test_hungarian_solver.py",
+              "size": 503
+            }
+          ]
+        },
+        {
+          "type": "dir",
+          "name": "unit",
+          "children": [
+            {
+              "type": "file",
+              "name": "__init__.py",
+              "size": 0
+            },
+            {
+              "type": "file",
+              "name": "test_collision_predictor.py",
+              "size": 969
+            },
+            {
+              "type": "file",
+              "name": "test_main_endpoints.py",
+              "size": 801
+            },
+            {
+              "type": "file",
+              "name": "test_threat_analyzer.py",
+              "size": 1228
+            }
+          ]
+        },
+        {
+          "type": "file",
+          "name": "__init__.py",
+          "size": 0
+        },
+        {
+          "type": "file",
+          "name": "conftest.py",
+          "size": 1603
+        },
+        {
+          "type": "file",
+          "name": "fixtures.py",
+          "size": 1509
+        },
+        {
+          "type": "file",
+          "name": "test_api_time.py",
+          "size": 501
+        },
+        {
+          "type": "file",
+          "name": "test_health.py",
+          "size": 428
+        },
+        {
+          "type": "file",
+          "name": "test_imports.py",
+          "size": 95
+        },
+        {
+          "type": "file",
+          "name": "test_utils_time.py",
+          "size": 382
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "tmp",
+      "children": [
+        {
+          "type": "dir",
+          "name": "mongo",
+          "children": [
+            {
+              "type": "dir",
+              "name": "diagnostic.data",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "metrics.2025-09-13T12-46-36Z-00000",
+                  "size": 606427
+                },
+                {
+                  "type": "file",
+                  "name": "metrics.2025-09-13T14-26-38Z-00000",
+                  "size": 850006
+                },
+                {
+                  "type": "file",
+                  "name": "metrics.interim",
+                  "size": 23406
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "journal",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "WiredTigerLog.0000000002",
+                  "size": 104857600
+                },
+                {
+                  "type": "file",
+                  "name": "WiredTigerPreplog.0000000001",
+                  "size": 104857600
+                },
+                {
+                  "type": "file",
+                  "name": "WiredTigerPreplog.0000000002",
+                  "size": 104857600
+                }
+              ]
+            },
+            {
+              "type": "file",
+              "name": "_mdb_catalog.wt",
+              "size": 36864
+            },
+            {
+              "type": "file",
+              "name": "collection-0--3666278562741621775.wt",
+              "size": 20480
+            },
+            {
+              "type": "file",
+              "name": "collection-2--3666278562741621775.wt",
+              "size": 36864
+            },
+            {
+              "type": "file",
+              "name": "collection-25--3666278562741621775.wt",
+              "size": 4096
+            },
+            {
+              "type": "file",
+              "name": "collection-26--3666278562741621775.wt",
+              "size": 4096
+            },
+            {
+              "type": "file",
+              "name": "collection-27--3666278562741621775.wt",
+              "size": 4096
+            },
+            {
+              "type": "file",
+              "name": "collection-28--3666278562741621775.wt",
+              "size": 4096
+            },
+            {
+              "type": "file",
+              "name": "collection-4--3666278562741621775.wt",
+              "size": 24576
+            },
+            {
+              "type": "file",
+              "name": "index-1--3666278562741621775.wt",
+              "size": 20480
+            },
+            {
+              "type": "file",
+              "name": "index-29--3666278562741621775.wt",
+              "size": 4096
+            },
+            {
+              "type": "file",
+              "name": "index-3--3666278562741621775.wt",
+              "size": 36864
+            },
+            {
+              "type": "file",
+              "name": "index-30--3666278562741621775.wt",
+              "size": 4096
+            },
+            {
+              "type": "file",
+              "name": "index-31--3666278562741621775.wt",
+              "size": 4096
+            },
+            {
+              "type": "file",
+              "name": "index-32--3666278562741621775.wt",
+              "size": 4096
+            },
+            {
+              "type": "file",
+              "name": "index-33--3666278562741621775.wt",
+              "size": 4096
+            },
+            {
+              "type": "file",
+              "name": "index-34--3666278562741621775.wt",
+              "size": 4096
+            },
+            {
+              "type": "file",
+              "name": "index-35--3666278562741621775.wt",
+              "size": 4096
+            },
+            {
+              "type": "file",
+              "name": "index-36--3666278562741621775.wt",
+              "size": 4096
+            },
+            {
+              "type": "file",
+              "name": "index-37--3666278562741621775.wt",
+              "size": 4096
+            },
+            {
+              "type": "file",
+              "name": "index-38--3666278562741621775.wt",
+              "size": 4096
+            },
+            {
+              "type": "file",
+              "name": "index-5--3666278562741621775.wt",
+              "size": 24576
+            },
+            {
+              "type": "file",
+              "name": "index-6--3666278562741621775.wt",
+              "size": 24576
+            },
+            {
+              "type": "file",
+              "name": "mongod.lock",
+              "size": 2
+            },
+            {
+              "type": "file",
+              "name": "sizeStorer.wt",
+              "size": 36864
+            },
+            {
+              "type": "file",
+              "name": "storage.bson",
+              "size": 114
+            },
+            {
+              "type": "file",
+              "name": "WiredTiger",
+              "size": 50
+            },
+            {
+              "type": "file",
+              "name": "WiredTiger.lock",
+              "size": 21
+            },
+            {
+              "type": "file",
+              "name": "WiredTiger.turtle",
+              "size": 1476
+            },
+            {
+              "type": "file",
+              "name": "WiredTiger.wt",
+              "size": 102400
+            },
+            {
+              "type": "file",
+              "name": "WiredTigerHS.wt",
+              "size": 4096
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "typings",
+      "children": [
+        {
+          "type": "dir",
+          "name": "kafka",
+          "children": [
+            {
+              "type": "file",
+              "name": "__init__.py",
+              "size": 15
+            }
+          ]
+        },
+        {
+          "type": "dir",
+          "name": "ros2",
+          "children": [
+            {
+              "type": "file",
+              "name": "__init__.py",
+              "size": 15
+            }
+          ]
+        },
+        {
+          "type": "file",
+          "name": "README.md",
+          "size": 89
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": ".env",
+      "size": 491
+    },
+    {
+      "type": "file",
+      "name": ".env.example",
+      "size": 99
+    },
+    {
+      "type": "file",
+      "name": ".gitignore",
+      "size": 934
+    },
+    {
+      "type": "file",
+      "name": ".pre-commit-config.yaml",
+      "size": 406
+    },
+    {
+      "type": "file",
+      "name": ".python-version",
+      "size": 5
+    },
+    {
+      "type": "file",
+      "name": ".ruffignore",
+      "size": 64
+    },
+    {
+      "type": "file",
+      "name": "constraints-macos.txt",
+      "size": 46
+    },
+    {
+      "type": "file",
+      "name": "demo.jsonl",
+      "size": 324
+    },
+    {
+      "type": "file",
+      "name": "docker-compose.mongo.yml",
+      "size": 506
+    },
+    {
+      "type": "file",
+      "name": "dump_tree.py",
+      "size": 2812
+    },
+    {
+      "type": "file",
+      "name": "enterprise-aura.code-workspace",
+      "size": 60
+    },
+    {
+      "type": "file",
+      "name": "Makefile",
+      "size": 548
+    },
+    {
+      "type": "file",
+      "name": "project_tree.txt",
+      "size": 11780
+    },
+    {
+      "type": "file",
+      "name": "pyproject.toml",
+      "size": 1766
+    },
+    {
+      "type": "file",
+      "name": "pyrightconfig.json",
+      "size": 299
+    },
+    {
+      "type": "file",
+      "name": "pytest.ini",
+      "size": 74
+    },
+    {
+      "type": "file",
+      "name": "README.md",
+      "size": 6930
+    },
+    {
+      "type": "file",
+      "name": "ruff.toml",
+      "size": 336
+    },
+    {
+      "type": "file",
+      "name": "ruff.toml.bak",
+      "size": 336
+    },
+    {
+      "type": "file",
+      "name": "setup.cfg",
+      "size": 177
+    },
+    {
+      "type": "file",
+      "name": "uv.lock",
+      "size": 374768
+    }
+  ]
+}

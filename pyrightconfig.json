@@ -1,0 +1,22 @@
+{
+  "venvPath": ".",
+  "venv": ".venv",
+  "pythonVersion": "3.11",
+  "typeCheckingMode": "basic",
+  "executionEnvironments": [
+    {
+      "root": ".",
+      "extraPaths": [
+        "aura_v2",
+        "tests"
+      ]
+    }
+  ],
+  "exclude": [
+    "**/__pycache__",
+    ".venv",
+    ".pytest_cache",
+    ".ruff_cache",
+    "tmp"
+  ]
+}

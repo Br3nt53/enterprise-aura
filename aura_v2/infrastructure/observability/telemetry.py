@@ -1,110 +1,61 @@
-import time
+# aura_v2/infrastructure/monitoring/telemetry.py
 from contextlib import contextmanager
+from logging import getLogger
+from typing import Any, Dict
+import time
 
 
-# Placeholder classes for missing definitions
-class TelemetryConfig:
-    pass
-
-
-class PrometheusMetrics:
-    pass
-
-
-class JaegerTracing:
-    pass
-
-
-class StructuredLogging:
-    pass
-
-
-# Placeholder classes for missing definitions
-class TelemetryConfig:
-    pass
-
-
-class PrometheusMetrics:
-    pass
-
-
-class JaegerTracing:
-    pass
-
-
-class StructuredLogging:
-    pass
-
-
-# Placeholder classes for missing definitions
-class TelemetryConfig:
-    pass
-
-
-class PrometheusMetrics:
-    pass
-
-
-class JaegerTracing:
-    pass
-
-
-class StructuredLogging:
-    pass
-
-
-# Placeholder classes for missing definitions
-class TelemetryConfig:
-    pass
-
-
-class PrometheusMetrics:
-    pass
-
-
-class JaegerTracing:
-    pass
-
-
-class StructuredLogging:
-    pass
-
-
-# Placeholder classes for missing definitions
-class TelemetryConfig:
-    pass
-
-
-class PrometheusMetrics:
-    pass
-
-
-class JaegerTracing:
-    pass
-
-
-class StructuredLogging:
-    pass
-
-
-# infrastructure/observability/telemetry.py
 class TelemetrySystem:
-    def __init__(self, config: TelemetryConfig):
-        self.metrics = PrometheusMetrics(config.metrics_port)
-        self.tracing = JaegerTracing(config.jaeger_endpoint)
-        self.logging = StructuredLogging(config.log_level)
+    """Complete observability for the tracking system"""
+
+    def __init__(self, config: Dict[str, Any]):
+        self.config = config
+        self.logger = getLogger(__name__)
+        self.metrics = {}
+    
+    def record_metric(self, name: str, value: float, tags: Dict[str, str] = None):
+        """Record a metric value"""
+        self.metrics[name] = {
+            "value": value,
+            "timestamp": time.time(),
+            "tags": tags or {},
+        }
 
     @contextmanager
     def track_operation(self, name: str):
-        with self.tracing.span(name) as span:
-            start = time.time()
-            try:
-                yield span
-                self.metrics.increment(f"{name}.success")
-            except Exception as e:
-                self.metrics.increment(f"{name}.failure")
-                span.set_error(e)
-                raise
-            finally:
-                duration = time.time() - start
-                self.metrics.histogram(f"{name}.duration", duration)
+        """Context manager to track operation timing"""
+        start_time = time.time()
+        try:
+            yield
+            duration = time.time() - start_time
+            self.record_metric(f"{name}.duration", duration)
+            self.record_metric(f"{name}.success", 1)
+        except Exception as e:
+            duration = time.time() - start_time
+            self.record_metric(f"{name}.duration", duration)
+            self.record_metric(f"{name}.failure", 1)
+            self.logger.error(f"Operation {name} failed: {e}")
+            raise
+
+    def get_metrics(self) -> Dict[str, Any]:
+        """Get all recorded metrics"""
+        return self.metrics.copy()
+
+
+# Placeholder classes for missing definitions
+class TelemetryConfig:
+    pass
+
+
+class PrometheusMetrics:
+    pass
+
+
+class JaegerTracing:
+    pass
+
+
+class StructuredLogging:
+    pass
+class OpenTelemetry:
+    pass    

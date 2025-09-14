@@ -1,0 +1,63 @@
+name: smoke-v3
+on:
+  push:
+    branches: [ main, "chore/**", "feat/**" ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:6.0
+        ports: ["27017:27017"]
+        options: >-
+          --health-cmd="mongosh --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      MONGO_URI: mongodb://localhost:27017
+      MONGO_DB: aura_ci
+      TTL_TRACKS_H: 1
+      TTL_DETECTIONS_H: 1
+      TTL_METRICS_H: 1
+      TTL_AUDIT_H: 1
+      AURA_USE_MONGO: "1"
+      AURA_USE_HUNGARIAN: "1"
+      AURA_USE_UFK: "1"
+      AURA_USE_WMS: "0"
+      AURA_USE_DSS: "1"
+      AURA_LATENCY_P99_BUDGET_MS: "750"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install system deps
+        run: sudo apt-get update && sudo apt-get install -y libatlas-base-dev
+
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[dev]
+          pip install motor pymongo httpx pydantic scipy numpy pytest pytest-asyncio
+
+      - name: Run unit tests (fast)
+        run: pytest -q -k "not e2e"
+
+      - name: Run fusion & persistence tests
+        run: pytest -q tests/fusion tests/persistence tests/dss tests/integrations
+
+      - name: Archive test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-logs
+          path: |
+            .pytest_cache
+            artifacts/**

@@ -1,0 +1,1096 @@
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/api/schemas.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/api/schemas.py:60:5 - warning: Type of "radar_detections" is partially unknown
+    Type of "radar_detections" is "list[Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/api/schemas.py:61:5 - warning: Type of "camera_detections" is partially unknown
+    Type of "camera_detections" is "list[Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/api/schemas.py:62:5 - warning: Type of "lidar_detections" is partially unknown
+    Type of "lidar_detections" is "list[Unknown]" (reportUnknownVariableType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/coordinators/advanced_intelligence_coordinator.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/coordinators/advanced_intelligence_coordinator.py:10:6 - error: Import "...infrastructure.persistence.in_memory" could not be resolved (reportMissingImports)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/coordinators/advanced_intelligence_coordinator.py:10:53 - warning: Type of "TrackHistoryRepository" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/coordinators/advanced_intelligence_coordinator.py:32:37 - error: Expression of type "None" cannot be assigned to parameter of type "CoordinatorConfig"
+    "None" is not assignable to "CoordinatorConfig" (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/coordinators/advanced_intelligence_coordinator.py:36:9 - warning: Type of "track_history" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/coordinators/advanced_intelligence_coordinator.py:50:13 - warning: Type of "track_history" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/coordinators/advanced_intelligence_coordinator.py:50:13 - warning: Type of "update" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/coordinators/advanced_intelligence_coordinator.py:52:13 - warning: Type of "track_history" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/coordinators/advanced_intelligence_coordinator.py:52:13 - warning: Type of "prune" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/coordinators/advanced_intelligence_coordinator.py:55:9 - warning: Type of "threat_assessment_tasks" is partially unknown
+    Type of "threat_assessment_tasks" is "list[Coroutine[Unknown, Unknown, Unknown]]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/coordinators/advanced_intelligence_coordinator.py:58:74 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "coros_or_futures" in function "gather"
+    Argument type is "Coroutine[Unknown, Unknown, Unknown]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/coordinators/advanced_intelligence_coordinator.py:112:13 - warning: Type of "append" is partially unknown
+    Type of "append" is "(object: Unknown, /) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/coordinators/advanced_intelligence_coordinator.py:121:23 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "iterable" in function "sorted"
+    Argument type is "list[Unknown]" (reportUnknownArgumentType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:10:40 - error: "ModernTracker" is unknown import symbol (reportAttributeAccessIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:10:40 - warning: Type of "ModernTracker" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:11:6 - error: Import "..events" could not be resolved (reportMissingImports)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:11:22 - warning: Type of "EventPublisher" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:24:9 - warning: Type of "tracker" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:26:9 - warning: Type of "event_publisher" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:57:75 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "obj" in function "len"
+    Argument type is "list[Unknown]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:64:9 - warning: Type of "latest_timestamp" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:64:32 - warning: Type of "timestamp" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:64:32 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "iterable" in function "max"
+    Argument type is "Generator[Unknown, None, None]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:64:48 - warning: Type of "d" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:70:9 - warning: Type of "command" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:70:19 - warning: Type of "_create_command" is partially unknown
+    Type of "_create_command" is "(detections: Unknown, latest_timestamp: datetime) -> Unknown" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:70:52 - warning: Argument type is unknown
+    Argument corresponds to parameter "latest_timestamp" in function "_create_command" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:71:9 - warning: Type of "updated_tracks" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:71:26 - warning: Type of "tracker" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:71:26 - warning: Type of "update" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:71:46 - warning: Type of "detections" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:77:9 - warning: Type of "_assess_threats" is partially unknown
+    Type of "_assess_threats" is "(tracks: Unknown) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:77:30 - warning: Argument type is unknown
+    Argument corresponds to parameter "tracks" in function "_assess_threats" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:81:33 - error: "DetectAndTrackCommand" is unknown import symbol (reportAttributeAccessIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:81:33 - warning: Type of "DetectAndTrackCommand" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:92:13 - warning: Type of "track" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:94:16 - warning: Type of "confidence" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:94:43 - warning: Type of "velocity" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:94:43 - warning: Type of "magnitude" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:95:68 - warning: Type of "id" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:96:18 - warning: Type of "confidence" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:96:45 - warning: Type of "velocity" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:96:45 - warning: Type of "magnitude" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/pipelines/real_time_tracking_pipeline.py:98:67 - warning: Type of "id" is unknown (reportUnknownMemberType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/services/collision_predictor.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/services/collision_predictor.py:24:21 - warning: Type of "append" is partially unknown
+    Type of "append" is "(object: Unknown, /) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/services/collision_predictor.py:26:16 - warning: Return type, "list[Unknown]", is partially unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/services/collision_predictor.py:57:20 - error: Type "None" is not assignable to return type "Collision"
+    "None" is not assignable to "Collision" (reportReturnType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/services/collision_predictor.py:64:20 - error: Type "None" is not assignable to return type "Collision"
+    "None" is not assignable to "Collision" (reportReturnType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/services/collision_predictor.py:76:29 - error: Argument of type "floating[Any]" cannot be assigned to parameter "probability" of type "float" in function "__init__"
+    "floating[Any]" is not assignable to "float" (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/services/collision_predictor.py:79:16 - error: Type "None" is not assignable to return type "Collision"
+    "None" is not assignable to "Collision" (reportReturnType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/use_cases/process_detections.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/use_cases/process_detections.py:59:20 - warning: Return type, "list[Unknown]", is partially unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/application/use_cases/process_detections.py:60:16 - warning: Return type, "list[Unknown]", is partially unknown (reportUnknownVariableType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/diagnostic_dashboard.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/diagnostic_dashboard.py:40:5 - warning: Type of "files_to_check" is partially unknown
+    Type of "files_to_check" is "list[Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/diagnostic_dashboard.py:46:9 - warning: Type of "filename" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/diagnostic_dashboard.py:46:19 - warning: Type of "default_content" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/diagnostic_dashboard.py:47:9 - warning: Type of "file_path" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/diagnostic_dashboard.py:48:12 - warning: Type of "exists" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/diagnostic_dashboard.py:49:43 - warning: Type of "stat" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/diagnostic_dashboard.py:49:43 - warning: Type of "st_size" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/diagnostic_dashboard.py:54:17 - warning: Type of "write_text" is unknown (reportUnknownMemberType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_costs.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_costs.py:28:44 - warning: Argument type is unknown
+    Argument corresponds to parameter "b1" in function "iou_cost" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_costs.py:28:53 - warning: Argument type is unknown
+    Argument corresponds to parameter "b2" in function "iou_cost" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_costs.py:29:52 - warning: Argument type is unknown
+    Argument corresponds to parameter "p1" in function "motion_cost" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_costs.py:29:61 - warning: Argument type is unknown
+    Argument corresponds to parameter "p2" in function "motion_cost" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_costs.py:30:60 - warning: Argument type is unknown
+    Argument corresponds to parameter "conf" in function "confidence_cost" (reportUnknownArgumentType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:4:6 - warning: Stub file not found for "scipy.optimize" (reportMissingTypeStubs)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:4:28 - warning: Type of "linear_sum_assignment" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:5:30 - warning: Type of "combined_cost" is partially unknown
+    Type of "combined_cost" is "(det_box: Unknown, trk_box: Unknown, det_conf: Unknown, weights: Dict[str, float]) -> float" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:10:16 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "obj" in function "len"
+    Argument type is "List[Dict[Unknown, Unknown]]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:10:33 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "obj" in function "len"
+    Argument type is "List[Dict[Unknown, Unknown]]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:12:12 - warning: Type of "d" is partially unknown
+    Type of "d" is "Dict[Unknown, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:12:27 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "iterable" in function "__new__"
+    Argument type is "List[Dict[Unknown, Unknown]]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:13:16 - warning: Type of "t" is partially unknown
+    Type of "t" is "Dict[Unknown, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:13:31 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "iterable" in function "__new__"
+    Argument type is "List[Dict[Unknown, Unknown]]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:14:34 - warning: Argument type is unknown
+    Argument corresponds to parameter "det_box" in function "combined_cost" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:14:45 - warning: Argument type is unknown
+    Argument corresponds to parameter "trk_box" in function "combined_cost" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:14:56 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:14:56 - warning: Argument type is unknown
+    Argument corresponds to parameter "det_conf" in function "combined_cost" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:19:5 - warning: Type of "row_ind" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:19:14 - warning: Type of "col_ind" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:21:5 - warning: Type of "assigned_trk" is partially unknown
+    Type of "assigned_trk" is "set[Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:22:9 - warning: Type of "r" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:22:12 - warning: Type of "c" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:22:21 - warning: Argument type is unknown
+    Argument corresponds to parameter "iter1" in function "__new__" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:22:30 - warning: Argument type is unknown
+    Argument corresponds to parameter "iter2" in function "__new__" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:24:13 - warning: Type of "append" is partially unknown
+    Type of "append" is "(object: Unknown, /) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:25:13 - warning: Type of "add" is partially unknown
+    Type of "add" is "(element: Unknown, /) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:25:30 - warning: Argument type is unknown
+    Argument corresponds to parameter "element" in function "add" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:27:13 - warning: Type of "append" is partially unknown
+    Type of "append" is "(object: Unknown, /) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:27:28 - warning: Argument type is unknown
+    Argument corresponds to parameter "object" in function "append" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:29:31 - warning: Type of "m" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:30:13 - warning: Type of "append" is partially unknown
+    Type of "append" is "(object: Unknown, /) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:33:13 - warning: Type of "append" is partially unknown
+    Type of "append" is "(object: Unknown, /) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:34:12 - warning: Return type, "tuple[list[Unknown], list[int], list[int]]", is partially unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:34:32 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "iterable" in function "__init__"
+    Argument type is "list[Unknown]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/association/hungarian_solver.py:34:54 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "iterable" in function "__init__"
+    Argument type is "list[Unknown]" (reportUnknownArgumentType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/dss/engine.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/dss/engine.py:7:1 - warning: Type of "OPS" is partially unknown
+    Type of "OPS" is "dict[str, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/dss/engine.py:12:13 - warning: Type of "policies" is partially unknown
+    Type of "policies" is "Any | dict[Unknown, Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/dss/engine.py:13:9 - warning: Type of "rules" is partially unknown
+    Type of "rules" is "Unknown | Any" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/dss/engine.py:13:22 - warning: Type of "policies" is partially unknown
+    Type of "policies" is "Any | dict[Unknown, Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/dss/engine.py:13:22 - warning: Type of "get" is partially unknown
+    Type of "get" is "Any | Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/dss/engine.py:17:13 - warning: Type of "r" is partially unknown
+    Type of "r" is "Unknown | Any" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/dss/engine.py:17:18 - warning: Type of "rules" is partially unknown
+    Type of "rules" is "Unknown | Any" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/dss/engine.py:18:13 - warning: Type of "conds" is partially unknown
+    Type of "conds" is "Unknown | Any" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/dss/engine.py:18:21 - warning: Type of "get" is partially unknown
+    Type of "get" is "Unknown | Any" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/dss/engine.py:18:21 - warning: Type of "get" is partially unknown
+    Type of "get" is "Unknown | Any" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/dss/engine.py:20:17 - warning: Type of "c" is partially unknown
+    Type of "c" is "Unknown | Any" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/dss/engine.py:21:17 - warning: Type of "metric" is partially unknown
+    Type of "metric" is "Unknown | Any" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/dss/engine.py:22:17 - warning: Type of "op" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/dss/engine.py:23:17 - warning: Type of "val" is partially unknown
+    Type of "val" is "Unknown | Any" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/dss/engine.py:24:35 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "key" in function "get"
+    Argument type is "Unknown | Any" (reportUnknownArgumentType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/entities/detection.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/entities/detection.py:18:5 - warning: Type of "attributes" is partially unknown
+    Type of "attributes" is "dict[Unknown, Unknown]" (reportUnknownVariableType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/entities/track.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/entities/track.py:47:31 - warning: Type of "position" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/entities/track.py:51:27 - warning: Type of "timestamp" is unknown (reportUnknownMemberType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/association.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/association.py:5:6 - warning: Stub file not found for "scipy.optimize" (reportMissingTypeStubs)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/association.py:5:28 - warning: Type of "linear_sum_assignment" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/association.py:41:21 - warning: Type of "to_array" is partially unknown
+    Type of "to_array" is "() -> ndarray[Unknown, Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/association.py:41:55 - warning: Type of "to_array" is partially unknown
+    Type of "to_array" is "() -> ndarray[Unknown, Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/association.py:47:9 - warning: Type of "track_indices" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/association.py:47:24 - warning: Type of "detection_indices" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/association.py:50:13 - warning: Type of "track_idx" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/association.py:50:24 - warning: Type of "det_idx" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/association.py:50:39 - warning: Argument type is unknown
+    Argument corresponds to parameter "iter1" in function "__new__" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/association.py:50:54 - warning: Argument type is unknown
+    Argument corresponds to parameter "iter2" in function "__new__" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/association.py:52:17 - warning: Type of "track" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/association.py:53:17 - warning: Type of "detection" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/association.py:56:17 - warning: Type of "append" is partially unknown
+    Type of "append" is "(object: Unknown, /) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/association.py:58:16 - warning: Return type, "list[Unknown]", is partially unknown (reportUnknownVariableType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:5:6 - warning: Stub file not found for "scipy.optimize" (reportMissingTypeStubs)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:5:28 - warning: Type of "linear_sum_assignment" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:12:5 - warning: Type of "ax" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:12:9 - warning: Type of "ay" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:13:5 - warning: Type of "bx" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:13:9 - warning: Type of "by" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:14:5 - warning: Type of "dx" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:14:9 - warning: Type of "dy" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:15:23 - warning: Argument type is unknown
+    Argument corresponds to parameter "coordinates" in function "hypot" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:15:27 - warning: Argument type is unknown
+    Argument corresponds to parameter "coordinates" in function "hypot" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:32:13 - warning: Type of "tp" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:32:18 - warning: Type of "state" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:32:18 - warning: Type of "position" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:32:21 - error: Cannot access attribute "state" for class "object"
+    Attribute "state" is unknown (reportAttributeAccessIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:34:17 - warning: Type of "dp" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:34:22 - warning: Type of "position" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:34:26 - error: Cannot access attribute "position" for class "object"
+    Attribute "position" is unknown (reportAttributeAccessIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:35:32 - warning: Argument type is unknown
+    Argument corresponds to parameter "a" in function "_euclidean" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:35:36 - warning: Argument type is unknown
+    Argument corresponds to parameter "b" in function "_euclidean" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:38:9 - warning: Type of "rows" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:38:15 - warning: Type of "cols" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:39:18 - warning: Type of "used_t" is partially unknown
+    Type of "used_t" is "set[Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:39:26 - warning: Type of "used_d" is partially unknown
+    Type of "used_d" is "set[Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:40:13 - warning: Type of "i" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:40:16 - warning: Type of "j" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:40:25 - warning: Argument type is unknown
+    Argument corresponds to parameter "iter1" in function "__new__" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:40:31 - warning: Argument type is unknown
+    Argument corresponds to parameter "iter2" in function "__new__" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:42:17 - warning: Type of "append" is partially unknown
+    Type of "append" is "(object: Unknown, /) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:43:17 - warning: Type of "add" is partially unknown
+    Type of "add" is "(element: Unknown, /) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:43:28 - warning: Argument type is unknown
+    Argument corresponds to parameter "element" in function "add" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:44:17 - warning: Type of "add" is partially unknown
+    Type of "add" is "(element: Unknown, /) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:44:28 - warning: Argument type is unknown
+    Argument corresponds to parameter "element" in function "add" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/hungarian_assoc.py:48:16 - warning: Return type, "tuple[list[Unknown], list[object], list[object]]", is partially unknown (reportUnknownVariableType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/sensor_characteristics.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/services/sensor_characteristics.py:8:5 - warning: Type of "params" is partially unknown
+    Type of "params" is "dict[Unknown, Unknown]" (reportUnknownVariableType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/value_objects/metrics.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/value_objects/metrics.py:18:24 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "a" in function "allclose"
+    Argument type is "ndarray[Unknown, Unknown]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/value_objects/metrics.py:18:27 - warning: Type of "T" is partially unknown
+    Type of "T" is "ndarray[Unknown, Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/value_objects/metrics.py:18:27 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "b" in function "allclose"
+    Argument type is "ndarray[Unknown, Unknown]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/value_objects/metrics.py:20:34 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "a" in function "eigvalsh"
+    Argument type is "ndarray[Unknown, Unknown]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/value_objects/metrics.py:21:12 - error: Type "bool_" is not assignable to return type "bool"
+    "bool_" is not assignable to "bool" (reportReturnType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/value_objects/metrics.py:28:9 - warning: Type of "cov_matrix" is partially unknown
+    Type of "cov_matrix" is "ndarray[Unknown, Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/value_objects/metrics.py:29:46 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "a" in function "pinv"
+    Argument type is "ndarray[Unknown, Unknown]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/value_objects/metrics.py:34:20 - error: Type "float64" is not assignable to return type "float"
+    "floating[_64Bit]" is not assignable to "float" (reportReturnType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/value_objects/metrics.py:34:32 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "u" in function "mahalanobis"
+    Argument type is "ndarray[Unknown, Unknown]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/value_objects/metrics.py:34:40 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "v" in function "mahalanobis"
+    Argument type is "ndarray[Unknown, Unknown]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/value_objects/metrics.py:41:16 - warning: Type of "distance" is partially unknown
+    Type of "distance" is "(point1: ndarray[Unknown, Unknown], point2: ndarray[Unknown, Unknown]) -> float" (reportUnknownMemberType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/value_objects/position.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/value_objects/position.py:17:37 - warning: Type of "to_array" is partially unknown
+    Type of "to_array" is "() -> ndarray[Unknown, Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/value_objects/position.py:17:55 - warning: Type of "to_array" is partially unknown
+    Type of "to_array" is "() -> ndarray[Unknown, Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/value_objects/position.py:32:37 - warning: Type of "to_array" is partially unknown
+    Type of "to_array" is "() -> ndarray[Unknown, Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/value_objects/position.py:32:55 - warning: Type of "to_array" is partially unknown
+    Type of "to_array" is "() -> ndarray[Unknown, Unknown]" (reportUnknownMemberType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/value_objects/position_2d.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/value_objects/position_2d.py:17:37 - warning: Type of "to_array" is partially unknown
+    Type of "to_array" is "() -> ndarray[Unknown, Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/domain/value_objects/position_2d.py:17:55 - warning: Type of "to_array" is partially unknown
+    Type of "to_array" is "() -> ndarray[Unknown, Unknown]" (reportUnknownMemberType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:14:6 - error: Import "evaluation.mot_evaluator" could not be resolved (reportMissingImports)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:14:54 - warning: Type of "LegacyEvaluator" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:15:6 - error: Import "evaluation.mot_evaluator" could not be resolved (reportMissingImports)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:15:52 - warning: Type of "LegacyParams" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:16:30 - error: "EvaluationService" is unknown import symbol (reportAttributeAccessIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:16:30 - warning: Type of "EvaluationService" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:24:9 - warning: Type of "legacy_evaluator" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:44:17 - warning: Type of "legacy_params" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:49:17 - warning: Type of "result" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:49:26 - warning: Type of "legacy_evaluator" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:49:26 - warning: Type of "evaluate" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:51:16 - warning: Return type is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:57:17 - warning: Type of "detection" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:57:30 - warning: Type of "history" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:57:36 - error: Cannot access attribute "history" for class "Track"
+    Attribute "history" is unknown (reportAttributeAccessIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:58:17 - warning: Type of "line" is partially unknown
+    Type of "line" is "dict[str, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:59:34 - warning: Type of "timestamp" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:59:34 - warning: Type of "timestamp" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:59:34 - warning: Argument type is unknown
+    Argument corresponds to parameter "x" in function "__new__" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:61:26 - warning: Type of "position" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:61:26 - warning: Type of "x" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:62:26 - warning: Type of "position" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:62:26 - warning: Type of "y" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:63:30 - warning: Type of "confidence" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:65:17 - warning: Type of "append" is partially unknown
+    Type of "append" is "(object: Unknown, /) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/legacy/bridge.py:66:26 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "iterable" in function "join"
+    Argument type is "list[Unknown]" (reportUnknownArgumentType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:23:20 - error: Import "rclpy" could not be resolved (reportMissingImports)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:24:18 - error: Import "rclpy.node" could not be resolved (reportMissingImports)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:24:36 - warning: Type of "Node" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:25:18 - error: Import "std_msgs.msg" could not be resolved (reportMissingImports)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:25:38 - warning: Type of "Float32MultiArray" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:29:21 - warning: Type of "__init__" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:31:21 - warning: Type of "subscription" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:31:41 - warning: Type of "create_subscription" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:32:51 - warning: Type of "_detection_callback" is partially unknown
+    Type of "_detection_callback" is "(msg: Unknown) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:36:21 - warning: Type of "t" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:36:25 - warning: Type of "get_clock" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:36:25 - warning: Type of "now" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:36:25 - warning: Type of "to_msg" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:37:51 - warning: Type of "sec" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:37:51 - warning: Argument type is unknown
+    Argument corresponds to parameter "timestamp" in function "fromtimestamp" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:37:59 - warning: Type of "nanosec" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:40:21 - warning: Type of "data" is partially unknown
+    Type of "data" is "Unknown | list[Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:40:28 - warning: Type of "data" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:42:33 - warning: Argument type is unknown
+    Argument corresponds to parameter "x" in function "__new__" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:42:49 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "obj" in function "len"
+    Argument type is "Unknown | list[Unknown]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:43:33 - warning: Argument type is unknown
+    Argument corresponds to parameter "x" in function "__new__" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:43:49 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "obj" in function "len"
+    Argument type is "Unknown | list[Unknown]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:44:33 - warning: Argument type is unknown
+    Argument corresponds to parameter "x" in function "__new__" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:44:49 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "obj" in function "len"
+    Argument type is "Unknown | list[Unknown]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:46:34 - warning: Argument type is unknown
+    Argument corresponds to parameter "x" in function "__new__" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:46:50 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "obj" in function "len"
+    Argument type is "Unknown | list[Unknown]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:50:36 - error: Argument of type "float" cannot be assigned to parameter "confidence" of type "Confidence" in function "__init__"
+    "float" is not assignable to "Confidence" (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:56:25 - warning: Type of "get_logger" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/adapters/ros2/detection_adapter.py:56:25 - warning: Type of "warning" is unknown (reportUnknownMemberType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/container.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/container.py:8:6 - error: Import "aura_v2.infrastructure.persistence.in_memory" could not be resolved (reportMissingImports)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/container.py:8:58 - warning: Type of "InMemoryTrackRepository" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/container.py:27:5 - warning: Type of "in_memory_repo" is partially unknown
+    Type of "in_memory_repo" is "Singleton[Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/container.py:27:42 - warning: Argument type is unknown
+    Argument corresponds to parameter "provides" in function "__init__" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/container.py:55:9 - error: Method "init_resources" overrides class "Container" in an incompatible manner
+    Positional parameter count mismatch; base method has 2, but override has 1
+    Parameter 2 mismatch: base parameter "resource_type" is keyword parameter, override parameter is position-only (reportIncompatibleMethodOverride)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/fusion/adapters/camera.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/fusion/adapters/camera.py:2:29 - error: Trailing comma not allowed without surrounding parentheses
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:1:29 - error: "ModelRegistry" is unknown import symbol (reportAttributeAccessIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:1:29 - warning: Type of "ModelRegistry" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:1:44 - error: "ModelVersion" is unknown import symbol (reportAttributeAccessIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:1:44 - warning: Type of "ModelVersion" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:1:58 - error: "ModelMetadata" is unknown import symbol (reportAttributeAccessIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:1:58 - warning: Type of "ModelMetadata" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:2:6 - error: Import ".experiment_tracking" could not be resolved (reportMissingImports)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:2:34 - warning: Type of "ExperimentTracker" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:2:53 - warning: Type of "Experiment" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:2:65 - warning: Type of "ExperimentRun" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:3:6 - error: Import ".feature_store" could not be resolved (reportMissingImports)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:3:28 - warning: Type of "FeatureStore" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:3:42 - warning: Type of "FeatureGroup" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:3:56 - warning: Type of "FeatureVector" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:4:6 - error: Import ".model_deployment" could not be resolved (reportMissingImports)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:4:31 - warning: Type of "ModelDeploymentManager" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:4:55 - warning: Type of "ModelEndpoint" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:4:70 - warning: Type of "DeploymentStrategy" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:5:6 - error: Import ".continuous_training" could not be resolved (reportMissingImports)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:5:34 - warning: Type of "ContinuousTrainingPipeline" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:5:62 - warning: Type of "TrainingJob" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:5:75 - warning: Type of "ModelValidator" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:6:6 - error: Import ".drift_detection" could not be resolved (reportMissingImports)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:6:30 - warning: Type of "DataDriftDetector" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:6:49 - warning: Type of "ModelDriftDetector" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/mlops/__init__.py:6:69 - warning: Type of "DriftAlert" is unknown (reportUnknownVariableType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/observability/telemetry.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/observability/telemetry.py:16:77 - error: Expression of type "None" cannot be assigned to parameter of type "Dict[str, str]"
+    "None" is not assignable to "Dict[str, str]" (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/observability/telemetry.py:18:9 - warning: Type of "metrics" is partially unknown
+    Type of "metrics" is "dict[Unknown, Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/observability/telemetry.py:42:16 - warning: Type of "metrics" is partially unknown
+    Type of "metrics" is "dict[Unknown, Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/observability/telemetry.py:42:16 - warning: Return type, "dict[Unknown, Unknown]", is partially unknown (reportUnknownVariableType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo.py:12:9 - warning: Type of "client" is partially unknown
+    Type of "client" is "AsyncIOMotorClient[Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo.py:19:15 - warning: Type of "_collection" is partially unknown
+    Type of "_collection" is "AsyncIOMotorCollection[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo.py:26:15 - warning: Type of "_collection" is partially unknown
+    Type of "_collection" is "AsyncIOMotorCollection[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo.py:30:9 - warning: Type of "doc" is partially unknown
+    Type of "doc" is "Unknown | None" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo.py:30:21 - warning: Type of "_collection" is partially unknown
+    Type of "_collection" is "AsyncIOMotorCollection[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo.py:31:32 - warning: Argument type is unknown
+    Argument corresponds to parameter "data" in function "from_dict" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo.py:35:9 - warning: Type of "docs" is partially unknown
+    Type of "docs" is "list[Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo.py:35:22 - warning: Type of "_collection" is partially unknown
+    Type of "_collection" is "AsyncIOMotorCollection[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo.py:36:33 - warning: Argument type is unknown
+    Argument corresponds to parameter "data" in function "from_dict" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo.py:36:40 - warning: Type of "d" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo.py:40:15 - warning: Type of "_collection" is partially unknown
+    Type of "_collection" is "AsyncIOMotorCollection[Unknown]" (reportUnknownMemberType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo_client.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo_client.py:16:19 - warning: Type of "_client" is partially unknown
+    Type of "_client" is "AsyncIOMotorClient[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo_client.py:17:16 - warning: Type of "_db" is partially unknown
+    Type of "_db" is "AsyncIOMotorDatabase[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo_client.py:17:16 - warning: Return type, "AsyncIOMotorDatabase[Unknown]", is partially unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo_client.py:21:12 - warning: Type of "_db" is partially unknown
+    Type of "_db" is "AsyncIOMotorDatabase[Unknown] | None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo_client.py:22:20 - warning: Type of "init" is partially unknown
+    Type of "init" is "() -> AsyncIOMotorDatabase[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo_client.py:22:20 - warning: Return type, "AsyncIOMotorDatabase[Unknown]", is partially unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo_client.py:23:16 - warning: Type of "_db" is partially unknown
+    Type of "_db" is "AsyncIOMotorDatabase[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo_client.py:23:16 - warning: Return type, "AsyncIOMotorDatabase[Unknown]", is partially unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo_client.py:27:9 - warning: Type of "db" is partially unknown
+    Type of "db" is "AsyncIOMotorDatabase[Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo_client.py:27:14 - warning: Type of "db" is partially unknown
+    Type of "db" is "() -> AsyncIOMotorDatabase[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo_client.py:36:12 - warning: Type of "_client" is partially unknown
+    Type of "_client" is "AsyncIOMotorClient[Unknown] | None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/mongo_client.py:37:13 - warning: Type of "_client" is partially unknown
+    Type of "_client" is "AsyncIOMotorClient[Unknown]" (reportUnknownMemberType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/reader.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/reader.py:8:5 - warning: Type of "cursor" is partially unknown
+    Type of "cursor" is "AgnosticBaseCursor[Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/reader.py:8:14 - warning: Type of "db" is partially unknown
+    Type of "db" is "() -> AsyncIOMotorDatabase[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/reader.py:13:5 - warning: Type of "cursor" is partially unknown
+    Type of "cursor" is "AsyncIOMotorCursor[Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/reader.py:13:14 - warning: Type of "db" is partially unknown
+    Type of "db" is "() -> AsyncIOMotorDatabase[Unknown]" (reportUnknownMemberType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/retention.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/retention.py:15:5 - warning: Type of "db" is partially unknown
+    Type of "db" is "AsyncIOMotorDatabase[Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/retention.py:15:10 - warning: Type of "db" is partially unknown
+    Type of "db" is "() -> AsyncIOMotorDatabase[Unknown]" (reportUnknownMemberType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/schemas.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/schemas.py:7:12 - warning: Return type is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/schemas.py:7:17 - error: Expected 0 positional arguments (reportCallIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/schemas.py:7:17 - warning: Type of "timezone" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/schemas.py:7:17 - warning: Type of "utc" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/schemas.py:7:26 - error: Cannot access attribute "timezone" for class "type[datetime]"
+    Attribute "timezone" is unknown (reportAttributeAccessIssue)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/writer.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/writer.py:9:15 - warning: Type of "db" is partially unknown
+    Type of "db" is "() -> AsyncIOMotorDatabase[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/writer.py:9:15 - warning: Type of "insert_one" is partially unknown
+    Type of "insert_one" is "(document: Unknown | RawBSONDocument, bypass_document_validation: bool = False, session: AgnosticClientSession | None = None, comment: Any | None = None) -> CoroutineType[Any, Any, InsertOneResult]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/writer.py:13:15 - warning: Type of "db" is partially unknown
+    Type of "db" is "() -> AsyncIOMotorDatabase[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/writer.py:13:15 - warning: Type of "insert_one" is partially unknown
+    Type of "insert_one" is "(document: Unknown | RawBSONDocument, bypass_document_validation: bool = False, session: AgnosticClientSession | None = None, comment: Any | None = None) -> CoroutineType[Any, Any, InsertOneResult]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/writer.py:17:15 - warning: Type of "db" is partially unknown
+    Type of "db" is "() -> AsyncIOMotorDatabase[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/writer.py:17:15 - warning: Type of "insert_one" is partially unknown
+    Type of "insert_one" is "(document: Unknown | RawBSONDocument, bypass_document_validation: bool = False, session: AgnosticClientSession | None = None, comment: Any | None = None) -> CoroutineType[Any, Any, InsertOneResult]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/writer.py:21:15 - warning: Type of "db" is partially unknown
+    Type of "db" is "() -> AsyncIOMotorDatabase[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/persistence/writer.py:21:15 - warning: Type of "insert_one" is partially unknown
+    Type of "insert_one" is "(document: Unknown | RawBSONDocument, bypass_document_validation: bool = False, session: AgnosticClientSession | None = None, comment: Any | None = None) -> CoroutineType[Any, Any, InsertOneResult]" (reportUnknownMemberType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/reporting/system_report.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/reporting/system_report.py:19:9 - warning: Type of "report" is partially unknown
+    Type of "report" is "dict[str, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/reporting/system_report.py:46:16 - warning: Return type, "dict[str, Unknown]", is partially unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/reporting/system_report.py:58:9 - warning: Type of "summary" is partially unknown
+    Type of "summary" is "dict[str, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/reporting/system_report.py:84:16 - warning: Return type, "dict[str, Unknown]", is partially unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/reporting/system_report.py:88:9 - warning: Type of "error_report" is partially unknown
+    Type of "error_report" is "dict[str, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/reporting/system_report.py:98:17 - warning: Type of "get" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/reporting/system_report.py:100:13 - warning: Type of "append" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/reporting/system_report.py:115:16 - warning: Return type, "dict[str, Unknown]", is partially unknown (reportUnknownVariableType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:34:17 - warning: Type of "raw_data" is partially unknown
+    Type of "raw_data" is "ndarray[Unknown, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:34:34 - warning: Type of "_read_radar_frame" is partially unknown
+    Type of "_read_radar_frame" is "() -> CoroutineType[Any, Any, ndarray[Unknown, Unknown]]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:37:17 - warning: Type of "range_doppler" is partially unknown
+    Type of "range_doppler" is "ndarray[Unknown, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:37:33 - warning: Type of "_process_range_doppler" is partially unknown
+    Type of "_process_range_doppler" is "(raw_data: ndarray[Unknown, Unknown]) -> ndarray[Unknown, Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:40:17 - warning: Type of "detections" is partially unknown
+    Type of "detections" is "List[Dict[Unknown, Unknown]]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:40:30 - warning: Type of "_cfar_detect" is partially unknown
+    Type of "_cfar_detect" is "(range_doppler: ndarray[Unknown, Unknown], pfa: float = 0.000001) -> List[Dict[Unknown, Unknown]]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:44:21 - warning: Type of "det" is partially unknown
+    Type of "det" is "Dict[Unknown, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:45:21 - warning: Type of "position" is partially unknown
+    Type of "position" is "ndarray[Unknown, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:45:32 - warning: Type of "_polar_to_cartesian" is partially unknown
+    Type of "_polar_to_cartesian" is "(range_m: float, azimuth_rad: float, elevation_rad: float) -> ndarray[Unknown, Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:46:25 - warning: Argument type is unknown
+    Argument corresponds to parameter "range_m" in function "_polar_to_cartesian" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:46:39 - warning: Argument type is unknown
+    Argument corresponds to parameter "azimuth_rad" in function "_polar_to_cartesian" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:46:55 - warning: Argument type is unknown
+    Argument corresponds to parameter "elevation_rad" in function "_polar_to_cartesian" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:52:48 - warning: Argument type is unknown
+    Argument corresponds to parameter "vx" in function "__init__" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:53:56 - warning: Argument type is unknown
+    Argument corresponds to parameter "arg2" in function "min" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:61:21 - warning: Type of "append" is partially unknown
+    Type of "append" is "(object: Unknown, /) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:76:16 - warning: Type of "complex128" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:76:16 - warning: Return type is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:76:26 - error: "complex128" is not a known attribute of module "numpy.random" (reportAttributeAccessIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:81:32 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "a" in function "fft"
+    Argument type is "ndarray[Unknown, Unknown]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:112:29 - warning: Type of "append" is partially unknown
+    Type of "append" is "(object: Unknown, /) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:115:39 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "a" in function "mean"
+    Argument type is "list[Unknown]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:120:21 - warning: Type of "append" is partially unknown
+    Type of "append" is "(object: Unknown, /) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:131:16 - warning: Return type, "list[Unknown]", is partially unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/sensors/radar_adapter.py:140:16 - warning: Return type, "ndarray[Any, dtype[Unknown]]", is partially unknown (reportUnknownVariableType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:10:6 - warning: Stub file not found for "filterpy.kalman" (reportMissingTypeStubs)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:14:6 - error: Import "...infrastructure.persistence.in_memory" could not be resolved (reportMissingImports)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:14:53 - warning: Type of "InMemoryTrackRepository" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:51:9 - warning: Type of "track_repository" is partially unknown
+    Type of "track_repository" is "Unknown | MongoTrackRepository" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:62:33 - warning: Type of "_to_dt" is partially unknown
+    Type of "_to_dt" is "(ts: Unknown) -> datetime" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:64:9 - warning: Type of "current_tracks" is partially unknown
+    Type of "current_tracks" is "List[Track] | Unknown" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:64:32 - warning: Type of "track_repository" is partially unknown
+    Type of "track_repository" is "Unknown | MongoTrackRepository" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:64:32 - warning: Type of "list" is partially unknown
+    Type of "list" is "Unknown | (() -> CoroutineType[Any, Any, List[Track]])" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:67:13 - warning: Type of "t" is partially unknown
+    Type of "t" is "Track | Unknown" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:68:32 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "track" in function "predict_track"
+    Argument type is "Track | Unknown" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:71:81 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "live_tracks" in function "_associate"
+    Argument type is "List[Track] | Unknown" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:76:19 - warning: Type of "track_repository" is partially unknown
+    Type of "track_repository" is "Unknown | MongoTrackRepository" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:76:19 - warning: Type of "save" is partially unknown
+    Type of "save" is "Unknown | ((track: Track) -> CoroutineType[Any, Any, None])" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:82:19 - warning: Type of "track_repository" is partially unknown
+    Type of "track_repository" is "Unknown | MongoTrackRepository" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:82:19 - warning: Type of "save" is partially unknown
+    Type of "save" is "Unknown | ((track: Track) -> CoroutineType[Any, Any, None])" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:89:19 - warning: Type of "track_repository" is partially unknown
+    Type of "track_repository" is "Unknown | MongoTrackRepository" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:89:19 - warning: Type of "save" is partially unknown
+    Type of "save" is "Unknown | ((track: Track) -> CoroutineType[Any, Any, None])" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:95:9 - warning: Type of "active_tracks" is partially unknown
+    Type of "active_tracks" is "list[Track | Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:95:32 - warning: Type of "t" is partially unknown
+    Type of "t" is "Track | Unknown" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:95:43 - warning: Type of "track_repository" is partially unknown
+    Type of "track_repository" is "Unknown | MongoTrackRepository" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:95:43 - warning: Type of "list" is partially unknown
+    Type of "list" is "Unknown | (() -> CoroutineType[Any, Any, List[Track]])" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:95:75 - warning: Type of "status" is partially unknown
+    Type of "status" is "TrackStatus | Unknown" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:98:27 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "active_tracks" in function "__init__"
+    Argument type is "list[Track | Unknown]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:118:9 - warning: Type of "predict" is partially unknown
+    Type of "predict" is "(u: Unknown | None = None, B: Unknown | None = None, F: Unknown | None = None, Q: Unknown | None = None) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:145:9 - warning: Type of "update" is partially unknown
+    Type of "update" is "(z: Unknown, R: Unknown | None = None, H: Unknown | None = None) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:163:13 - warning: Type of "update" is partially unknown
+    Type of "update" is "(detection: Unknown, score: float) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:164:28 - error: Cannot assign to attribute "updated_at" for class "Track"
+    Type "datetime | None" is not assignable to type "datetime"
+      "None" is not assignable to "datetime" (reportAttributeAccessIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:165:9 - error: Argument of type "datetime | None" cannot be assigned to parameter "value" of type "datetime" in function "__setitem__"
+    Type "datetime | None" is not assignable to type "datetime"
+      "None" is not assignable to "datetime" (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:250:9 - warning: Type of "current_tracks" is partially unknown
+    Type of "current_tracks" is "List[Track] | Unknown" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:250:32 - warning: Type of "track_repository" is partially unknown
+    Type of "track_repository" is "Unknown | MongoTrackRepository" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:250:32 - warning: Type of "list" is partially unknown
+    Type of "list" is "Unknown | (() -> CoroutineType[Any, Any, List[Track]])" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:251:13 - warning: Type of "t" is partially unknown
+    Type of "t" is "Track | Unknown" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:253:43 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "o" in function "getattr"
+    Argument type is "Track | Unknown" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:255:21 - warning: Type of "age" is partially unknown
+    Type of "age" is "Any | Unknown" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:255:27 - warning: Type of "total_seconds" is partially unknown
+    Type of "total_seconds" is "Any | Unknown" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:255:33 - warning: Type of "updated_at" is partially unknown
+    Type of "updated_at" is "datetime | Unknown" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:256:21 - warning: Type of "too_old" is partially unknown
+    Type of "too_old" is "Any | Unknown" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:259:16 - warning: Type of "missed" is partially unknown
+    Type of "missed" is "int | Unknown" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:261:32 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "object" in function "append"
+    Argument type is "Track | Unknown" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:262:23 - warning: Type of "track_repository" is partially unknown
+    Type of "track_repository" is "Unknown | MongoTrackRepository" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:262:23 - warning: Type of "delete" is partially unknown
+    Type of "delete" is "Unknown | ((track_id: str) -> CoroutineType[Any, Any, None])" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:262:52 - warning: Type of "id" is partially unknown
+    Type of "id" is "str | Unknown" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:262:52 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "track_id" in function "delete"
+    Argument type is "str | Unknown" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:263:41 - warning: Type of "id" is partially unknown
+    Type of "id" is "str | Unknown" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/infrastructure/tracking/modern_tracker.py:263:41 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "key" in function "pop"
+    Argument type is "str | Unknown" (reportUnknownArgumentType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:53:24 - error: Argument missing for parameter "track_repository" (reportCallIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:110:16 - error: Type "(app: FastAPI) -> _AsyncGeneratorContextManager[None, None]" is not assignable to return type "(FastAPI) -> AsyncIterator[None]"
+    Type "(app: FastAPI) -> _AsyncGeneratorContextManager[None, None]" is not assignable to type "(FastAPI) -> AsyncIterator[None]"
+      Function return type "_AsyncGeneratorContextManager[None, None]" is incompatible with type "AsyncIterator[None]"
+        "_AsyncGeneratorContextManager[None, None]" is incompatible with protocol "AsyncIterator[None]"
+          "__anext__" is not present
+          "__aiter__" is not present (reportReturnType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:113:74 - error: Argument of type "(FastAPI) -> AsyncIterator[None]" cannot be assigned to parameter "lifespan" of type "StatelessLifespan[FastAPI] | StatefulLifespan[FastAPI] | None" in function "__init__"
+    Type "(FastAPI) -> AsyncIterator[None]" is not assignable to type "StatelessLifespan[FastAPI] | StatefulLifespan[FastAPI] | None"
+      Type "(FastAPI) -> AsyncIterator[None]" is not assignable to type "StatelessLifespan[FastAPI]"
+        Function return type "AsyncIterator[None]" is incompatible with type "AbstractAsyncContextManager[None, bool | None]"
+          "AsyncIterator[None]" is incompatible with protocol "AbstractAsyncContextManager[None, bool | None]"
+            "__aenter__" is not present
+            "__aexit__" is not present
+      Type "(FastAPI) -> AsyncIterator[None]" is not assignable to type "StatefulLifespan[FastAPI]"
+        Function return type "AsyncIterator[None]" is incompatible with type "AbstractAsyncContextManager[Mapping[str, Any], bool | None]"
+    ... (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:173:36 - error: Argument of type "APIRouter" cannot be assigned to parameter "router" of type "APIRouter" in function "include_router"
+    "aura_v2.web_dashboard.api.APIRouter" is not assignable to "fastapi.routing.APIRouter" (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:194:21 - error: Arguments missing for parameters "dev_ok", "default_tz" (reportCallIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:208:25 - error: Arguments missing for parameters "dev_ok", "default_tz" (reportCallIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:357:9 - warning: Type of "scenario" is partially unknown
+    Type of "scenario" is "dict[str, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:374:19 - error: Argument missing for parameter "track_repository" (reportCallIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:378:17 - warning: Type of "p" is partially unknown
+    Type of "p" is "Any | dict[Unknown, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:380:29 - warning: Type of "get" is partially unknown
+    Type of "get" is "Any | Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:380:29 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "x" in function "__new__"
+    Argument type is "Unknown | Any" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:381:29 - warning: Type of "get" is partially unknown
+    Type of "get" is "Any | Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:381:29 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "x" in function "__new__"
+    Argument type is "Unknown | Any" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:382:29 - warning: Type of "get" is partially unknown
+    Type of "get" is "Any | Overload[(key: Unknown, default: None = None, /) -> (Unknown | None), (key: Unknown, default: Unknown, /) -> Unknown, (key: Unknown, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:382:29 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "x" in function "__new__"
+    Argument type is "Unknown | Any" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:397:9 - warning: Type of "frames" is partially unknown
+    Type of "frames" is "Unknown | list[Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:397:18 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: str, default: None = None, /) -> (Unknown | None), (key: str, default: Unknown, /) -> Unknown, (key: str, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:399:13 - warning: Type of "frame" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:400:13 - warning: Type of "detections" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:400:26 - warning: Type of "get" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:401:27 - warning: Argument type is unknown
+    Argument corresponds to parameter "dets" in function "process" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:403:9 - warning: Type of "metrics" is partially unknown
+    Type of "metrics" is "dict[str, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:405:25 - warning: Type of "get" is partially unknown
+    Type of "get" is "Overload[(key: str, default: None = None, /) -> (Unknown | None), (key: str, default: Unknown, /) -> Unknown, (key: str, default: _T@get, /) -> (Unknown | _T@get)]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:436:9 - warning: Type of "req" is partially unknown
+    Type of "req" is "dict[str, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/main.py:442:34 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "json" in function "post"
+    Argument type is "dict[str, Unknown]" (reportUnknownArgumentType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/sources/demo.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/sources/demo.py:9:15 - error: Method "frames" overrides class "DetectionSource" in an incompatible manner
+    Return type mismatch: base method returns type "CoroutineType[Any, Any, AsyncIterator[Dict[str, Any]]]", override returns type "AsyncGenerator[Dict[str, Any], Any]"
+      "AsyncGenerator[Dict[str, Any], Any]" is not assignable to "CoroutineType[Any, Any, AsyncIterator[Dict[str, Any]]]" (reportIncompatibleMethodOverride)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/sources/demo.py:14:13 - warning: Type of "dets" is partially unknown
+    Type of "dets" is "list[dict[str, Unknown]]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/sources/demo.py:16:32 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "camera" in function "batch"
+    Argument type is "list[dict[str, Unknown]]" (reportUnknownArgumentType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/sources/jsonl.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/sources/jsonl.py:12:15 - error: Method "frames" overrides class "DetectionSource" in an incompatible manner
+    Return type mismatch: base method returns type "CoroutineType[Any, Any, AsyncIterator[Dict[str, Any]]]", override returns type "AsyncGenerator[Dict[str, Any], Any]"
+      "AsyncGenerator[Dict[str, Any], Any]" is not assignable to "CoroutineType[Any, Any, AsyncIterator[Dict[str, Any]]]" (reportIncompatibleMethodOverride)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/sources/kafka.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/sources/kafka.py:3:6 - warning: Stub file not found for "aiokafka" (reportMissingTypeStubs)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/sources/kafka.py:10:15 - error: Method "frames" overrides class "DetectionSource" in an incompatible manner
+    Return type mismatch: base method returns type "CoroutineType[Any, Any, AsyncIterator[Dict[str, Any]]]", override returns type "AsyncGenerator[Dict[str, Any], Any]"
+      "AsyncGenerator[Dict[str, Any], Any]" is not assignable to "CoroutineType[Any, Any, AsyncIterator[Dict[str, Any]]]" (reportIncompatibleMethodOverride)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/sources/kafka.py:11:145 - warning: Type of "decode" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/sources/kafka.py:11:145 - warning: Argument type is unknown
+    Argument corresponds to parameter "s" in function "loads" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/sources/kafka.py:15:23 - warning: Type of "msg" is partially unknown
+    Type of "msg" is "ConsumerRecord[Unknown, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/sources/kafka.py:16:17 - warning: Type of "append" is partially unknown
+    Type of "append" is "(object: Unknown, /) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/sources/kafka.py:16:31 - warning: Type of "value" is partially unknown
+    Type of "value" is "Unknown | None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/sources/kafka.py:17:24 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "obj" in function "len"
+    Argument type is "list[Unknown]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/sources/kafka.py:18:40 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "camera" in function "batch"
+    Argument type is "list[Unknown]" (reportUnknownArgumentType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/test_dashboard_setup.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/test_dashboard_setup.py:92:9 - warning: Type of "routes" is partially unknown
+    Type of "routes" is "list[Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/test_dashboard_setup.py:92:19 - warning: Type of "path" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/test_dashboard_setup.py:92:25 - error: Cannot access attribute "path" for class "BaseRoute"
+    Attribute "path" is unknown (reportAttributeAccessIssue)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:15:13 - error: Type "None" is not assignable to declared type "type[APIRouter]"
+    Type "None" is not assignable to type "type[APIRouter]" (reportAssignmentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:16:17 - error: Type "None" is not assignable to declared type "type[HTTPException]"
+    Type "None" is not assignable to type "type[HTTPException]" (reportAssignmentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:19:25 - error: Type "type[fastapi.routing.APIRouter]" is not assignable to declared type "type[aura_v2.web_dashboard.api.APIRouter]"
+    "fastapi.routing.APIRouter" is not assignable to "aura_v2.web_dashboard.api.APIRouter"
+    Type "type[fastapi.routing.APIRouter]" is not assignable to type "type[aura_v2.web_dashboard.api.APIRouter]" (reportAssignmentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:19:36 - error: Type "type[fastapi.exceptions.HTTPException]" is not assignable to declared type "type[aura_v2.web_dashboard.api.HTTPException]"
+    "fastapi.exceptions.HTTPException" is not assignable to "aura_v2.web_dashboard.api.HTTPException"
+    Type "type[fastapi.exceptions.HTTPException]" is not assignable to type "type[aura_v2.web_dashboard.api.HTTPException]" (reportAssignmentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:20:26 - error: Type "type[pydantic.main.BaseModel]" is not assignable to declared type "type[aura_v2.web_dashboard.api.BaseModel]"
+    "pydantic.main.BaseModel" is not assignable to "aura_v2.web_dashboard.api.BaseModel"
+    Type "type[pydantic.main.BaseModel]" is not assignable to type "type[aura_v2.web_dashboard.api.BaseModel]" (reportAssignmentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:34:24 - warning: Return type is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:35:20 - warning: Return type, "(func: Unknown) -> Unknown", is partially unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:39:24 - warning: Return type is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:40:20 - warning: Return type, "(func: Unknown) -> Unknown", is partially unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:46:30 - warning: Argument type is unknown
+    Argument corresponds to parameter "args" in function "__init__" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:75:6 - warning: Type of "post" is partially unknown
+    Type of "post" is "(...) -> ((func: Unknown) -> Unknown)" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:110:17 - error: No parameter named "success" (reportCallIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:111:17 - error: No parameter named "output" (reportCallIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:112:17 - error: No parameter named "error" (reportCallIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:113:17 - error: No parameter named "exit_code" (reportCallIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:114:17 - error: No parameter named "duration_ms" (reportCallIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:120:17 - error: No parameter named "success" (reportCallIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:121:17 - error: No parameter named "output" (reportCallIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:122:17 - error: No parameter named "error" (reportCallIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:123:17 - error: No parameter named "exit_code" (reportCallIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:124:17 - error: No parameter named "duration_ms" (reportCallIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:127:6 - warning: Type of "get" is partially unknown
+    Type of "get" is "(...) -> ((func: Unknown) -> Unknown)" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:153:13 - error: No parameter named "python" (reportCallIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:154:13 - error: No parameter named "pytest" (reportCallIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:155:13 - error: No parameter named "dependencies" (reportCallIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:156:13 - error: No parameter named "server" (reportCallIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:157:13 - error: No parameter named "aura_imports" (reportCallIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:162:6 - warning: Type of "get" is partially unknown
+    Type of "get" is "(...) -> ((func: Unknown) -> Unknown)" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:196:20 - warning: Return type, "dict[Unknown, Unknown]", is partially unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:204:6 - warning: Type of "post" is partially unknown
+    Type of "post" is "(...) -> ((func: Unknown) -> Unknown)" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/aura_v2/web_dashboard/api.py:217:34 - error: No parameter named "command" (reportCallIssue)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/ops/deployment/rollback.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/ops/deployment/rollback.py:17:13 - warning: Type of "degradation" is unknown (reportUnknownVariableType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/dss/test_integration_wms_dispatch.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/dss/test_integration_wms_dispatch.py:9:5 - warning: Type of "pol" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/dss/test_integration_wms_dispatch.py:10:5 - warning: Type of "write_text" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/dss/test_integration_wms_dispatch.py:16:25 - warning: Argument type is unknown
+    Argument corresponds to parameter "object" in function "__new__" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/dss/test_integration_wms_dispatch.py:23:38 - error: Argument of type "Unknown | None" cannot be assigned to parameter "s" of type "str | bytes | bytearray" in function "loads"
+    Type "Unknown | None" is not assignable to type "str | bytes | bytearray"
+      Type "None" is not assignable to type "str | bytes | bytearray"
+        "None" is not assignable to "str"
+        "None" is not assignable to "bytes"
+        "None" is not assignable to "bytearray" (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/dss/test_integration_wms_dispatch.py:28:5 - warning: Type of "setattr" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/dss/test_integration_wms_dispatch.py:32:12 - warning: Type of "endswith" is unknown (reportUnknownMemberType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/dss/test_policy_eval.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/dss/test_policy_eval.py:5:5 - warning: Type of "pol" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/dss/test_policy_eval.py:6:5 - warning: Type of "write_text" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/dss/test_policy_eval.py:12:25 - warning: Argument type is unknown
+    Argument corresponds to parameter "object" in function "__new__" (reportUnknownArgumentType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:3:42 - error: "Position" is unknown import symbol (reportAttributeAccessIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:3:42 - warning: Type of "Position" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:4:6 - error: Import "aura_v2.tests.architecture.test_dependencies" could not be resolved (reportMissingImports)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:4:58 - warning: Type of "has_import_from" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:5:6 - error: Import "aura_v2.infrastructure.builder" could not be resolved (reportMissingImports)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:5:44 - warning: Type of "TrackingSystemBuilder" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:6:6 - error: Import "aura_v2.domain.factories" could not be resolved (reportMissingImports)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:6:38 - warning: Type of "DomainFactory" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:12:12 - warning: Return type is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:13:9 - warning: Type of "with_in_memory_storage" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:13:9 - warning: Type of "with_mock_sensors" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:13:9 - warning: Type of "with_test_config" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:13:9 - warning: Type of "build" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:23:12 - warning: Type of "with_deterministic_ids" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:23:12 - warning: Type of "with_fixed_timestamps" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:23:12 - warning: Type of "build" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:23:12 - warning: Return type is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:30:9 - warning: Type of "scenario" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:30:20 - warning: Type of "crossing_targets_scenario" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:35:9 - warning: Type of "result" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:35:24 - warning: Type of "execute" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:38:16 - warning: Type of "metrics" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:38:16 - warning: Type of "mota" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:39:16 - warning: Type of "metrics" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:39:16 - warning: Type of "id_switches" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:40:16 - warning: Type of "metrics" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fixtures.py:40:16 - warning: Type of "fragments" is unknown (reportUnknownMemberType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fusion/test_adapters_normalize.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fusion/test_adapters_normalize.py:5:5 - warning: Type of "d" is partially unknown
+    Type of "d" is "dict[str, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fusion/test_adapters_normalize.py:6:18 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "det" in function "normalize"
+    Argument type is "dict[str, Unknown]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fusion/test_adapters_normalize.py:11:5 - warning: Type of "p" is partially unknown
+    Type of "p" is "dict[str, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fusion/test_adapters_normalize.py:12:18 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "ping" in function "normalize"
+    Argument type is "dict[str, Unknown]" (reportUnknownArgumentType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fusion/test_end_to_end_fuse.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fusion/test_end_to_end_fuse.py:5:5 - warning: Type of "cfg" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fusion/test_end_to_end_fuse.py:6:5 - warning: Type of "write_text" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fusion/test_end_to_end_fuse.py:7:19 - warning: Argument type is unknown
+    Argument corresponds to parameter "object" in function "__new__" (reportUnknownArgumentType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py:17:6 - error: Import "aura_v2.infrastructure.persistence.in_memory" could not be resolved (reportMissingImports)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py:17:58 - warning: Type of "TrackHistoryRepository" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py:33:20 - warning: Return type, "list[Unknown]", is partially unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py:47:25 - error: Argument of type "MockThreatAnalyzer" cannot be assigned to parameter "threat_analyzer" of type "ThreatAnalyzer" in function "__init__"
+    "MockThreatAnalyzer" is not assignable to "ThreatAnalyzer" (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py:48:29 - error: Argument of type "MockCollisionPredictor" cannot be assigned to parameter "collision_predictor" of type "CollisionPredictor" in function "__init__"
+    "MockCollisionPredictor" is not assignable to "CollisionPredictor" (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py:49:23 - warning: Argument type is unknown
+    Argument corresponds to parameter "track_history" in function "__init__" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py:87:5 - warning: Type of "alerts" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py:87:20 - warning: Type of "process_tracks" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py:90:16 - warning: Argument type is unknown
+    Argument corresponds to parameter "obj" in function "len" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py:91:12 - warning: Type of "urgency" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py:91:32 - warning: Type of "urgency" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py:94:5 - warning: Type of "high_alert" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py:95:12 - warning: Type of "threat" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py:95:12 - warning: Type of "track" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py:95:12 - warning: Type of "id" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py:96:12 - warning: Type of "threat" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py:96:12 - warning: Type of "threat_level" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py:97:12 - warning: Type of "collision" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py:98:12 - warning: Type of "collision" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_advanced_intelligence_coordinator.py:98:12 - warning: Type of "time_to_collision" is unknown (reportUnknownMemberType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_multi_sensor_tracking.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_multi_sensor_tracking.py:20:5 - warning: Type of "pipeline" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_multi_sensor_tracking.py:20:16 - warning: Type of "tracking_pipeline" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_multi_sensor_tracking.py:25:5 - warning: Type of "sensor_data_t1" is partially unknown
+    Type of "sensor_data_t1" is "list[dict[str, Unknown]]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_multi_sensor_tracking.py:29:5 - warning: Type of "sensor_data_t2" is partially unknown
+    Type of "sensor_data_t2" is "list[dict[str, Unknown]]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_multi_sensor_tracking.py:35:5 - warning: Type of "tracks_t1" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_multi_sensor_tracking.py:35:23 - warning: Type of "process" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_multi_sensor_tracking.py:36:5 - warning: Type of "tracks_t2" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_multi_sensor_tracking.py:36:23 - warning: Type of "process" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_multi_sensor_tracking.py:40:16 - warning: Argument type is unknown
+    Argument corresponds to parameter "obj" in function "len" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_multi_sensor_tracking.py:41:16 - warning: Argument type is unknown
+    Argument corresponds to parameter "obj" in function "len" (reportUnknownArgumentType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_persistence.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_persistence.py:29:11 - warning: Type of "_collection" is partially unknown
+    Type of "_collection" is "AsyncIOMotorCollection[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_persistence.py:29:11 - warning: Type of "database" is partially unknown
+    Type of "database" is "AsyncIOMotorCollection[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_persistence.py:29:11 - warning: Type of "client" is partially unknown
+    Type of "client" is "AsyncIOMotorCollection[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_persistence.py:29:11 - warning: Type of "drop_database" is partially unknown
+    Type of "drop_database" is "AsyncIOMotorCollection[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_persistence.py:88:11 - warning: Type of "_collection" is partially unknown
+    Type of "_collection" is "AsyncIOMotorCollection[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_persistence.py:88:11 - warning: Type of "database" is partially unknown
+    Type of "database" is "AsyncIOMotorCollection[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_persistence.py:88:11 - warning: Type of "client" is partially unknown
+    Type of "client" is "AsyncIOMotorCollection[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_persistence.py:88:11 - warning: Type of "close" is partially unknown
+    Type of "close" is "AsyncIOMotorCollection[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_persistence.py:112:9 - warning: Type of "append" is partially unknown
+    Type of "append" is "(object: Unknown, /) -> None" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_persistence.py:114:31 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "iterable" in function "sum"
+    Argument type is "list[Unknown]" (reportUnknownArgumentType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_pipeline_e2e.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_pipeline_e2e.py:17:5 - warning: Type of "pipeline" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_pipeline_e2e.py:17:16 - warning: Type of "tracking_pipeline" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_pipeline_e2e.py:18:5 - warning: Type of "sensor_data" is partially unknown
+    Type of "sensor_data" is "list[dict[str, Unknown]]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_pipeline_e2e.py:25:5 - warning: Type of "tracks" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_pipeline_e2e.py:25:20 - warning: Type of "process" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_pipeline_e2e.py:28:16 - warning: Argument type is unknown
+    Argument corresponds to parameter "obj" in function "len" (reportUnknownArgumentType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_track_ttl.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_track_ttl.py:7:5 - warning: Type of "body" is partially unknown
+    Type of "body" is "dict[str, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_track_ttl.py:20:12 - warning: Type of "post" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_track_ttl.py:20:12 - warning: Return type is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_track_ttl.py:24:5 - warning: Type of "body" is partially unknown
+    Type of "body" is "dict[str, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_track_ttl.py:30:12 - warning: Type of "post" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_track_ttl.py:30:12 - warning: Return type is unknown (reportUnknownVariableType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_wms_payloads.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_wms_payloads.py:9:5 - warning: Type of "t" is partially unknown
+    Type of "t" is "dict[str, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_wms_payloads.py:10:29 - warning: Argument type is partially unknown
+    Argument corresponds to parameter "track" in function "fused_track_payload"
+    Argument type is "dict[str, Unknown]" (reportUnknownArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_wms_payloads.py:18:38 - error: Argument of type "Unknown | None" cannot be assigned to parameter "s" of type "str | bytes | bytearray" in function "loads"
+    Type "Unknown | None" is not assignable to type "str | bytes | bytearray"
+      Type "None" is not assignable to type "str | bytes | bytearray"
+        "None" is not assignable to "str"
+        "None" is not assignable to "bytes"
+        "None" is not assignable to "bytearray" (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_wms_payloads.py:24:5 - warning: Type of "setattr" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_wms_payloads.py:28:12 - warning: Type of "endswith" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/integration/test_wms_payloads.py:29:12 - warning: Type of "startswith" is unknown (reportUnknownMemberType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/persistence/test_retention_ttl.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/persistence/test_retention_ttl.py:25:5 - warning: Type of "init" is partially unknown
+    Type of "init" is "() -> AsyncIOMotorDatabase[Unknown]" (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/persistence/test_retention_ttl.py:33:5 - warning: Type of "db" is partially unknown
+    Type of "db" is "AsyncIOMotorDatabase[Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/persistence/test_retention_ttl.py:33:10 - warning: Type of "db" is partially unknown
+    Type of "db" is "() -> AsyncIOMotorDatabase[Unknown]" (reportUnknownMemberType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/persistence/test_roundtrip_tracks.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/persistence/test_roundtrip_tracks.py:15:5 - warning: Type of "init" is partially unknown
+    Type of "init" is "() -> AsyncIOMotorDatabase[Unknown]" (reportUnknownMemberType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/test_api_time.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/test_api_time.py:7:5 - warning: Type of "body" is partially unknown
+    Type of "body" is "dict[str, Unknown]" (reportUnknownVariableType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/test_utils_time.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/test_utils_time.py:7:12 - warning: Type of "key" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/test_utils_time.py:7:30 - error: Cannot access attribute "key" for class "_TzInfo"
+    Attribute "key" is unknown (reportAttributeAccessIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/test_utils_time.py:7:30 - error: "key" is not a known attribute of "None" (reportOptionalMemberAccess)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_assoc.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_assoc.py:16:12 - warning: Return type, "set[tuple[Unknown, Unknown]]", is partially unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_assoc.py:16:14 - warning: Type of "id" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_assoc.py:16:20 - warning: Type of "id" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_assoc.py:16:30 - warning: Type of "t" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_assoc.py:16:33 - warning: Type of "d" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_assoc.py:22:37 - error: Argument of type "list[_T]" cannot be assigned to parameter "tracks" of type "List[object]" in function "associate"
+    "list[_T]" is not assignable to "List[object]"
+      Type parameter "_T@list" is invariant, but "_T" is not the same as "object"
+      Consider switching from "list" to "Sequence" which is covariant (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_assoc.py:22:45 - error: Argument of type "list[_D]" cannot be assigned to parameter "detections" of type "List[object]" in function "associate"
+    "list[_D]" is not assignable to "List[object]"
+      Type parameter "_T@list" is invariant, but "_D" is not the same as "object"
+      Consider switching from "list" to "Sequence" which is covariant (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_assoc.py:30:37 - error: Argument of type "list[_T]" cannot be assigned to parameter "tracks" of type "List[object]" in function "associate"
+    "list[_T]" is not assignable to "List[object]"
+      Type parameter "_T@list" is invariant, but "_T" is not the same as "object"
+      Consider switching from "list" to "Sequence" which is covariant (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_assoc.py:30:45 - error: Argument of type "list[_D]" cannot be assigned to parameter "detections" of type "List[object]" in function "associate"
+    "list[_D]" is not assignable to "List[object]"
+      Type parameter "_T@list" is invariant, but "_D" is not the same as "object"
+      Consider switching from "list" to "Sequence" which is covariant (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_assoc.py:32:13 - warning: Type of "id" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_assoc.py:32:15 - error: Cannot access attribute "id" for class "object"
+    Attribute "id" is unknown (reportAttributeAccessIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_assoc.py:33:13 - warning: Type of "id" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_assoc.py:33:15 - error: Cannot access attribute "id" for class "object"
+    Attribute "id" is unknown (reportAttributeAccessIssue)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_assoc.py:41:33 - error: Argument of type "list[_T]" cannot be assigned to parameter "tracks" of type "List[object]" in function "associate"
+    "list[_T]" is not assignable to "List[object]"
+      Type parameter "_T@list" is invariant, but "_T" is not the same as "object"
+      Consider switching from "list" to "Sequence" which is covariant (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_assoc.py:41:41 - error: Argument of type "list[_D]" cannot be assigned to parameter "detections" of type "List[object]" in function "associate"
+    "list[_D]" is not assignable to "List[object]"
+      Type parameter "_T@list" is invariant, but "_D" is not the same as "object"
+      Consider switching from "list" to "Sequence" which is covariant (reportArgumentType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_costs.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_costs.py:1:96 - warning: Type of "combined_cost" is partially unknown
+    Type of "combined_cost" is "(det_box: Unknown, trk_box: Unknown, det_conf: Unknown, weights: Dict[str, float]) -> float" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_costs.py:6:21 - error: Argument of type "list[int]" cannot be assigned to parameter "b1" of type "List[float]" in function "iou_cost"
+    "list[int]" is not assignable to "List[float]"
+      Type parameter "_T@list" is invariant, but "int" is not the same as "float"
+      Consider switching from "list" to "Sequence" which is covariant (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_costs.py:6:23 - error: Argument of type "list[int]" cannot be assigned to parameter "b2" of type "List[float]" in function "iou_cost"
+    "list[int]" is not assignable to "List[float]"
+      Type parameter "_T@list" is invariant, but "int" is not the same as "float"
+      Consider switching from "list" to "Sequence" which is covariant (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_costs.py:8:29 - error: Argument of type "list[int]" cannot be assigned to parameter "b1" of type "List[float]" in function "iou_cost"
+    "list[int]" is not assignable to "List[float]"
+      Type parameter "_T@list" is invariant, but "int" is not the same as "float"
+      Consider switching from "list" to "Sequence" which is covariant (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_costs.py:8:31 - error: Argument of type "list[int]" cannot be assigned to parameter "b2" of type "List[float]" in function "iou_cost"
+    "list[int]" is not assignable to "List[float]"
+      Type parameter "_T@list" is invariant, but "int" is not the same as "float"
+      Consider switching from "list" to "Sequence" which is covariant (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_costs.py:14:24 - error: Argument of type "list[int]" cannot be assigned to parameter "p1" of type "List[float]" in function "motion_cost"
+    "list[int]" is not assignable to "List[float]"
+      Type parameter "_T@list" is invariant, but "int" is not the same as "float"
+      Consider switching from "list" to "Sequence" which is covariant (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_costs.py:14:26 - error: Argument of type "list[int]" cannot be assigned to parameter "p2" of type "List[float]" in function "motion_cost"
+    "list[int]" is not assignable to "List[float]"
+      Type parameter "_T@list" is invariant, but "int" is not the same as "float"
+      Consider switching from "list" to "Sequence" which is covariant (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_costs.py:14:43 - error: Argument of type "list[int]" cannot be assigned to parameter "p1" of type "List[float]" in function "motion_cost"
+    "list[int]" is not assignable to "List[float]"
+      Type parameter "_T@list" is invariant, but "int" is not the same as "float"
+      Consider switching from "list" to "Sequence" which is covariant (reportArgumentType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_costs.py:14:45 - error: Argument of type "list[int]" cannot be assigned to parameter "p2" of type "List[float]" in function "motion_cost"
+    "list[int]" is not assignable to "List[float]"
+      Type parameter "_T@list" is invariant, but "int" is not the same as "float"
+      Consider switching from "list" to "Sequence" which is covariant (reportArgumentType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_solver.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_solver.py:2:57 - warning: Type of "build_cost_matrix" is partially unknown
+    Type of "build_cost_matrix" is "(detections: List[Dict[Unknown, Unknown]], tracks: List[Dict[Unknown, Unknown]], weights: Dict[str, float], max_cost: float) -> ndarray[Unknown, Unknown]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_solver.py:2:76 - warning: Type of "solve_assignment" is partially unknown
+    Type of "solve_assignment" is "(C: ndarray[Unknown, Unknown], max_cost: float) -> Tuple[List[Tuple[int, int]], List[int], List[int]]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_solver.py:5:5 - warning: Type of "dets" is partially unknown
+    Type of "dets" is "list[dict[str, Unknown]]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/tracking/test_hungarian_solver.py:7:5 - warning: Type of "C" is partially unknown
+    Type of "C" is "ndarray[Unknown, Unknown]" (reportUnknownVariableType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/unit/test_collision_predictor.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/unit/test_collision_predictor.py:37:12 - warning: Type of "predict" is unknown (reportUnknownMemberType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/unit/test_main_endpoints.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/unit/test_main_endpoints.py:17:5 - warning: Type of "pipeline" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/unit/test_main_endpoints.py:17:16 - warning: Type of "tracking_pipeline" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/unit/test_main_endpoints.py:18:5 - warning: Type of "sensor_data" is partially unknown
+    Type of "sensor_data" is "list[dict[str, Unknown]]" (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/unit/test_main_endpoints.py:25:5 - warning: Type of "tracks" is unknown (reportUnknownVariableType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/unit/test_main_endpoints.py:25:20 - warning: Type of "process" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/unit/test_main_endpoints.py:28:16 - warning: Argument type is unknown
+    Argument corresponds to parameter "obj" in function "len" (reportUnknownArgumentType)
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/unit/test_threat_analyzer.py
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/unit/test_threat_analyzer.py:25:12 - warning: Type of "analyze" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/unit/test_threat_analyzer.py:34:12 - warning: Type of "analyze" is unknown (reportUnknownMemberType)
+  /Users/sharkbait/Projects/aura-project/enterprise-aura/tests/unit/test_threat_analyzer.py:43:12 - warning: Type of "analyze" is unknown (reportUnknownMemberType)
+98 errors, 513 warnings, 0 informations

@@ -1,0 +1,319 @@
+enterprise-aura/
+├── .devcontainer/
+│   └── devcontainer.json
+├── .github/
+│   └── workflows/
+│       ├── ci-cd-pipeline.yml
+│       ├── ci.yml
+│       ├── security.yml
+│       └── smoke-v3.yml
+├── artifacts/
+│   ├── pylance/
+│   │   ├── pyright_output.json
+│   │   ├── pyright_output.txt
+│   │   └── summary.json
+│   ├── validation/
+│   │   └── VALIDATION.md
+│   └── soak_pass.txt
+├── aura_v2/
+│   ├── api/
+│   │   ├── __init__.py
+│   │   └── schemas.py
+│   ├── application/
+│   │   ├── coordinators/
+│   │   │   ├── __init__.py
+│   │   │   └── advanced_intelligence_coordinator.py
+│   │   ├── dto/
+│   │   │   └── __init__.py
+│   │   ├── facades/
+│   │   │   └── __init__.py
+│   │   ├── mappers/
+│   │   │   └── __init__.py
+│   │   ├── pipelines/
+│   │   │   ├── real_time_tracking_pipeline.py
+│   │   │   └── tracking_pipeline.py
+│   │   ├── services/
+│   │   │   ├── __init__.py
+│   │   │   ├── collision_predictor.py
+│   │   │   └── threat_analyzer.py
+│   │   ├── use_cases/
+│   │   │   ├── __init__.py
+│   │   │   ├── detect_and_track.py
+│   │   │   └── process_detections.py
+│   │   └── __init__.py
+│   ├── config/
+│   │   ├── Dockerfile
+│   │   ├── feature_flags.yaml
+│   │   └── production.yaml
+│   ├── domain/
+│   │   ├── association/
+│   │   │   ├── hungarian_costs.py
+│   │   │   ├── hungarian_solver.py
+│   │   │   └── policy.yaml
+│   │   ├── dss/
+│   │   │   ├── engine.py
+│   │   │   └── policies.yaml
+│   │   ├── entities/
+│   │   │   ├── __init__.py
+│   │   │   ├── detection.py
+│   │   │   └── track.py
+│   │   ├── events/
+│   │   │   ├── __init__.py
+│   │   │   └── tracking_events.py
+│   │   ├── pipeline/
+│   │   │   └── model.py
+│   │   ├── ports/
+│   │   │   ├── __init__.py
+│   │   │   └── sensor_port.py
+│   │   ├── services/
+│   │   │   ├── __init__.py
+│   │   │   ├── association.py
+│   │   │   ├── collision_prediction.py
+│   │   │   ├── hungarian_assoc.py
+│   │   │   ├── multi_sensor_fusion.py
+│   │   │   ├── sensor_characteristics.py
+│   │   │   └── threat_analysis.py
+│   │   ├── tracking/
+│   │   │   └── models.py
+│   │   ├── value_objects/
+│   │   │   ├── __init__.py
+│   │   │   ├── collision.py
+│   │   │   ├── confidence.py
+│   │   │   ├── covariance.py
+│   │   │   ├── identifiers.py
+│   │   │   ├── metrics.py
+│   │   │   ├── position.py
+│   │   │   ├── position_2d.py
+│   │   │   ├── tactical_alert.py
+│   │   │   ├── threat.py
+│   │   │   └── velocity.py
+│   │   ├── __init__.py
+│   │   ├── confidence.py
+│   │   ├── position.py
+│   │   └── velocity.py
+│   ├── infrastructure/
+│   │   ├── adapters/
+│   │   │   ├── legacy/
+│   │   │   │   └── bridge.py
+│   │   │   ├── ros2/
+│   │   │   │   ├── __init__.py
+│   │   │   │   └── detection_adapter.py
+│   │   │   ├── sensors/
+│   │   │   │   └── __init__.py
+│   │   │   ├── storage/
+│   │   │   │   └── __init__.py
+│   │   │   ├── unity/
+│   │   │   │   └── __init__.py
+│   │   │   └── __init__.py
+│   │   ├── config/
+│   │   │   └── __init__.py
+│   │   ├── fusion/
+│   │   │   ├── adapters/
+│   │   │   │   ├── camera.py
+│   │   │   │   └── uwb.py
+│   │   │   ├── config/
+│   │   │   │   └── fusion.yaml
+│   │   │   ├── strategies/
+│   │   │   │   └── weighted.py
+│   │   │   └── ufk_core.py
+│   │   ├── integrations/
+│   │   │   └── wms/
+│   │   │       ├── client.py
+│   │   │       └── schemas.py
+│   │   ├── messaging/
+│   │   │   └── __init__.py
+│   │   ├── mlops/
+│   │   │   ├── __init__.py
+│   │   │   └── model_registry.py
+│   │   ├── monitoring/
+│   │   ├── observability/
+│   │   │   ├── __init__.py
+│   │   │   └── telemetry.py
+│   │   ├── persistence/
+│   │   │   ├── migrations/
+│   │   │   │   ├── 0001_init.js
+│   │   │   │   └── 0002_ttl.js
+│   │   │   ├── __init__.py
+│   │   │   ├── mongo.py
+│   │   │   ├── mongo_client.py
+│   │   │   ├── reader.py
+│   │   │   ├── retention.py
+│   │   │   ├── schemas.py
+│   │   │   └── writer.py
+│   │   ├── reporting/
+│   │   │   └── system_report.py
+│   │   ├── sensors/
+│   │   │   └── radar_adapter.py
+│   │   ├── telemetry/
+│   │   │   ├── __init__.py
+│   │   │   ├── metrics.py
+│   │   │   └── time_guard.py
+│   │   ├── tracking/
+│   │   │   └── modern_tracker.py
+│   │   ├── __init__.py
+│   │   └── container.py
+│   ├── observability/
+│   │   └── metrics_validator.py
+│   ├── sources/
+│   │   ├── __init__.py
+│   │   ├── base.py
+│   │   ├── demo.py
+│   │   ├── jsonl.py
+│   │   └── kafka.py
+│   ├── utils/
+│   │   └── time.py
+│   ├── web_dashboard/
+│   │   ├── __init__.py
+│   │   ├── api.py
+│   │   └── dashboard.html
+│   ├── __init__.py
+│   ├── ARCHITECTURE.md
+│   ├── diagnostic_dashboard.py
+│   ├── main.py
+│   ├── setup_dashboard.py
+│   └── test_dashboard_setup.py
+├── aura_v2.egg-info/
+│   ├── dependency_links.txt
+│   ├── entry_points.txt
+│   ├── PKG-INFO
+│   ├── requires.txt
+│   ├── SOURCES.txt
+│   └── top_level.txt
+├── certs/
+│   ├── localhost.conf
+│   ├── localhost.crt
+│   └── localhost.key
+├── config/
+│   ├── mongo.example.env
+│   └── v2_5.flags.env.example
+├── db/
+│   └── migration/
+│       └── run_parallel.py
+├── ops/
+│   ├── deployment/
+│   │   └── rollback.py
+│   ├── kubernetes/
+│   │   ├── kubernetes/
+│   │   │   └── aura-deployment.yaml
+│   │   └── aura-deployment.yaml
+│   └── runbooks/
+│       └── mongo_retention.md
+├── scripts/
+│   ├── bootstrap.sh
+│   ├── demo.jsonl
+│   └── pylance_report.sh
+├── tests/
+│   ├── architecture/
+│   │   ├── __init__.py
+│   │   ├── test_container_contract.py
+│   │   └── test_dependencies.py
+│   ├── dss/
+│   │   ├── __init__.py
+│   │   ├── test_integration_wms_dispatch.py
+│   │   └── test_policy_eval.py
+│   ├── fixtures/
+│   │   └── __init__.py
+│   ├── fusion/
+│   │   ├── test_adapters_normalize.py
+│   │   ├── test_end_to_end_fuse.py
+│   │   └── test_straight_api.py
+│   ├── integration/
+│   │   ├── __init__.py
+│   │   ├── test_advanced_intelligence_coordinator.py
+│   │   ├── test_multi_sensor_tracking.py
+│   │   ├── test_persistence.py
+│   │   ├── test_persistence.py.bak
+│   │   ├── test_pipeline_e2e.py
+│   │   ├── test_track_ttl.py
+│   │   └── test_wms_payloads.py
+│   ├── observability/
+│   │   ├── test_budgets.py
+│   │   └── test_metrics_validator.py
+│   ├── persistence/
+│   │   ├── __init__.py
+│   │   ├── test_retention_ttl.py
+│   │   ├── test_roundtrip_tracks.py
+│   │   └── test_writer_reader_roundtrip.py
+│   ├── tracking/
+│   │   ├── test_hungarian_assoc.py
+│   │   ├── test_hungarian_costs.py
+│   │   └── test_hungarian_solver.py
+│   ├── unit/
+│   │   ├── __init__.py
+│   │   ├── test_collision_predictor.py
+│   │   ├── test_main_endpoints.py
+│   │   └── test_threat_analyzer.py
+│   ├── __init__.py
+│   ├── conftest.py
+│   ├── fixtures.py
+│   ├── test_api_time.py
+│   ├── test_health.py
+│   ├── test_imports.py
+│   └── test_utils_time.py
+├── tmp/
+│   └── mongo/
+│       ├── diagnostic.data/
+│       │   ├── metrics.2025-09-13T12-46-36Z-00000
+│       │   ├── metrics.2025-09-13T14-26-38Z-00000
+│       │   └── metrics.interim
+│       ├── journal/
+│       │   ├── WiredTigerLog.0000000002
+│       │   ├── WiredTigerPreplog.0000000001
+│       │   └── WiredTigerPreplog.0000000002
+│       ├── _mdb_catalog.wt
+│       ├── collection-0--3666278562741621775.wt
+│       ├── collection-2--3666278562741621775.wt
+│       ├── collection-25--3666278562741621775.wt
+│       ├── collection-26--3666278562741621775.wt
+│       ├── collection-27--3666278562741621775.wt
+│       ├── collection-28--3666278562741621775.wt
+│       ├── collection-4--3666278562741621775.wt
+│       ├── index-1--3666278562741621775.wt
+│       ├── index-29--3666278562741621775.wt
+│       ├── index-3--3666278562741621775.wt
+│       ├── index-30--3666278562741621775.wt
+│       ├── index-31--3666278562741621775.wt
+│       ├── index-32--3666278562741621775.wt
+│       ├── index-33--3666278562741621775.wt
+│       ├── index-34--3666278562741621775.wt
+│       ├── index-35--3666278562741621775.wt
+│       ├── index-36--3666278562741621775.wt
+│       ├── index-37--3666278562741621775.wt
+│       ├── index-38--3666278562741621775.wt
+│       ├── index-5--3666278562741621775.wt
+│       ├── index-6--3666278562741621775.wt
+│       ├── mongod.lock
+│       ├── sizeStorer.wt
+│       ├── storage.bson
+│       ├── WiredTiger
+│       ├── WiredTiger.lock
+│       ├── WiredTiger.turtle
+│       ├── WiredTiger.wt
+│       └── WiredTigerHS.wt
+├── typings/
+│   ├── kafka/
+│   │   └── __init__.py
+│   ├── ros2/
+│   │   └── __init__.py
+│   └── README.md
+├── .env
+├── .env.example
+├── .gitignore
+├── .pre-commit-config.yaml
+├── .python-version
+├── .ruffignore
+├── constraints-macos.txt
+├── demo.jsonl
+├── docker-compose.mongo.yml
+├── dump_tree.py
+├── enterprise-aura.code-workspace
+├── Makefile
+├── project_tree.txt
+├── pyproject.toml
+├── pyrightconfig.json
+├── pytest.ini
+├── README.md
+├── ruff.toml
+├── ruff.toml.bak
+├── setup.cfg
+└── uv.lock
