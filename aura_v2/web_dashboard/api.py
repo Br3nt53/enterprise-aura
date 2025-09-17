@@ -5,27 +5,32 @@ Gracefully handles missing dependencies during setup
 """
 
 import asyncio
-from pathlib import Path
-from typing import Any, Dict
+from typing import Any, cast
 
 # Defensive imports - handle missing dependencies gracefully
+
 FASTAPI_AVAILABLE = False
-APIRouter = None
-HTTPException = None
+APIRouter: Any = None  # type: ignore
+HTTPException: Any = None  # type: ignore
+BaseModel: Any = None  # type: ignore
 
 try:
-    from fastapi import APIRouter, HTTPException
-    from pydantic import BaseModel
+    from fastapi import APIRouter as RealAPIRouter
+    from fastapi import HTTPException as RealHTTPException
+    from pydantic import BaseModel as RealBaseModel
 
+    APIRouter = cast(Any, RealAPIRouter)
+    HTTPException = cast(Any, RealHTTPException)
+    BaseModel = cast(Any, RealBaseModel)
     FASTAPI_AVAILABLE = True
 except ImportError:
     FASTAPI_AVAILABLE = False
 
     # Create dummy classes for when FastAPI isn't available
-    class BaseModel:
+    class DummyBaseModel:
         pass
 
-    class APIRouter:
+    class DummyAPIRouter:
         def __init__(self, *args, **kwargs):
             pass
 
@@ -41,11 +46,15 @@ except ImportError:
 
             return decorator
 
-    class HTTPException(Exception):
+    class DummyHTTPException(Exception):
         def __init__(self, status_code, detail):
             self.status_code = status_code
             self.detail = detail
             super().__init__(detail)
+
+    APIRouter = cast(Any, DummyAPIRouter)  # type: ignore
+    HTTPException = cast(Any, DummyHTTPException)  # type: ignore
+    BaseModel = cast(Any, DummyBaseModel)  # type: ignore
 
 
 class CommandRequest(BaseModel):
@@ -71,7 +80,9 @@ class SystemStatusResponse(BaseModel):
 
 def create_router():
     """Create dashboard router only if dependencies are available"""
+
     if not FASTAPI_AVAILABLE:
+        # Provide dummy router for fallback
         return None
 
     router = APIRouter(prefix="/dashboard", tags=["dashboard"])
@@ -180,83 +191,6 @@ def create_router():
         )
 
         return status
-
-    @router.get("/file-structure")
-    async def get_file_structure():
-        """Get the current file structure for verification"""
-
-        def scan_directory(
-            path: Path, max_depth: int = 3, current_depth: int = 0
-        ) -> Dict[str, Any]:
-            if current_depth >= max_depth:
-                return {}
-
-            structure = {}
-            try:
-                for item in sorted(path.iterdir()):
-                    if item.name.startswith("."):
-                        continue
-
-                    if item.is_file() and item.suffix in [
-                        ".py",
-                        ".toml",
-                        ".yml",
-                        ".yaml",
-                        ".md",
-                    ]:
-                        try:
-                            structure[str(item)] = {
-                                "type": "file",
-                                "size": item.stat().st_size,
-                                "modified": item.stat().st_mtime,
-                            }
-                        except OSError:
-                            pass
-                    elif item.is_dir() and item.name not in [
-                        "__pycache__",
-                        ".git",
-                        "node_modules",
-                        ".pytest_cache",
-                    ]:
-                        try:
-                            structure[str(item)] = {
-                                "type": "directory",
-                                "children": scan_directory(
-                                    item, max_depth, current_depth + 1
-                                ),
-                            }
-                        except OSError:
-                            pass
-            except OSError:
-                pass
-
-            return structure
-
-        try:
-            project_root = Path.cwd()
-            return scan_directory(project_root)
-        except Exception as e:
-            return {"error": f"Failed to scan directory: {e}"}
-
-    @router.post("/run-tests")
-    async def run_specific_tests(test_path: str):
-        """Run specific test files or directories"""
-
-        if not test_path.startswith("tests/"):
-            raise HTTPException(
-                status_code=400, detail="Test path must start with 'tests/'"
-            )
-
-        test_file = Path(test_path)
-        if not test_file.exists():
-            raise HTTPException(
-                status_code=404, detail=f"Test file not found: {test_path}"
-            )
-
-        command = f"pytest {test_path} -v --tb=short"
-
-        request = CommandRequest(command=command)
-        return await execute_command(request)
 
     return router
 

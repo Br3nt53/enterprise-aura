@@ -1,11 +1,11 @@
 from datetime import timedelta
 
 import pytest
-from aura_v2.domain.factories import DomainFactory
-from aura_v2.infrastructure.builder import TrackingSystemBuilder
-from aura_v2.tests.architecture.test_dependencies import has_import_from
 
-from aura_v2.domain.value_objects import Position
+from aura_v2.domain.factories import DomainFactory  # type: ignore[import]
+from aura_v2.domain.value_objects import Position  # type: ignore
+from aura_v2.infrastructure.builder import TrackingSystemBuilder  # type: ignore[import]
+from aura_v2.tests.architecture.test_dependencies import has_import_from  # type: ignore[import]
 
 
 # test/infrastructure/fixtures.py

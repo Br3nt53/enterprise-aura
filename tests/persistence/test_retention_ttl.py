@@ -31,8 +31,8 @@ async def test_ttls_exist(ready) -> None:
     db = MongoProvider.db()
     # Look for at least one TTL index in any collection
     found_ttl = False
-    for name in await db.list_collection_names():
-        idx_info = await db[name].index_information()
+    for name in await db.list_collection_names():  # type: ignore
+        idx_info = await db[name].index_information()  # type: ignore
         if any("expireAfterSeconds" in v for v in idx_info.values()):
             found_ttl = True
             break

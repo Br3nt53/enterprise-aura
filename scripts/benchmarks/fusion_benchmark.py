@@ -4,7 +4,7 @@ import random
 import time
 from statistics import quantiles
 
-from aura_v2.domain.pipeline.fusion_pipeline import build_default_pipeline
+from aura_v2.application.pipeline.fusion_pipeline_factory import build_default_pipeline
 
 
 class SensorReading:
@@ -18,10 +18,7 @@ def main():
     tracks = []
     timings = []
     for _ in range(200):
-        batch = [
-            SensorReading(random.random() * 100, random.random() * 100)
-            for _ in range(25)
-        ]
+        batch = [SensorReading(random.random() * 100, random.random() * 100) for _ in range(25)]
         start = time.perf_counter()
         tracks = pipeline.process_batch(batch, tracks)
         timings.append((time.perf_counter() - start) * 1000)

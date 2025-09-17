@@ -1,10 +1,12 @@
 {
   "name": "aura-enterprise (uv)",
-  "dockerComposeFile": ["../docker-compose.devcontainer.yml"],
+  "dockerComposeFile": [
+    "../docker-compose.devcontainer.yml"
+  ],
   "service": "devcontainer",
   "workspaceFolder": "/workspaces/enterprise-aura",
-  "postCreateCommand": "uv sync",
-  "updateContentCommand": "uv sync",
+  "postCreateCommand": "uv sync --dev && uvx pre-commit install",
+  "updateContentCommand": "uv sync --dev",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -16,10 +18,32 @@
       "settings": {
         "python.defaultInterpreterPath": "/workspaces/enterprise-aura/.venv/bin/python",
         "python.testing.pytestEnabled": true,
-        "python.testing.pytestArgs": ["-q"],
-        "editor.codeActionsOnSave": { "source.organizeImports": "explicit" }
+        "python.testing.pytestArgs": [
+          "-q"
+        ],
+        "python.analysis.diagnosticMode": "workspace",
+        "python.analysis.typeCheckingMode": "basic",
+        "editor.formatOnSave": true,
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff"
+        },
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": "explicit"
+        }
       }
     }
   },
-  "portsAttributes": { "0-65535": { "onAutoForward": "ignore" } }
+  "mounts": [
+    "type=volume,source=uv-cache,target=/root/.cache/uv"
+  ],
+  "containerEnv": {
+    "PIP_DISABLE_PIP_VERSION_CHECK": "1",
+    "UV_SYSTEM_PYTHON": "0",
+    "UV_LINK_MODE": "copy"
+  },
+  "portsAttributes": {
+    "0-65535": {
+      "onAutoForward": "ignore"
+    }
+  }
 }

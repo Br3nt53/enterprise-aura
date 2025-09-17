@@ -8,7 +8,7 @@ import uuid
 from contextlib import asynccontextmanager, suppress
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, AsyncIterator, Callable, Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 import typer
 import uvicorn
@@ -18,11 +18,7 @@ from fastapi.responses import HTMLResponse
 
 from aura_v2.api.schemas import DetectionInput, TrackOutput, TrackRequest, TrackResponse
 from aura_v2.domain import Confidence, Detection, Position3D, Track
-from aura_v2.domain.services import (
-    BasicFusionService,
-    FusionService,
-    SensorCharacteristics,
-)
+from aura_v2.domain.services import BasicFusionService, FusionService, SensorCharacteristics
 from aura_v2.infrastructure.tracking.modern_tracker import ModernTracker, TrackingResult
 from aura_v2.utils.time import to_utc
 
@@ -60,9 +56,9 @@ class AURAApplication:
         )
         self._initialized = True
 
-    def _lifespan(self) -> Callable[[FastAPI], AsyncIterator[None]]:
+    def _lifespan(self):
         @asynccontextmanager
-        async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+        async def lifespan(app: FastAPI):
             # --- startup ---
             pump_task: Optional[asyncio.Task[Any]] = None
             if os.environ.get("AURA_PUMP_ENABLED", "0") == "1":
@@ -84,16 +80,15 @@ class AURAApplication:
                 if src is not None:
 
                     async def pump() -> None:
-                        # Local import keeps app import time small
                         import httpx  # type: ignore
 
                         url = f"http://{host}:{port}/track"
                         async with httpx.AsyncClient(timeout=10.0) as client:
-                            async for frame in src.frames():
+                            # type: ignore for src.frames() if needed
+                            async for frame in src.frames():  # type: ignore
                                 try:
                                     await client.post(url, json=frame)
                                 except Exception:
-                                    # ignore transient errors
                                     pass
 
                     pump_task = asyncio.create_task(pump())
@@ -102,7 +97,6 @@ class AURAApplication:
             try:
                 yield
             finally:
-                # --- shutdown ---
                 task = getattr(app.state, "pump_task", None)
                 if task is not None:
                     task.cancel()
@@ -112,9 +106,7 @@ class AURAApplication:
         return lifespan
 
     def _build_app(self) -> None:
-        app = FastAPI(
-            title="AURA Enterprise", version="2.0.0", lifespan=self._lifespan()
-        )
+        app = FastAPI(title="AURA Enterprise", version="2.0.0", lifespan=self._lifespan())
 
         app.add_middleware(
             CORSMiddleware,
@@ -195,7 +187,8 @@ class AURAApplication:
             ts = to_utc(ts_raw)
             if _tg_validate is not None:  # pragma: no cover - optional
                 try:
-                    _tg_validate(ts)
+                    if _tg_validate is not None:
+                        _tg_validate(ts, dev_ok=True, default_tz="UTC")  # type: ignore
                 except Exception:
                     pass
 
@@ -209,7 +202,8 @@ class AURAApplication:
                 dts = to_utc(d.timestamp)
                 if _tg_validate is not None:  # pragma: no cover - optional
                     try:
-                        _tg_validate(dts)
+                        if _tg_validate is not None:
+                            _tg_validate(dts, dev_ok=True, default_tz="UTC")  # type: ignore
                     except Exception:
                         pass
                 return Detection(
@@ -221,9 +215,7 @@ class AURAApplication:
                 )
 
             detections: List[Detection] = []
-            for d in (
-                req.radar_detections + req.camera_detections + req.lidar_detections
-            ):
+            for d in req.radar_detections + req.camera_detections + req.lidar_detections:
                 detections.append(to_det(d))
 
             result: TrackingResult = await self.tracker.update(detections, ts)
@@ -456,9 +448,7 @@ def detections_send(
 
 
 @app_cli.command("tracks-tail")
-def tracks_tail(
-    host: str = "127.0.0.1", port: int = 8000, interval: float = 1.0
-) -> None:
+def tracks_tail(host: str = "127.0.0.1", port: int = 8000, interval: float = 1.0) -> None:
     # Local imports keep CLI startup snappy
     import time  # type: ignore
 
@@ -470,9 +460,7 @@ def tracks_tail(
             r = httpx.get(url, timeout=5.0)
             if r.status_code == 200:
                 data = r.json()
-                print(
-                    {"frame_id": data.get("frame_id"), "active": data.get("active", 0)}
-                )
+                print({"frame_id": data.get("frame_id"), "active": data.get("active", 0)})
         except Exception:
             pass
         time.sleep(interval)

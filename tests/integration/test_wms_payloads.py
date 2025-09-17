@@ -25,7 +25,7 @@ async def test_wms_payload_and_client(monkeypatch):
     async def fake_post(self, url, headers=None, content=None):
         sent["url"] = url
         sent["headers"] = headers or {}
-        sent["content"] = json.loads(content)
+        sent["content"] = json.loads(content)  # type: ignore[arg-type]
 
         class R:
             status_code = 200
@@ -37,7 +37,7 @@ async def test_wms_payload_and_client(monkeypatch):
 
     monkeypatch.setattr("httpx.AsyncClient.post", fake_post)
     cli = WMSClient(base_url="https://wms.example/api", api_key="k")
-    n = await cli.publish_tracks([t])
+    n = await cli.publish_tracks([t])  # type: ignore
     assert n == 1
     assert sent["url"].endswith("/tracks")
     assert sent["headers"]["Authorization"].startswith("Bearer ")

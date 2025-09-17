@@ -45,9 +45,9 @@ class MockCollisionPredictor:
 @pytest.fixture
 def coordinator():
     return AdvancedIntelligenceCoordinator(
-        threat_analyzer=MockThreatAnalyzer(),
-        collision_predictor=MockCollisionPredictor(),
-        track_history=TrackHistoryRepository(),
+        threat_analyzer=MockThreatAnalyzer(),  # type: ignore[arg-type]
+        collision_predictor=MockCollisionPredictor(),  # type: ignore[arg-type]
+        track_history=TrackHistoryRepository(),  # type: ignore[arg-type]
         logger=logging.getLogger(__name__),
     )
 
@@ -92,8 +92,8 @@ async def test_process_tracks_and_create_alerts(coordinator):
     assert alerts[0].urgency > alerts[1].urgency  # Alerts are sorted by urgency
 
     # Check the highest urgency alert
-    high_alert = alerts[0]
-    assert high_alert.threat.track.id in ["1", "2"]
-    assert high_alert.threat.threat_level in [ThreatLevel.HIGH, ThreatLevel.MEDIUM]
-    assert high_alert.collision is not None
-    assert high_alert.collision.time_to_collision == 10.5
+    high_alert = alerts[0]  # type: ignore
+    assert high_alert.threat.track.id in ["1", "2"]  # type: ignore
+    assert high_alert.threat.threat_level in [ThreatLevel.HIGH, ThreatLevel.MEDIUM]  # type: ignore
+    assert high_alert.collision is not None  # type: ignore
+    assert high_alert.collision.time_to_collision == 10.5  # type: ignore

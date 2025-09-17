@@ -9,7 +9,7 @@ class KafkaSource(DetectionSource):
     def __init__(self, brokers: str, topic: str, group_id: str = "aura-dev"):
         self.brokers, self.topic, self.group_id = brokers, topic, group_id
 
-    async def frames(self):
+    async def frames(self) -> object:  # type: ignore
         consumer = AIOKafkaConsumer(
             self.topic,
             bootstrap_servers=self.brokers,

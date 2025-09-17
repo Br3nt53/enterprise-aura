@@ -1,5 +1,5 @@
 # aura_v2/application/services/collision_predictor.py
-from typing import List
+from typing import List, Optional
 
 import numpy as np
 
@@ -20,22 +20,18 @@ class BasicCollisionPredictor(CollisionPredictor):
         collisions = []
 
         for i, track1 in enumerate(tracks):
-            for j, track2 in enumerate(tracks[i + 1 :], i + 1):
+            for _j, track2 in enumerate(tracks[i + 1 :], i + 1):
                 collision = self._check_collision_pair(track1, track2)
                 if collision:
                     collisions.append(collision)
 
         return collisions
 
-    def _check_collision_pair(self, track1: Track, track2: Track) -> Collision:
+    def _check_collision_pair(self, track1: Track, track2: Track) -> Optional[Collision]:
         """Check if two tracks are on collision course."""
         # Current positions
-        p1 = np.array(
-            [track1.state.position.x, track1.state.position.y, track1.state.position.z]
-        )
-        p2 = np.array(
-            [track2.state.position.x, track2.state.position.y, track2.state.position.z]
-        )
+        p1 = np.array([track1.state.position.x, track1.state.position.y, track1.state.position.z])
+        p2 = np.array([track2.state.position.x, track2.state.position.y, track2.state.position.z])
 
         # Velocities
         v1 = np.array(
@@ -74,12 +70,12 @@ class BasicCollisionPredictor(CollisionPredictor):
 
         # Check if collision will occur
         if closest_distance < self.collision_threshold:
-            probability = 1.0 - (closest_distance / self.collision_threshold)
+            probability = float(1.0 - (closest_distance / self.collision_threshold))
             return Collision(
                 track1=track1,
                 track2=track2,
                 time_to_collision=t_closest,
-                probability=probability,
+                probability=float(probability),
             )
 
         return None

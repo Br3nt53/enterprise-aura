@@ -4,10 +4,10 @@ from datetime import datetime
 from logging import Logger
 from typing import Dict
 
-from ...domain.ports import SensorStream
-from ...domain.services import FusionService
-from ...infrastructure.tracking import ModernTracker
-from ..events import EventPublisher
+from aura_v2.application.events.event_publisher import EventPublisher
+from aura_v2.domain.ports.sensor_port import SensorStream
+from aura_v2.domain.ports.tracking_port import Tracker
+from aura_v2.domain.services import FusionService
 
 
 class RealTimeTrackingPipeline:
@@ -15,7 +15,7 @@ class RealTimeTrackingPipeline:
 
     def __init__(
         self,
-        tracker: ModernTracker,
+        tracker: Tracker,
         fusion_service: FusionService,
         event_publisher: EventPublisher,
         logger: Logger,
@@ -50,12 +50,10 @@ class RealTimeTrackingPipeline:
         for stream in streams:
             self.subscribe(stream)
 
-    def process_frame(self, detections: list) -> None:
+    async def process_frame(self, detections: list) -> None:
         """Process a single frame of detections."""
         self.sequence_id += 1
-        self.logger.debug(
-            f"Processing frame {self.sequence_id} with {len(detections)} detections."
-        )
+        self.logger.debug(f"Processing frame {self.sequence_id} with {len(detections)} detections.")
 
         if not detections:
             return
@@ -69,19 +67,19 @@ class RealTimeTrackingPipeline:
 
         # Update tracker
         command = self._create_command(detections, latest_timestamp)
-        updated_tracks = self.tracker.update(command.detections)
+        result = await self.tracker.update(command.detections, command.timestamp)
 
         # Publish events (e.g., TrackUpdated)
-        # for track in updated_tracks:
-        #     self.event_publisher.publish(TrackUpdated(track_id=track.id, ...))
+        for track in result.active_tracks:
+            self.event_publisher.publish({"event": "TrackUpdated", "track_id": track.id})
 
-        self._assess_threats(updated_tracks)
+        self._assess_threats(result.active_tracks)
 
     def _create_command(self, detections, latest_timestamp: datetime):
         """Create a command object for the detect and track use case."""
-        from ..use_cases import DetectAndTrackCommand
+        from aura_v2.application.use_cases.detect_and_track_command import DetectAndTrackCommand
 
-        return DetectAndTrackCommand(  # type: ignore
+        return DetectAndTrackCommand(
             detections=detections,
             timestamp=latest_timestamp,
             sequence_id=self.sequence_id,

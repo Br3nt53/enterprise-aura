@@ -1,5 +1,15 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from ..ports.sensor_port import SensorReading
+    from ..tracking.track_state import TrackState
+else:
+    SensorReading = Any  # type: ignore
+    TrackState = Any  # type: ignore
+
+
 import math
 from dataclasses import dataclass
 from typing import Optional, Sequence

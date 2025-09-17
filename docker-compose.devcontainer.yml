@@ -1,7 +1,8 @@
-version: "3.8"
-
 services:
   devcontainer:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
     image: ghcr.io/astral-sh/uv:python3.11-bookworm
     command: sleep infinity
     volumes:

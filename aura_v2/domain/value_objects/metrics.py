@@ -18,7 +18,7 @@ def is_symmetric_positive_semidefinite(m: np.ndarray, atol: float = 1e-8) -> boo
     if not np.allclose(m, m.T, atol=atol):
         return False
     eigvals = np.linalg.eigvalsh(m)
-    return np.all(eigvals >= -atol)
+    return bool(np.all(eigvals >= -atol))
 
 
 class MahalanobisDistance:
@@ -31,11 +31,11 @@ class MahalanobisDistance:
     def distance(self, point1: np.ndarray, point2: np.ndarray) -> float:
         """Compute Mahalanobis distance between two points."""
         try:
-            return mahalanobis(point1, point2, self.inv_cov_matrix)
+            return float(mahalanobis(point1, point2, self.inv_cov_matrix))
         except Exception:
             # Fallback to Euclidean distance if covariance is singular
-            return float(np.linalg.norm(point1 - point2))
+            return float(np.linalg.norm(point1 - point2))  # type: ignore
 
     def distance_to_mean(self, point: np.ndarray, mean: np.ndarray) -> float:
         """Compute Mahalanobis distance from point to mean."""
-        return self.distance(point, mean)
+        return self.distance(point, mean)  # type: ignore

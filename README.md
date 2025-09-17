@@ -233,3 +233,24 @@ The new domain model uses position: Position3D (not state/covariance). Send a po
 
 Dashboard not loading
 This is optional. Install extras and ensure aura_v2/web_dashboard/api.py exists; otherwise, you’ll just see a warning.
+
+Recommended Startup Flow
+Start MongoDB
+
+If using devcontainer: it starts automatically.
+Else: docker-compose -f [docker-compose.devcontainer.yml] up -d mongo
+Bootstrap environment
+
+make setup (runs bootstrap.sh)
+Start dev server
+
+make dev or . .venv/bin/activate && python -m aura_v2.main dev-server --host 0.0.0.0 --port 8000
+Send demo detections
+
+make demo or . .venv/bin/activate && aura-cli detections-send scripts/demo.jsonl
+View dashboard
+
+Open http://localhost:8000 in your browser.
+Run tests
+
+make test or . .venv/bin/activate && python -m pytest -q

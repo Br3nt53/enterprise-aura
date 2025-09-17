@@ -4,10 +4,13 @@ import logging
 from dataclasses import dataclass
 from typing import Coroutine, List, Optional
 
-from ...domain.entities import ThreatLevel, Track
-from ...domain.services import CollisionPredictor, ThreatAnalyzer
-from ...domain.value_objects import Collision, TacticalAlert, Threat
-from ...infrastructure.persistence.in_memory import TrackHistoryRepository
+from aura_v2.domain.entities import ThreatLevel, Track
+from aura_v2.domain.ports.tracking_port import TrackHistoryRepository
+from aura_v2.domain.services.collision_prediction import CollisionPredictor
+from aura_v2.domain.services.threat_analysis import ThreatAnalyzer
+from aura_v2.domain.value_objects.collision import Collision
+from aura_v2.domain.value_objects.tactical_alert import TacticalAlert
+from aura_v2.domain.value_objects.threat import Threat
 
 
 @dataclass
@@ -29,7 +32,7 @@ class AdvancedIntelligenceCoordinator:
         collision_predictor: CollisionPredictor,
         track_history: TrackHistoryRepository,
         logger: logging.Logger,
-        config: CoordinatorConfig = None,
+        config: Optional[CoordinatorConfig] = None,
     ):
         self.threat_analyzer = threat_analyzer
         self.collision_predictor = collision_predictor
@@ -55,17 +58,13 @@ class AdvancedIntelligenceCoordinator:
         threat_assessment_tasks: List[Coroutine] = [
             self._assess_individual_threat(track) for track in tracks
         ]
-        assessed_threats: List[Optional[Threat]] = await asyncio.gather(
-            *threat_assessment_tasks
-        )
+        assessed_threats: List[Optional[Threat]] = await asyncio.gather(*threat_assessment_tasks)
 
         # Step 3: Filter for threats that meet the required level for further analysis
         priority_threats = [
             threat
             for threat in assessed_threats
-            if threat
-            and threat.threat_level.value
-            >= self.config.threat_assessment_threshold.value
+            if threat and threat.threat_level.value >= self.config.threat_assessment_threshold.value
         ]
 
         if not priority_threats:

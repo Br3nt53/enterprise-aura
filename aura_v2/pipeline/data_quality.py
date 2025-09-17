@@ -1,5 +1,13 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from ..domain.ports.sensor_port import SensorReading
+else:
+    SensorReading = Any  # type: ignore
+
+
 from aura_v2.ml.model.inference import load_quality_model, score_reading
 
 

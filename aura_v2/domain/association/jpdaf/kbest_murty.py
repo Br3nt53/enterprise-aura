@@ -9,6 +9,13 @@ import numpy as np
 from scipy.optimize import linear_sum_assignment
 
 
+def _sanitize_cost(C):
+    C = np.asarray(C, float)
+    finite = C[np.isfinite(C)]
+    fill = (finite.max() if finite.size else 1.0) * 1e6
+    return np.where(np.isfinite(C), C, fill)
+
+
 @dataclass(order=True)
 class _MurtyNode:
     total_cost: float
@@ -62,7 +69,7 @@ class MurtyKBest:
         if np.isinf(C).all():
             return None
 
-        row_ind, col_ind = linear_sum_assignment(C)
+        row_ind, col_ind = linear_sum_assignment(_sanitize_cost(C))
         # Validate feasibility: any chosen inf => infeasible
         pairs = []
         total_cost = 0.0
@@ -84,7 +91,7 @@ class MurtyKBest:
 
         root = self._solve([], [])
         if root is None:
-            return solutions
+            return sorted(solutions, key=lambda n: float(n.total_cost))
         heap: List[_MurtyNode] = []
         heapq.heappush(heap, root)
 
@@ -101,10 +108,8 @@ class MurtyKBest:
             for idx, (ri, ci) in enumerate(best.assignment):
                 fixed_prefix = best.assignment[:idx]
                 forbid_pair = (ri, ci)
-                node = self._solve(
-                    fixed=fixed_prefix, forbid=best.forbidden_pairs + [forbid_pair]
-                )
+                node = self._solve(fixed=fixed_prefix, forbid=best.forbidden_pairs + [forbid_pair])
                 if node:
                     heapq.heappush(heap, node)
 
-        return solutions
+        return sorted(solutions, key=lambda n: float(n.total_cost))

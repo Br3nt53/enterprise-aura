@@ -1,8 +1,10 @@
-# aura_v2/domain/ports/sensor_port.py
 from abc import ABC, abstractmethod
 from typing import AsyncIterator, List
 
-from ..entities import Detection
+from ..entities.detection import Detection
+
+# Alias for type checking and clarity
+SensorReading = Detection
 
 
 class SensorPort(ABC):

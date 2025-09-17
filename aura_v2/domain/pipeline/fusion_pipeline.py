@@ -1,19 +1,19 @@
 from __future__ import annotations
 
-from pathlib import Path
-
-from ...infrastructure.fusion.ufk_core import UFK
+from typing import Any, Optional
 
 
-def _default_cfg() -> str:
-    return str(
-        Path(__file__).resolve().parents[3]
-        / "infrastructure"
-        / "fusion"
-        / "config"
-        / "fusion.yaml"
-    )
+class FusionPipeline:
+    """Thin adapter that owns a fusion core and exposes a stable process_batch()."""
+
+    def __init__(self, core: Any):
+        if not hasattr(core, "process_batch"):
+            raise AttributeError("Fusion core must implement process_batch(batch, tracks=None)")
+        self._core = core
+
+    def process_batch(self, batch: Any, tracks: Optional[list[dict]] = None) -> list[dict]:
+        return self._core.process_batch(batch, tracks)
 
 
-def build_default_pipeline(config_path: str | None = None):
-    return UFK(config_path or _default_cfg())
+# NOTE: build_default_pipeline and infrastructure imports have been moved to
+# aura_v2.application.pipeline.fusion_pipeline_factory. Import from there.

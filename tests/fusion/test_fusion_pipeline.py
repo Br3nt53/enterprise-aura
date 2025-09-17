@@ -1,4 +1,4 @@
-from aura_v2.domain.pipeline.fusion_pipeline import build_default_pipeline
+from aura_v2.application.pipeline.fusion_pipeline_factory import build_default_pipeline
 
 
 class SensorReading:

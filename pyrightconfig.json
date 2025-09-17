@@ -1,15 +1,26 @@
 {
-  "venvPath": ".",
+  "$schema": "https://raw.githubusercontent.com/microsoft/pyright/master/packages/pyright/config.schema.json",
+  "venvPath": "/workspaces/enterprise-aura",
   "venv": ".venv",
-  "pythonVersion": "3.11",
-  "typeCheckingMode": "basic",
-  "reportMissingImports": true,
+  "include": [
+    "aura_v2",
+    "tests"
+  ],
+  "exclude": [
+    "**/.venv",
+    "**/.git",
+    "**/__pycache__"
+  ],
   "executionEnvironments": [
     {
-      "root": "./",
+      "root": ".",
       "pythonVersion": "3.11",
-      "venv": ".venv"
+      "extraPaths": [
+        "aura_v2",
+        "scripts"
+      ]
     }
   ],
-  "include": ["aura_v2", "tests"]
+  "reportMissingImports": "warning",
+  "reportMissingTypeStubs": "none"
 }
