@@ -24,9 +24,7 @@ class LegacyEvaluatorAdapter(EvaluationService):
     def __init__(self):
         self.legacy_evaluator = LegacyEvaluator()
 
-    async def evaluate(
-        self, tracks: List[Track], ground_truth: List[Track]
-    ) -> Dict[str, Any]:
+    async def evaluate(self, tracks: List[Track], ground_truth: List[Track]) -> Dict[str, Any]:
         """Convert new domain objects to legacy format and evaluate"""
 
         # Convert tracks to legacy JSONL format
@@ -59,9 +57,7 @@ class LegacyEvaluatorAdapter(EvaluationService):
         for track in tracks:
             for detection in track.history:
                 line = {
-                    "frame": int(
-                        detection.timestamp.timestamp() * 10
-                    ),  # Convert to frame number
+                    "frame": int(detection.timestamp.timestamp() * 10),  # Convert to frame number
                     "id": str(track.id),
                     "x": detection.position.x,
                     "y": detection.position.y,

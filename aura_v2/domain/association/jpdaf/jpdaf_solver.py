@@ -23,9 +23,7 @@ def cluster_jpda(
       P_missed: (N,) probability of miss for each track
     """
     allowed = {d: [t for t in trk_indices if gating_mask[d, t]] for d in det_indices}
-    hyps = enumerate_hypotheses(
-        det_indices, trk_indices, allowed, max_hypotheses=max_hypotheses
-    )
+    hyps = enumerate_hypotheses(det_indices, trk_indices, allowed, max_hypotheses=max_hypotheses)
 
     track_lh_map = {}
     for d in det_indices:

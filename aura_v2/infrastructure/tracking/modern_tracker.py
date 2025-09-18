@@ -50,9 +50,7 @@ class ModernTracker:
 
     def __init__(
         self,
-        track_repository: (
-            TrackRepo | InMemoryTrackRepository | MongoTrackRepository | None
-        ) = None,
+        track_repository: TrackRepo | InMemoryTrackRepository | MongoTrackRepository | None = None,
         max_distance: float = 50.0,
         max_missed: int = 2,
     ) -> None:
@@ -65,9 +63,7 @@ class ModernTracker:
         self._frame_timestamp: Optional[datetime] = None
         self._last_obs: Dict[str, datetime] = {}
 
-    async def update(
-        self, detections: List[Detection], timestamp: datetime
-    ) -> TrackingResult:
+    async def update(self, detections: List[Detection], timestamp: datetime) -> TrackingResult:
         start_time = time.time()
         self._frame_timestamp = self._to_dt(timestamp)
 
@@ -76,9 +72,7 @@ class ModernTracker:
         for t in current_tracks:
             self.predict_track(t, self._frame_timestamp)
 
-        matched, unmatched_dets, unmatched_tracks = self._associate(
-            detections, current_tracks
-        )
+        matched, unmatched_dets, unmatched_tracks = self._associate(detections, current_tracks)
 
         for track, det, score in matched:
             self._update_track(track, det, score, self._frame_timestamp)
@@ -99,9 +93,7 @@ class ModernTracker:
 
         processing_time = (time.time() - start_time) * 1000.0
         active_tracks = [
-            t
-            for t in await self.track_repository.list()
-            if t.status != TrackStatus.DELETED
+            t for t in await self.track_repository.list() if t.status != TrackStatus.DELETED
         ]
 
         return TrackingResult(
@@ -207,19 +199,13 @@ class ModernTracker:
                 used_dets.add(j)
 
         unmatched_dets = [d for j, d in enumerate(detections) if j not in used_dets]
-        unmatched_tracks = [
-            t for i, t in enumerate(live_tracks) if i not in used_tracks
-        ]
+        unmatched_tracks = [t for i, t in enumerate(live_tracks) if i not in used_tracks]
         return matched, unmatched_dets, unmatched_tracks
 
-    def _new_track_from_detection(
-        self, detection: Detection, now: datetime | None
-    ) -> Track:
+    def _new_track_from_detection(self, detection: Detection, now: datetime | None) -> Track:
         now_nn = now or datetime.now(timezone.utc)
         track_id = self._next_track_id()
-        state = TrackState(
-            position=detection.position, velocity=Velocity3D(0.0, 0.0, 0.0)
-        )
+        state = TrackState(position=detection.position, velocity=Velocity3D(0.0, 0.0, 0.0))
         track = Track(
             id=track_id,
             state=state,
@@ -263,11 +249,7 @@ class ModernTracker:
         current_tracks = await self.track_repository.list()
         for t in current_tracks:
             too_old = False
-            if (
-                ts is not None
-                and getattr(t, "updated_at", None) is not None
-                and ttl > 0
-            ):
+            if ts is not None and getattr(t, "updated_at", None) is not None and ttl > 0:
                 try:
                     age = (ts - t.updated_at).total_seconds()  # type: ignore[arg-type]
                     too_old = age > ttl

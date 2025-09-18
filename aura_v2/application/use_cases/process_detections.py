@@ -51,9 +51,7 @@ class ProcessDetectionsUseCase:
         return await self.tracker.update(detections, ts)
 
     # ✅ Tests call `.process(...)` and expect a list[Track]
-    async def process(
-        self, sensor_data: Iterable[Dict[str, Any]], ts: Optional[datetime] = None
-    ):
+    async def process(self, sensor_data: Iterable[Dict[str, Any]], ts: Optional[datetime] = None):
         result = await self(sensor_data, ts)
         if hasattr(result, "active_tracks"):
             return list(result.active_tracks)

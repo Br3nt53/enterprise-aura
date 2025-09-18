@@ -112,9 +112,7 @@ def audit_init(init_file: Path) -> list[str]:
 
 
 def main():
-    ap = argparse.ArgumentParser(
-        description="Audit __init__.py imports (project only)."
-    )
+    ap = argparse.ArgumentParser(description="Audit __init__.py imports (project only).")
     ap.add_argument(
         "--dirs",
         nargs="*",

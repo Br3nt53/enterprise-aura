@@ -59,9 +59,7 @@ class MongoProvider:
         assert cls._db is not None
         ttl_seconds = int(os.getenv("AURA_TTL_SECONDS", "3600"))
         try:
-            await cls._db["tracks"].create_index(
-                "updated_at", expireAfterSeconds=ttl_seconds
-            )
+            await cls._db["tracks"].create_index("updated_at", expireAfterSeconds=ttl_seconds)
         except Exception:
             # Non-fatal if index exists or cannot be created due to perms
             pass

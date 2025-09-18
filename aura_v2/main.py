@@ -18,7 +18,11 @@ from fastapi.responses import HTMLResponse
 
 from aura_v2.api.schemas import DetectionInput, TrackOutput, TrackRequest, TrackResponse
 from aura_v2.domain import Confidence, Detection, Position3D, Track
-from aura_v2.domain.services import BasicFusionService, FusionService, SensorCharacteristics
+from aura_v2.domain.services import (
+    BasicFusionService,
+    FusionService,
+    SensorCharacteristics,
+)
 from aura_v2.infrastructure.tracking.modern_tracker import ModernTracker, TrackingResult
 from aura_v2.utils.time import to_utc
 

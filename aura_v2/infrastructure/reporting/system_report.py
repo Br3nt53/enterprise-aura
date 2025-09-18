@@ -39,25 +39,18 @@ class SystemReportGenerator:
         }
 
         # Save report
-        report_file = (
-            self.output_dir
-            / f"health_report_{timestamp.strftime('%Y%m%d_%H%M%S')}.json"
-        )
+        report_file = self.output_dir / f"health_report_{timestamp.strftime('%Y%m%d_%H%M%S')}.json"
         with open(report_file, "w") as f:
             json.dump(report, f, indent=2)
 
         return report
 
-    def generate_tracking_summary(
-        self, tracking_results: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    def generate_tracking_summary(self, tracking_results: List[Dict[str, Any]]) -> Dict[str, Any]:
         """Generate a tracking performance summary."""
         if not tracking_results:
             return {"error": "No tracking results available"}
 
-        total_tracks = sum(
-            len(result.get("active_tracks", [])) for result in tracking_results
-        )
+        total_tracks = sum(len(result.get("active_tracks", [])) for result in tracking_results)
         avg_processing_time = sum(
             result.get("processing_time_ms", 0) for result in tracking_results
         ) / len(tracking_results)
@@ -83,8 +76,7 @@ class SystemReportGenerator:
 
         # Save summary
         summary_file = (
-            self.output_dir
-            / f"tracking_summary_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+            self.output_dir / f"tracking_summary_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
         )
         with open(summary_file, "w") as f:
             json.dump(summary, f, indent=2)
@@ -115,8 +107,7 @@ class SystemReportGenerator:
 
         # Save error report
         error_file = (
-            self.output_dir
-            / f"error_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+            self.output_dir / f"error_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
         )
         with open(error_file, "w") as f:
             json.dump(error_report, f, indent=2)

@@ -7,9 +7,7 @@ import numpy as np
 from .kbest_murty import MurtyKBest
 
 
-def kbest_to_marginals(
-    C: np.ndarray, k: int, beta: float = 1.0
-) -> Dict[str, np.ndarray]:
+def kbest_to_marginals(C: np.ndarray, k: int, beta: float = 1.0) -> Dict[str, np.ndarray]:
     """
     Convert top-k assignments into approximate association marginals.
     Cost matrix C: shape (M,N)

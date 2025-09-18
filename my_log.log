@@ -1,0 +1,133 @@
+..........FFF...............................                             [100%]
+=================================== FAILURES ===================================
+______________________________ test_ufk_weighted _______________________________
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fusion/test_end_to_end_fuse.py:14: in test_ufk_weighted
+    ???
+E   assert 4 == 1
+E    +  where 4 = len([100, 100, 100, 100])
+___________________________ test_new_tracks_created ____________________________
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fusion/test_fusion_pipeline.py:14: in test_new_tracks_created
+    ???
+aura_v2/domain/pipeline/fusion_pipeline.py:40: in process_batch
+    return self._core.process_batch(batch, tracks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+aura_v2/infrastructure/fusion/ufk_core.py:217: in process_batch
+    cam = _normalize_dets("camera", batch[0])
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+aura_v2/infrastructure/fusion/ufk_core.py:67: in _normalize_dets
+    for item in seq:
+E   TypeError: 'SensorReading' object is not iterable
+_____________________ test_association_reduces_new_tracks ______________________
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fusion/test_fusion_pipeline.py:23: in test_association_reduces_new_tracks
+    ???
+E   assert 0 == 1
+E    +  where 0 = len([])
+=========================== short test summary info ============================
+FAILED tests/fusion/test_end_to_end_fuse.py::test_ufk_weighted - assert 4 == 1
+FAILED tests/fusion/test_fusion_pipeline.py::test_new_tracks_created - TypeEr...
+FAILED tests/fusion/test_fusion_pipeline.py::test_association_reduces_new_tracks
+F401 `aura_v2` imported but unused; consider using `importlib.util.find_spec` to test for availability
+  --> aura_v2/test_dashboard_setup.py:50:16
+   |
+49 |         # Test basic import
+50 |         import aura_v2
+   |                ^^^^^^^
+51 |
+52 |         print("✅ Basic aura_v2 import successful")
+   |
+help: Remove unused import: `aura_v2`
+
+F401 `fastapi` imported but unused; consider using `importlib.util.find_spec` to test for availability
+  --> aura_v2/test_dashboard_setup.py:91:16
+   |
+90 |     try:
+91 |         import fastapi
+   |                ^^^^^^^
+92 |
+93 |         print("✅ FastAPI is available")
+   |
+help: Remove unused import: `fastapi`
+
+Found 3 errors (1 fixed, 2 remaining).
+36 files reformatted, 165 files left unchanged
+..........FFF...............................                             [100%]
+=================================== FAILURES ===================================
+______________________________ test_ufk_weighted _______________________________
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fusion/test_end_to_end_fuse.py:14: in test_ufk_weighted
+    ???
+E   assert 4 == 1
+E    +  where 4 = len([100, 100, 100, 100])
+___________________________ test_new_tracks_created ____________________________
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fusion/test_fusion_pipeline.py:14: in test_new_tracks_created
+    ???
+aura_v2/domain/pipeline/fusion_pipeline.py:38: in process_batch
+    return self._core.process_batch(batch, tracks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+aura_v2/infrastructure/fusion/ufk_core.py:215: in process_batch
+    cam = _normalize_dets("camera", batch[0])
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+aura_v2/infrastructure/fusion/ufk_core.py:67: in _normalize_dets
+    for item in seq:
+E   TypeError: 'SensorReading' object is not iterable
+_____________________ test_association_reduces_new_tracks ______________________
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fusion/test_fusion_pipeline.py:23: in test_association_reduces_new_tracks
+    ???
+E   assert 0 == 1
+E    +  where 0 = len([])
+=========================== short test summary info ============================
+FAILED tests/fusion/test_end_to_end_fuse.py::test_ufk_weighted - assert 4 == 1
+FAILED tests/fusion/test_fusion_pipeline.py::test_new_tracks_created - TypeEr...
+FAILED tests/fusion/test_fusion_pipeline.py::test_association_reduces_new_tracks
+F821 Undefined name `d`
+   --> aura_v2/infrastructure/fusion/ufk_core.py:205:39
+    |
+204 |         cams = (
+205 |             [_normalize_det("camera", d, default_sensor="camera_1")]
+    |                                       ^
+206 |             if camera_dets is not None and not isinstance(camera_dets, (list, tuple))
+207 |             else [
+    |
+
+F821 Undefined name `d`
+   --> aura_v2/infrastructure/fusion/ufk_core.py:213:36
+    |
+211 |         )
+212 |         uwbs = (
+213 |             [_normalize_det("uwb", d, default_sensor="uwb_1")]
+    |                                    ^
+214 |             if uwb_pings is not None and not isinstance(uwb_pings, (list, tuple))
+215 |             else [
+    |
+
+F401 `aura_v2` imported but unused; consider using `importlib.util.find_spec` to test for availability
+  --> aura_v2/test_dashboard_setup.py:50:16
+   |
+49 |         # Test basic import
+50 |         import aura_v2
+   |                ^^^^^^^
+51 |
+52 |         print("✅ Basic aura_v2 import successful")
+   |
+help: Remove unused import: `aura_v2`
+
+F401 `fastapi` imported but unused; consider using `importlib.util.find_spec` to test for availability
+  --> aura_v2/test_dashboard_setup.py:91:16
+   |
+90 |     try:
+91 |         import fastapi
+   |                ^^^^^^^
+92 |
+93 |         print("✅ FastAPI is available")
+   |
+help: Remove unused import: `fastapi`
+
+Found 6 errors (2 fixed, 4 remaining).
+...........F................................                             [100%]
+=================================== FAILURES ===================================
+___________________________ test_new_tracks_created ____________________________
+/Users/sharkbait/Projects/aura-project/enterprise-aura/tests/fusion/test_fusion_pipeline.py:15: in test_new_tracks_created
+    ???
+E   AssertionError: assert 1 == 2
+E    +  where 1 = len([{'position': {'x': 5.0, 'y': 6.0}}])
+=========================== short test summary info ============================
+FAILED tests/fusion/test_fusion_pipeline.py::test_new_tracks_created - Assert...

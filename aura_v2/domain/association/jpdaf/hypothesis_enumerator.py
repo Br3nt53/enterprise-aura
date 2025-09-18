@@ -22,9 +22,7 @@ def enumerate_hypotheses(
         if di == len(det_indices):
             matched_tracks = {t for _, t in current_pairs}
             unmatched_tracks = [t for t in trk_indices if t not in matched_tracks]
-            unmatched_dets = [
-                d for d in det_indices if d not in [p[0] for p in current_pairs]
-            ]
+            unmatched_dets = [d for d in det_indices if d not in [p[0] for p in current_pairs]]
             results.append(
                 {
                     "pairs": list(current_pairs),

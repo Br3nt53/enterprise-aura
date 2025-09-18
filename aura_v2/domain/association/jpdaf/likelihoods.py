@@ -6,9 +6,7 @@ from typing import Dict, Tuple
 import numpy as np
 
 
-def gaussian_likelihood(
-    residual: np.ndarray, S_inv: np.ndarray, log_det_S: float
-) -> float:
+def gaussian_likelihood(residual: np.ndarray, S_inv: np.ndarray, log_det_S: float) -> float:
     # residual: (m,1)
     # p(z|track) = (2π)^{-m/2} |S|^{-1/2} exp(-0.5 * r^T S^{-1} r)
     m = residual.shape[0]

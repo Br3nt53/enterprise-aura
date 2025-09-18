@@ -1,4 +1,8 @@
-from aura_v2.domain.association.hungarian_costs import combined_cost, iou_cost, motion_cost
+from aura_v2.domain.association.hungarian_costs import (
+    combined_cost,
+    iou_cost,
+    motion_cost,
+)
 
 
 def test_iou_cost_range():

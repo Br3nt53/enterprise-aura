@@ -77,7 +77,9 @@ class RealTimeTrackingPipeline:
 
     def _create_command(self, detections, latest_timestamp: datetime):
         """Create a command object for the detect and track use case."""
-        from aura_v2.application.use_cases.detect_and_track_command import DetectAndTrackCommand
+        from aura_v2.application.use_cases.detect_and_track_command import (
+            DetectAndTrackCommand,
+        )
 
         return DetectAndTrackCommand(
             detections=detections,

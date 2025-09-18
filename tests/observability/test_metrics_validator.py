@@ -3,9 +3,7 @@ from __future__ import annotations
 
 import pytest
 
-psutil = pytest.importorskip(
-    "psutil", reason="psutil not installed; metrics smoke skipped"
-)
+psutil = pytest.importorskip("psutil", reason="psutil not installed; metrics smoke skipped")
 
 
 def test_metrics_psutil_smoke() -> None:

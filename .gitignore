@@ -1,106 +1,63 @@
-@'
-# Byte-compiled / optimized / DLL files
+# Byte-compiled / optimized
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
 
 # C extensions
 *.so
 
-# Distribution / packaging
-.Python
+# Build / packaging
+.build/
 build/
-develop-eggs/
 dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
-parts/
 sdist/
-var/
 wheels/
 *.egg-info/
-.installed.cfg
 *.egg
 
-# PyInstaller
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
+# Test / coverage
 .tox/
-.coverage
-.coverage.*
-.cache
+.nox/
+.coverage*
+.cache/
+pytestdebug.log
 nosetests.xml
 coverage.xml
-*.cover
+htmlcov/
 .hypothesis/
 .pytest_cache/
 
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-
-# Flask stuff:
-instance/
-.webassets-cache
-
-# Scrapy stuff:
-.scrapy
-
-# Sphinx documentation
-docs/_build/
-
-# PyBuilder
-target/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
 # Environments
 .env
-.venv
+.env.*
+.venv/
+.venv*/
 env/
 venv/
 ENV/
-env.bak
-venv.bak
+env.bak/
 
-# IDE / Editor specific
-.idea/
-.vscode/
-*.swp
-*.swo
-*~
-.DS_Store
-'@ | Set-Content -Path ".gitignore"
-*.egg-info/
-artifacts/env.txt
-.env
-artifacts/env.txt
-
-tmp/
-
-# build & local data
-aura_v2.egg-info/
-tmp/
-
-# build & local data
-aura_v2.egg-info/
+# Data / temp
 tmp/
 artifacts/**
 !artifacts/validation/
 !artifacts/validation/**
+
+# Project-specific
+aura_v2.egg-info/
+
+# IDE
+.idea/
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Do NOT ignore .vscode if you want to commit workspace settings
+# .vscode/
+# local backups
+/workspaces/backups/*
+changes*.tgz
+changes*.patch

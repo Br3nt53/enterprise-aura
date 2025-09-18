@@ -12,7 +12,7 @@ from pathlib import Path
 def check_fastapi():
     """Check if FastAPI is available"""
     try:
-        import fastapi
+        import fastapi  # noqa: F401
 
         return True
     except ImportError:

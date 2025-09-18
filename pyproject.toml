@@ -1,3 +1,6 @@
+[tool.isort]
+skip = [".venv", ".venv.bak"]
+
 [project]
 name = "aura-v2"
 version = "2.0.0"
@@ -59,6 +62,25 @@ test = [
   "anyio>=3.7,<5",
 ]
 
+dev = [
+  # test
+  "pytest>=8.4.2",
+  "pytest-asyncio>=0.24.0",
+  "anyio>=3.7,<5",
+  # tooling
+  "pre-commit>=3.7",
+  "ruff>=0.6",
+  "black>=24.3",
+  # helpful locally (unblocks observability smoke tests)
+  "psutil>=5.9",
+]
+docs = [
+  "sphinx>=7.3",
+  "sphinx-autodoc-typehints>=1.25",
+  "sphinx-rtd-theme>=1.2",
+  "myst-parser>=0.19",
+]
+
 # Linux-only GPU extras (won't resolve on macOS/Windows)
 gpu = [
   "cupy-cuda12x>=13; platform_system == 'Linux'",
@@ -91,20 +113,11 @@ addopts = "-q"
 # uv uses PEP 735-style groups
 [dependency-groups]
 dev = [
-  # test
-  "pytest>=8.4.2",
-  "pytest-asyncio>=0.24.0",
-  "anyio>=3.7,<5",
-  # tooling
-  "pre-commit>=3.7",
-  "ruff>=0.6",
-  "black>=24.3",
-  # helpful locally (unblocks observability smoke tests)
-  "psutil>=5.9",
-]
-docs = [
-  "sphinx>=7.3",
-  "sphinx-autodoc-typehints>=1.25",
-  "sphinx-rtd-theme>=1.2",
-  "myst-parser>=0.19",
+    "black>=25.1.0",
+    "pre-commit>=4.3.0",
+    "psutil>=7.0.0",
+    "pytest>=8.4.2",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.13.0",
 ]

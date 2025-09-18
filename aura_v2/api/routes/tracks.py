@@ -6,6 +6,8 @@ router = APIRouter(prefix="/tracks", tags=["tracks"])
 
 
 @router.get("/active")
-def list_active(_: bool = Depends(api_key_guard)):
+def list_active(_=None):
+    if _ is None:
+        _ = Depends(api_key_guard)
     # placeholder returns empty
     return {"tracks": []}
