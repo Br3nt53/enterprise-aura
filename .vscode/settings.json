@@ -1,5 +1,4 @@
 {
-  "python.defaultInterpreterPath": "/workspaces/enterprise-aura/.venv/bin/python",
   "python.testing.pytestEnabled": true,
   "python.testing.pytestArgs": [
     "-q"

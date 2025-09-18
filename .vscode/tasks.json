@@ -1,0 +1,35 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "tests: fast",
+            "type": "shell",
+            "command": "uv run pytest -q -k \"not e2e\"",
+            "problemMatcher": []
+        },
+        {
+            "label": "tests: full",
+            "type": "shell",
+            "command": "uv run pytest -q",
+            "problemMatcher": []
+        },
+        {
+            "label": "lint: ruff --fix",
+            "type": "shell",
+            "command": "uv run ruff check --fix .",
+            "problemMatcher": []
+        },
+        {
+            "label": "format: black",
+            "type": "shell",
+            "command": "uv run black .",
+            "problemMatcher": []
+        },
+        {
+            "label": "pre-commit: all files",
+            "type": "shell",
+            "command": "uv run pre-commit run --all-files",
+            "problemMatcher": []
+        }
+    ]
+}
