@@ -61,3 +61,7 @@ aura_v2.egg-info/
 /workspaces/backups/*
 changes*.tgz
 changes*.patch
+
+# local backups
+changes-*.tgz
+changes*.patch
